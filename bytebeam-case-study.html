@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bytebeam Cloud Platform — Krupali Jain</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --black: #1A1A1A;
+    --yellow: #D4FF4A;
+    --coral: #FF6B47;
+    --muted: #8A8070;
+    --border: #C8C0B0;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; cursor: none !important; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--black);
+    font-family: 'DM Mono', monospace;
+    overflow-x: hidden;
+  }
+
+  /* ── CURSOR ── */
+  .c-dot {
+    width: 10px; height: 10px;
+    background: var(--yellow);
+    border: 1.5px solid var(--black);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    z-index: 999999; pointer-events: none;
+    transition: background 0.2s, width 0.2s, height 0.2s;
+  }
+  .c-ring {
+    width: 34px; height: 34px;
+    border: 1.5px solid var(--black);
+    border-radius: 50%; background: transparent;
+    position: fixed; top: 0; left: 0;
+    z-index: 999998; pointer-events: none;
+    transition: background 0.2s, border-color 0.2s, width 0.2s, height 0.2s;
+  }
+  .c-ring.on { background: rgba(255,107,71,0.12); border-color: var(--coral); width: 44px; height: 44px; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 60px;
+    background: rgba(245,240,232,0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    text-decoration: none;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .box {
+    width: 36px; height: 36px;
+    background: var(--black);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .box::after {
+    content: '';
+    position: absolute; inset: 0;
+    border: 1.5px solid var(--black);
+    transform: translate(3px, 3px);
+    transition: transform 0.2s;
+  }
+  .box-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px; font-weight: 900;
+    color: var(--yellow); z-index: 1;
+  }
+  .logo:hover .box::after { transform: translate(5px, 5px); }
+  .nav-links { display: flex; gap: 40px; list-style: none; }
+  .nav-links a {
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    text-decoration: none; color: var(--black); position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -2px; left: 0;
+    width: 0; height: 1.5px; background: var(--coral);
+    transition: width 0.3s;
+  }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-back {
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    text-decoration: none; color: var(--muted);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .nav-back:hover { color: var(--coral); }
+
+  /* ── HERO ── */
+  .cs-hero {
+    padding: 140px 60px 80px;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: end;
+  }
+  .cs-eyebrow {
+    font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 20px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .cs-eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--coral); display: inline-block; }
+  .cs-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(40px, 5vw, 68px);
+    font-weight: 900; line-height: 1.05;
+    letter-spacing: -2px;
+  }
+  .cs-title em { font-style: italic; color: var(--coral); }
+  .cs-subtitle {
+    font-size: 14px; line-height: 1.8; color: var(--muted);
+    margin-top: 24px; max-width: 100%;
+  }
+  .cs-meta { display: flex; flex-direction: column; gap: 24px; padding-bottom: 8px; }
+  .cs-meta-item {}
+  .cs-meta-label { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .cs-meta-value { font-size: 14px; line-height: 1.7; color: var(--black); }
+  .cs-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 28px; }
+  .cs-tag {
+    font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase;
+    border: 1px solid var(--black); padding: 5px 12px;
+  }
+  .cs-tag.fill { background: var(--black); color: var(--cream); }
+
+  /* ── SECTION BASE ── */
+  .cs-section {
+    padding: 80px 60px;
+    border-bottom: 1px solid var(--border);
+  }
+  .cs-section-label {
+    font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .cs-section-label::before { content: '↳'; color: var(--coral); }
+  .cs-section-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 3.5vw, 44px);
+    font-weight: 900; line-height: 1.1;
+    letter-spacing: -1px; margin-bottom: 32px;
+  }
+  .cs-body {
+    font-size: 14px; line-height: 1.9; color: var(--muted);
+    max-width: 100%;
+  }
+  .cs-body + .cs-body { margin-top: 16px; }
+
+  /* ── OVERVIEW STRIP ── */
+  .cs-overview {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-bottom: 1px solid var(--border);
+    background: var(--black);
+  }
+  .cs-overview-item {
+    padding: 24px 40px;
+    border-right: 1px solid #333;
+  }
+  .cs-overview-item:last-child { border-right: none; }
+  .cs-overview-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 40px; font-weight: 900;
+    color: var(--yellow); line-height: 1; margin-bottom: 8px;
+  }
+  .cs-overview-label { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(245,240,232,0.5); }
+
+  /* ── PROBLEM GRID ── */
+  .problem-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 48px;
+  }
+  .problem-card {
+    background: var(--cream);
+    padding: 36px;
+  }
+  .problem-card:nth-child(1) { background: var(--black); color: var(--cream); }
+  .problem-card:nth-child(2) { background: var(--yellow); color: var(--black); }
+  .problem-card:nth-child(3) { background: var(--coral); color: var(--black); }
+  .problem-card:nth-child(4) { background: #fff; color: var(--black); }
+  .problem-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 56px; font-weight: 900;
+    opacity: 0.08; line-height: 1; margin-bottom: 12px;
+  }
+  .problem-card:nth-child(1) .problem-num,
+  .problem-card:nth-child(4) .problem-num { opacity: 0.15; }
+  .problem-card:nth-child(1) .problem-desc { color: rgba(245,240,232,0.8); }
+  .problem-card:nth-child(2) .problem-desc { color: var(--black); }
+  .problem-card:nth-child(3) .problem-desc { color: var(--black); }
+  .problem-card:nth-child(4) .problem-desc { color: var(--muted); }
+  .problem-title {
+    font-size: 15px; font-weight: 500; line-height: 1.4;
+    margin-bottom: 10px;
+  }
+  .problem-desc { font-size: 13px; line-height: 1.8; color: var(--muted); }
+
+  /* ── RESEARCH QUESTIONS ── */
+  .rq-list {
+    margin-top: 40px;
+    display: flex; flex-direction: column;
+  }
+  .rq-item {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 24px;
+    align-items: baseline;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border);
+    transition: padding-left 0.2s;
+  }
+  .rq-item:first-child { border-top: 1px solid var(--border); }
+  .rq-item:hover { padding-left: 8px; }
+  .rq-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 900;
+    color: var(--border);
+  }
+  .rq-item:hover .rq-num { color: var(--coral); }
+  .rq-text { font-size: 14px; line-height: 1.7; color: var(--black); }
+
+  /* ── DESIGN CHANGES ── */
+  .change-list { margin-top: 48px; display: flex; flex-direction: column; gap: 80px; }
+  .change-item {}
+  .change-header {
+    display: flex; align-items: baseline; gap: 20px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .change-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 64px; font-weight: 900;
+    line-height: 1; color: var(--border);
+    flex-shrink: 0;
+  }
+  .change-title-block {}
+  .change-tag { font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--coral); margin-bottom: 4px; }
+  .change-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; }
+  .change-body { font-size: 14px; line-height: 1.85; color: var(--muted); margin-bottom: 28px; max-width: 100%; }
+
+  /* Before / After */
+  .before-after {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;
+  }
+  .ba-box { padding: 20px; }
+  .ba-box.before { background: var(--coral); border: 1px solid var(--coral); color: var(--black); }
+  .ba-box.after  { background: var(--black); color: var(--cream); }
+  .ba-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 12px; opacity: 0.7; }
+  .ba-box.before .ba-label { color: var(--black); }
+  .ba-box.before .ba-points li { color: var(--black); }
+  .ba-box.before .ba-points li::before { color: var(--black); }
+  .ba-box.after .ba-label { color: #fff; }
+  .ba-points { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .ba-points li { font-size: 14px; line-height: 1.7; padding-left: 14px; position: relative; }
+  .ba-points li::before { content: '—'; position: absolute; left: 0; color: var(--coral); }
+
+  /* Image frame */
+  .img-frame {
+    border: 1px solid var(--border);
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .img-frame img { width: 100%; display: block; max-height: 50vh; object-fit: contain; object-position: top; background: #f0ede8; }
+  .img-caption { font-size: 12px; letter-spacing: 0.1em; color: var(--muted); padding-top: 8px; }
+
+  /* Steps row */
+  .steps-strip {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 24px;
+  }
+  .step-cell { background: var(--cream); padding: 20px 16px; }
+  .step-cell:nth-child(odd) { background: var(--black); color: var(--cream); }
+  .step-n { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; opacity: 0.15; }
+  .step-img { width: 100%; margin-top: 8px; display: block; border: 1px solid var(--border); }
+
+  /* Features list */
+  .features-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    background: var(--cream);
+    margin-top: 40px;
+  }
+  .feat-card {
+    background: #fff;
+    color: var(--black);
+    padding: 32px;
+    border: 1.5px solid var(--black);
+    display: flex; gap: 20px; align-items: flex-start;
+  }
+  .feat-card:nth-child(1) { background: var(--coral); color: var(--black); }
+  .feat-card:nth-child(4) { background: var(--coral); color: var(--black); }
+  .feat-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: currentColor; flex-shrink: 0; margin-top: 5px; opacity: 0.5;
+  }
+  .feat-title { font-size: 14px; font-weight: 500; margin-bottom: 6px; }
+  .feat-desc { font-size: 14px; line-height: 1.7; opacity: 0.7; }
+
+  /* ── CTA ── */
+  .cs-cta {
+    padding: 100px 60px;
+    background: var(--black);
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .cs-cta-bg {
+    font-family: 'Playfair Display', serif;
+    font-size: 200px; font-weight: 900;
+    color: #fff; opacity: 0.03;
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    white-space: nowrap; pointer-events: none;
+    letter-spacing: -8px;
+  }
+  .cs-cta-label { font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+  .cs-cta-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 4vw, 56px);
+    font-weight: 900; color: var(--cream); line-height: 1.1;
+    margin-bottom: 40px; letter-spacing: -1.5px;
+  }
+  .cs-cta-heading em { font-style: italic; color: var(--yellow); }
+  .cs-cta-link {
+    font-size: 12px; letter-spacing: 0.1em;
+    color: var(--cream); text-decoration: none;
+    border-bottom: 1px solid var(--coral); padding-bottom: 3px;
+    transition: color 0.2s, background 0.2s;
+  }
+  .cs-cta-link:hover { color: var(--black); background: var(--yellow); border-color: var(--yellow); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--black);
+    color: var(--cream);
+    padding: 24px 60px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid #333;
+  }
+  .footer-copy { font-size: 10px; letter-spacing: 0.1em; color: #555; }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #555; text-decoration: none; }
+  .footer-links a:hover { color: var(--yellow); }
+
+  /* ── NOISE ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 1000; opacity: 0.5;
+  }
+
+  /* ── REVEAL ── */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body onmousemove="__cm(event)">
+
+<script>
+function __cm(e) {
+  var d = document.getElementById('c-dot');
+  var r = document.getElementById('c-ring');
+  if (d) { d.style.left = (e.clientX - 5) + 'px'; d.style.top = (e.clientY - 5) + 'px'; }
+  if (r) { r.style.left = (e.clientX - 17) + 'px'; r.style.top = (e.clientY - 17) + 'px'; }
+}
+</script>
+<div class="c-dot" id="c-dot"></div>
+<div class="c-ring" id="c-ring"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="krupalijain-fixed.html" class="logo">
+    <div class="box"><span class="box-letter">KJ</span></div>
+  </a>
+  <a href="krupalijain-fixed.html#work" class="nav-back">← Back to Work</a>
+  <ul class="nav-links">
+    <li><a href="krupalijain-fixed.html#about">About</a></li>
+    <li><a href="krupalijain-fixed.html#footer">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="cs-hero">
+  <div class="cs-hero-left">
+    <p class="cs-eyebrow">Case Study · 01</p>
+    <h1 class="cs-title">Bytebeam <em>Cloud</em><br>Platform</h1>
+    <p class="cs-subtitle">A comprehensive redesign of the Actions dashboard for an automotive IoT platform — improving usability, reducing errors, and scaling for enterprise device management.</p>
+    <div class="cs-tags">
+      <span class="cs-tag fill">Product Design</span>
+      <span class="cs-tag fill">Dashboard UX</span>
+      <span class="cs-tag">B2B</span>
+      <span class="cs-tag">IoT</span>
+    </div>
+  </div>
+  <div class="cs-meta">
+    <div class="cs-meta-item">
+      <p class="cs-meta-label">Role</p>
+      <p class="cs-meta-value">UI/UX Designer — Requirements gathering, prototyping & design in Figma</p>
+    </div>
+    <div class="cs-meta-item">
+      <p class="cs-meta-label">Duration</p>
+      <p class="cs-meta-value">Oct 2023 – Ongoing</p>
+    </div>
+    <div class="cs-meta-item">
+      <p class="cs-meta-label">Team</p>
+      <p class="cs-meta-value">Ravi Teja (CTO) · Pranav Kumar (Sr. Frontend) · Isac Sam (Graphic) · Krupali Jain (UI/UX) · Frontend Team</p>
+    </div>
+  </div>
+</section>
+
+<!-- OVERVIEW STRIP -->
+<div class="cs-overview reveal">
+  <div class="cs-overview-item">
+    <p class="cs-overview-num">4+</p>
+    <p class="cs-overview-label">Major Features Redesigned</p>
+  </div>
+  <div class="cs-overview-item">
+    <p class="cs-overview-num">6</p>
+    <p class="cs-overview-label">Design Changes Shipped</p>
+  </div>
+  <div class="cs-overview-item">
+    <p class="cs-overview-num">B2B</p>
+    <p class="cs-overview-label">Enterprise IoT Platform</p>
+  </div>
+  <div class="cs-overview-item">
+    <p class="cs-overview-num">∞</p>
+    <p class="cs-overview-label">Connected Vehicles</p>
+  </div>
+</div>
+
+<!-- ABOUT PROJECT -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">The Project</p>
+  <h2 class="cs-section-heading">What is <em style="font-style:italic;color:var(--black);background:linear-gradient(transparent 25%, var(--yellow) 25%);padding:0 6px;">Bytebeam?</em></h2>
+  <p class="cs-body">Bytebeam is a comprehensive platform designed to optimize connectivity and data management for connected vehicles. It serves fleet management, vehicle health monitoring, predictive maintenance, battery monitoring, driver monitoring, and over-the-air (OTA) updates.</p>
+  <p class="cs-body">Key capabilities include remote diagnostics, data analytics and visualization, and error analysis for efficient troubleshooting — all within a single cloud dashboard used by engineering teams.</p>
+
+  <div class="features-grid" style="margin-top:48px">
+    <div class="feat-card">
+      <div class="feat-dot"></div>
+      <div><p class="feat-title">Fleet Management</p><p class="feat-desc">Real-time monitoring and control across large connected vehicle fleets and devices.</p></div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-dot"></div>
+      <div><p class="feat-title">OTA Updates</p><p class="feat-desc">Over-the-air firmware deployment with phased rollout and version controls.</p></div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-dot"></div>
+      <div><p class="feat-title">Predictive Maintenance</p><p class="feat-desc">Analytics-driven alerting before device failures occur in the field.</p></div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-dot"></div>
+      <div><p class="feat-title">Remote Diagnostics</p><p class="feat-desc">Deep error analysis and live device state visualization in the cloud.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM STATEMENT -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">The Problem</p>
+  <h2 class="cs-section-heading"><em style="font-style:normal;background:linear-gradient(transparent 25%, var(--yellow) 25%);padding:0 6px;">Four</em> pain points,<br>one <em style="font-style:italic;color:var(--coral);">broken</em> workflow.</h2>
+  <p class="cs-body">With a growing number of active devices on the platform, the Actions tab required an upgrade — to handle load, incorporate new features, and eliminate user errors that were becoming increasingly costly.</p>
+
+  <div class="problem-grid">
+    <div class="problem-card">
+      <p class="problem-num">01</p>
+      <p class="problem-title">Insufficient Action Overview</p>
+      <p class="problem-desc">Users were only notified of executed actions — with no visibility into current status or ongoing operations.</p>
+    </div>
+    <div class="problem-card">
+      <p class="problem-num">02</p>
+      <p class="problem-title">Broken New Action Workflow</p>
+      <p class="problem-desc">Multiple stages involving numerous stakeholders, with no structured approach — creating operational chaos.</p>
+    </div>
+    <div class="problem-card">
+      <p class="problem-num">03</p>
+      <p class="problem-title">Errors in Rolling Updates</p>
+      <p class="problem-desc">Different vendors for different tasks made tracking progress across device groups extremely difficult.</p>
+    </div>
+    <div class="problem-card">
+      <p class="problem-num">04</p>
+      <p class="problem-title">Basic Filter Criteria</p>
+      <p class="problem-desc">Limited filtering forced users to manually search and note down each device — a slow, error-prone process.</p>
+    </div>
+  </div>
+</section>
+
+<!-- RESEARCH -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Discovery</p>
+  <h2 class="cs-section-heading">Starting with<br>the <em style="font-style:normal;background:linear-gradient(transparent 25%, var(--yellow) 25%);padding:0 6px;">right</em> questions.</h2>
+  <p class="cs-body">We began by gathering structured feedback from existing users — engineers and fleet managers who relied on the platform daily. These questions guided our research sessions:</p>
+
+  <div class="rq-list">
+    <div class="rq-item"><span class="rq-num">01</span><span class="rq-text">How do you currently manage the devices?</span></div>
+    <div class="rq-item"><span class="rq-num">02</span><span class="rq-text">Who is responsible for managing and monitoring the devices?</span></div>
+    <div class="rq-item"><span class="rq-num">03</span><span class="rq-text">What are the limitations of the current process?</span></div>
+    <div class="rq-item"><span class="rq-num">04</span><span class="rq-text">How many devices do you monitor or manage simultaneously?</span></div>
+    <div class="rq-item"><span class="rq-num">05</span><span class="rq-text">What actions are required on connected devices?</span></div>
+    <div class="rq-item"><span class="rq-num">06</span><span class="rq-text">How often do any actions need to be performed?</span></div>
+    <div class="rq-item"><span class="rq-num">07</span><span class="rq-text">What errors could be encountered while performing an action?</span></div>
+    <div class="rq-item"><span class="rq-num">08</span><span class="rq-text">What parameters indicate that a device is healthy and working properly?</span></div>
+    <div class="rq-item"><span class="rq-num">09</span><span class="rq-text">Are actions on all devices performed simultaneously?</span></div>
+    <div class="rq-item"><span class="rq-num">10</span><span class="rq-text">How many actions can be run simultaneously?</span></div>
+  </div>
+</section>
+
+<!-- DESIGN CHANGES -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Design Changes</p>
+  <h2 class="cs-section-heading"><em style="font-style:normal;background:linear-gradient(transparent 25%, var(--yellow) 25%);padding:0 6px;">Six</em> changes.<br>One <em style="font-style:italic;color:var(--coral);">cohesive</em> system.</h2>
+
+  <div class="change-list">
+
+    <!-- 1 -->
+    <div class="change-item reveal">
+      <div class="change-header">
+        <span class="change-num">01</span>
+        <div class="change-title-block">
+          <p class="change-tag">Action Overview</p>
+          <p class="change-title">Enhanced Action Summary</p>
+        </div>
+      </div>
+      <p class="change-body">The action view was restructured to give users a complete picture of ongoing and completed operations — not just what ran, but what's happening now and what failed.</p>
+      <div class="before-after">
+        <div class="ba-box before">
+          <p class="ba-label">Before</p>
+          <ul class="ba-points">
+            <li>Only showed executed actions</li>
+            <li>No status visibility on ongoing operations</li>
+            <li>No failure notification system</li>
+          </ul>
+        </div>
+        <div class="ba-box after">
+          <p class="ba-label">After</p>
+          <ul class="ba-points">
+            <li>Sub-tabs: Live Actions vs Action History</li>
+            <li>New widget for action failures and root causes</li>
+            <li>Clear distinction between ongoing and completed</li>
+          </ul>
+        </div>
+      </div>
+      <div class="img-frame">
+        <img src="https://static.wixstatic.com/media/f74026_cb8bc1c698f2468db1d204075e0bd492~mv2.png/v1/fill/w_980,h_585,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_cb8bc1c698f2468db1d204075e0bd492~mv2.png" alt="Old Design">
+      </div>
+      <div class="img-frame">
+        <img src="https://static.wixstatic.com/media/f74026_ca6e4711974c4422835ab5dab5e88858~mv2.png/v1/fill/w_980,h_636,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_ca6e4711974c4422835ab5dab5e88858~mv2.png" alt="New Design">
+      </div>
+      <p class="img-caption">Before → After: Action Overview redesign</p>
+    </div>
+
+    <!-- 2 -->
+    <div class="change-item reveal">
+      <div class="change-header">
+        <span class="change-num">02</span>
+        <div class="change-title-block">
+          <p class="change-tag">Phased Roll-out</p>
+          <p class="change-title">Dynamic Icon Integration</p>
+        </div>
+      </div>
+      <p class="change-body">The phased roll-out feature introduced additional segmented information. Dynamic icons were implemented to draw attention and provide immediate visual feedback on current status — making the interface intuitive at a glance.</p>
+      <div class="img-frame">
+        <img src="https://static.wixstatic.com/media/f74026_60266fbb94a5441bad08028354ca1a4e~mv2.png/v1/fill/w_980,h_329,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_60266fbb94a5441bad08028354ca1a4e~mv2.png" alt="Phased Roll-out">
+      </div>
+      <p class="img-caption">Dynamic icon system for phased rollout status</p>
+    </div>
+
+    <!-- 3 -->
+    <div class="change-item reveal">
+      <div class="change-header">
+        <span class="change-num">03</span>
+        <div class="change-title-block">
+          <p class="change-tag">New Action Form</p>
+          <p class="change-title">Progressive Disclosure</p>
+        </div>
+      </div>
+      <p class="change-body">When initiating a new action, users configure multiple parameters. Progressive disclosure maintains user focus by presenting information in a structured, manageable sequence — left to right, simple to complex.</p>
+      <p class="change-body">Advanced features like Phased Rollout, Advanced Trigger, and Auto-Retry are hidden until the user opts in — reducing cognitive load without sacrificing capability.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div class="img-frame">
+          <img src="https://static.wixstatic.com/media/f74026_60818a75922547479e3e701062491df2~mv2.png/v1/fill/w_980,h_1321,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_60818a75922547479e3e701062491df2~mv2.png" alt="Progressive Form Step 1">
+        </div>
+        <div class="img-frame">
+          <img src="https://static.wixstatic.com/media/f74026_5d7060ed0f5d4b0bb3e500c926f11622~mv2.png/v1/fill/w_980,h_1435,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_5d7060ed0f5d4b0bb3e500c926f11622~mv2.png" alt="Progressive Form Step 2">
+        </div>
+      </div>
+      <p class="img-caption">Progressive disclosure form — simple → advanced</p>
+    </div>
+
+    <!-- 4 -->
+    <div class="change-item reveal">
+      <div class="change-header">
+        <span class="change-num">04</span>
+        <div class="change-title-block">
+          <p class="change-tag">New Action Form</p>
+          <p class="change-title">Summary Screen</p>
+        </div>
+      </div>
+      <p class="change-body">The length and complexity of the form increases the risk of user error. A summary screen at the end allows users to review all inputs before final submission — acting as a last checkpoint before fleet-wide operations are triggered.</p>
+      <div class="img-frame">
+        <img src="https://static.wixstatic.com/media/f74026_b9734b4cd070437ab122aadef8867d2c~mv2.png/v1/fill/w_980,h_1435,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_b9734b4cd070437ab122aadef8867d2c~mv2.png" alt="Summary Screen">
+      </div>
+      <p class="img-caption">Review & confirm before final submission</p>
+    </div>
+
+    <!-- 5 -->
+    <div class="change-item reveal">
+      <div class="change-header">
+        <span class="change-num">05</span>
+        <div class="change-title-block">
+          <p class="change-tag">Error Handling</p>
+          <p class="change-title">Minimizing User Errors</p>
+        </div>
+      </div>
+      <p class="change-body">Running actions across large device fleets often creates overlaps with devices already engaged in other operations — leading to system errors. An 'Undone' action state was introduced, allowing users to defer conflicting devices. A button opens conflicting action details in a new tab for informed decision-making.</p>
+      <div class="img-frame">
+        <img src="https://static.wixstatic.com/media/f74026_0974e58847364a4e9679e224f3d5758c~mv2.jpg/v1/fill/w_980,h_828,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_0974e58847364a4e9679e224f3d5758c~mv2.jpg" alt="Error Handling">
+      </div>
+      <p class="img-caption">Conflict resolution dialog with 'Undone' state</p>
+    </div>
+
+    <!-- 6 -->
+    <div class="change-item reveal">
+      <div class="change-header">
+        <span class="change-num">06</span>
+        <div class="change-title-block">
+          <p class="change-tag">Filter & View</p>
+          <p class="change-title">Advanced Filter Function & View Options</p>
+        </div>
+      </div>
+      <p class="change-body">Managing thousands of devices requires smart filtering. Each device has two identification parameter sets — Metadata and Device Shadow. A percentage-based filter lets users select subsets of devices for bulk operations. Filters are context-sensitive across sections of the interface.</p>
+      <div class="steps-strip">
+        <div class="step-cell"><p class="step-n">1</p><img src="https://static.wixstatic.com/media/f74026_b9734b4cd070437ab122aadef8867d2c~mv2.png/v1/crop/x_0,y_1278,w_2797,h_239/fill/w_980,h_84,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_b9734b4cd070437ab122aadef8867d2c~mv2.png" class="step-img" alt="Step 1"></div>
+        <div class="step-cell"><p class="step-n">2</p><img src="https://static.wixstatic.com/media/f74026_1e54b80b8e254b15b5e2e751022a8eb5~mv2.png/v1/crop/x_0,y_1323,w_2797,h_343/fill/w_980,h_120,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_1e54b80b8e254b15b5e2e751022a8eb5~mv2.png" class="step-img" alt="Step 2"></div>
+        <div class="step-cell"><p class="step-n">3</p><img src="https://static.wixstatic.com/media/f74026_694757fbe7cd42a989376befaa23489f~mv2.png/v1/crop/x_0,y_1319,w_2797,h_656/fill/w_980,h_230,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_694757fbe7cd42a989376befaa23489f~mv2.png" class="step-img" alt="Step 3"></div>
+        <div class="step-cell"><p class="step-n">4</p><img src="https://static.wixstatic.com/media/f74026_8e9eaba8a93f4a4a960a776b77263d4e~mv2.png/v1/crop/x_0,y_1158,w_2797,h_382/fill/w_980,h_134,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_8e9eaba8a93f4a4a960a776b77263d4e~mv2.png" class="step-img" alt="Step 4"></div>
+        <div class="step-cell"><p class="step-n">5</p><img src="https://static.wixstatic.com/media/f74026_bc8481726f2f439c9138b53ee84c6074~mv2.png/v1/crop/x_0,y_1307,w_2797,h_692/fill/w_980,h_242,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_bc8481726f2f439c9138b53ee84c6074~mv2.png" class="step-img" alt="Step 5"></div>
+      </div>
+      <p class="img-caption" style="margin-top:12px">Steps 1–4: Filter selection flow. Step 5: View options panel.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cs-cta">
+  <div class="cs-cta-bg">Talk?</div>
+  <p class="cs-cta-label">↳ Let's connect</p>
+  <h2 class="cs-cta-heading">Have a project<br>in <em>mind?</em></h2>
+  <a href="mailto:designer.kj1411@gmail.com" class="cs-cta-link">designer.kj1411@gmail.com</a>
+</section>
+
+<!-- FOOTER -->
+<footer id="footer">
+  <p class="footer-copy">© 2025 Krupali Jain — All rights reserved</p>
+  <div class="footer-links">
+    <a href="#">LinkedIn</a>
+    <a href="#">Resume</a>
+    <a href="index.html">Back to Portfolio</a>
+  </div>
+</footer>
+
+<script>
+  // Hover states for cursor
+  document.querySelectorAll('a, button').forEach(function(el) {
+    el.addEventListener('mouseenter', function() {
+      var r = document.getElementById('c-ring');
+      var d = document.getElementById('c-dot');
+      if (r) r.classList.add('on');
+      if (d) d.style.background = 'var(--coral)';
+    });
+    el.addEventListener('mouseleave', function() {
+      var r = document.getElementById('c-ring');
+      var d = document.getElementById('c-dot');
+      if (r) r.classList.remove('on');
+      if (d) d.style.background = 'var(--yellow)';
+    });
+  });
+
+  // Scroll reveal
+  var revealEls = document.querySelectorAll('.reveal');
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+  revealEls.forEach(function(el) { observer.observe(el); });
+</script>
+</body>
+</html>

@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StoryTalkies — Krupali Jain</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --black: #1A1A1A;
+    --yellow: #D4FF4A;
+    --coral: #FF6B47;
+    --muted: #8A8070;
+    --border: #C8C0B0;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; cursor: none !important; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--black);
+    font-family: 'DM Mono', monospace;
+    overflow-x: hidden;
+  }
+
+  /* ── CURSOR ── */
+  .c-dot {
+    width: 10px; height: 10px;
+    background: var(--yellow);
+    border: 1.5px solid var(--black);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    z-index: 999999; pointer-events: none;
+    transition: background 0.2s, width 0.2s, height 0.2s;
+  }
+  .c-ring {
+    width: 34px; height: 34px;
+    border: 1.5px solid var(--black);
+    border-radius: 50%; background: transparent;
+    position: fixed; top: 0; left: 0;
+    z-index: 999998; pointer-events: none;
+    transition: background 0.2s, border-color 0.2s, width 0.2s, height 0.2s;
+  }
+  .c-ring.on { background: rgba(255,107,71,0.12); border-color: var(--coral); width: 44px; height: 44px; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 60px;
+    background: rgba(245,240,232,0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    text-decoration: none;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .box {
+    width: 36px; height: 36px;
+    background: var(--black);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .box::after {
+    content: '';
+    position: absolute; inset: 0;
+    border: 1.5px solid var(--black);
+    transform: translate(3px, 3px);
+    transition: transform 0.2s;
+  }
+  .box-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px; font-weight: 900;
+    color: var(--yellow); z-index: 1;
+  }
+  .logo:hover .box::after { transform: translate(5px, 5px); }
+  .nav-links { display: flex; gap: 40px; list-style: none; }
+  .nav-links a {
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    text-decoration: none; color: var(--black); position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -2px; left: 0;
+    width: 0; height: 1.5px; background: var(--coral);
+    transition: width 0.3s;
+  }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-back {
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    text-decoration: none; color: var(--muted);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .nav-back:hover { color: var(--coral); }
+
+  /* ── HERO ── */
+  .cs-hero {
+    padding: 140px 60px 80px;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: end;
+  }
+  .cs-eyebrow {
+    font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 20px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .cs-eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--coral); display: inline-block; }
+  .cs-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(40px, 5vw, 68px);
+    font-weight: 900; line-height: 1.05;
+    letter-spacing: -2px;
+  }
+  .cs-title em { font-style: italic; color: var(--coral); }
+  .cs-subtitle {
+    font-size: 14px; line-height: 1.8; color: var(--muted);
+    margin-top: 24px; max-width: 100%;
+  }
+  .cs-meta { display: flex; flex-direction: column; gap: 24px; padding-bottom: 8px; }
+  .cs-meta-item {}
+  .cs-meta-label { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .cs-meta-value { font-size: 14px; line-height: 1.7; color: var(--black); }
+  .cs-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 28px; }
+  .cs-tag {
+    font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase;
+    border: 1px solid var(--black); padding: 5px 12px;
+  }
+  .cs-tag.fill { background: var(--black); color: var(--cream); }
+
+  /* ── SECTION BASE ── */
+  .cs-section {
+    padding: 80px 60px;
+    border-bottom: 1px solid var(--border);
+  }
+  .cs-section-label {
+    font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .cs-section-label::before { content: '↳'; color: var(--coral); }
+  .cs-section-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 3.5vw, 44px);
+    font-weight: 900; line-height: 1.1;
+    letter-spacing: -1px; margin-bottom: 32px;
+  }
+  .cs-body {
+    font-size: 14px; line-height: 1.9; color: var(--muted);
+    max-width: 100%;
+  }
+  .cs-body + .cs-body { margin-top: 16px; }
+
+  /* ── OVERVIEW STRIP ── */
+  .cs-overview {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-bottom: 1px solid var(--border);
+    background: var(--black);
+  }
+  .cs-overview-item {
+    padding: 24px 40px;
+    border-right: 1px solid #333;
+  }
+  .cs-overview-item:last-child { border-right: none; }
+  .cs-overview-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 40px; font-weight: 900;
+    color: var(--yellow); line-height: 1; margin-bottom: 8px;
+  }
+  .cs-overview-label { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(245,240,232,0.5); }
+
+  /* ── PROBLEM GRID ── */
+  .problem-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 48px;
+  }
+  .problem-card {
+    background: var(--cream);
+    padding: 36px;
+  }
+  .problem-card:nth-child(1) { background: var(--black); color: var(--cream); }
+  .problem-card:nth-child(2) { background: var(--yellow); color: var(--black); }
+  .problem-card:nth-child(3) { background: var(--coral); color: var(--black); }
+  .problem-card:nth-child(4) { background: #fff; color: var(--black); }
+  .problem-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 56px; font-weight: 900;
+    opacity: 0.08; line-height: 1; margin-bottom: 12px;
+  }
+  .problem-card:nth-child(1) .problem-num,
+  .problem-card:nth-child(4) .problem-num { opacity: 0.15; }
+  .problem-card:nth-child(1) .problem-desc { color: rgba(245,240,232,0.8); }
+  .problem-card:nth-child(2) .problem-desc { color: var(--black); }
+  .problem-card:nth-child(3) .problem-desc { color: var(--black); }
+  .problem-card:nth-child(4) .problem-desc { color: var(--muted); }
+  .problem-title {
+    font-size: 15px; font-weight: 500; line-height: 1.4;
+    margin-bottom: 10px;
+  }
+  .problem-desc { font-size: 13px; line-height: 1.8; color: var(--muted); }
+
+  /* ── RESEARCH QUESTIONS ── */
+  .rq-list {
+    margin-top: 40px;
+    display: flex; flex-direction: column;
+  }
+  .rq-item {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 24px;
+    align-items: baseline;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border);
+    transition: padding-left 0.2s;
+  }
+  .rq-item:first-child { border-top: 1px solid var(--border); }
+  .rq-item:hover { padding-left: 8px; }
+  .rq-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 900;
+    color: var(--border);
+  }
+  .rq-item:hover .rq-num { color: var(--coral); }
+  .rq-text { font-size: 14px; line-height: 1.7; color: var(--black); }
+
+  /* ── DESIGN CHANGES ── */
+  .change-list { margin-top: 48px; display: flex; flex-direction: column; gap: 80px; }
+  .change-item {}
+  .change-header {
+    display: flex; align-items: baseline; gap: 20px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .change-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 64px; font-weight: 900;
+    line-height: 1; color: var(--border);
+    flex-shrink: 0;
+  }
+  .change-title-block {}
+  .change-tag { font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--coral); margin-bottom: 4px; }
+  .change-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; }
+  .change-body { font-size: 14px; line-height: 1.85; color: var(--muted); margin-bottom: 28px; max-width: 100%; }
+
+  /* Before / After */
+  .before-after {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;
+  }
+  .ba-box { padding: 20px; }
+  .ba-box.before { background: var(--coral); border: 1px solid var(--coral); color: var(--black); }
+  .ba-box.after  { background: var(--black); color: var(--cream); }
+  .ba-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 12px; opacity: 0.7; }
+  .ba-box.before .ba-label { color: var(--black); }
+  .ba-box.before .ba-points li { color: var(--black); }
+  .ba-box.before .ba-points li::before { color: var(--black); }
+  .ba-box.after .ba-label { color: #fff; }
+  .ba-points { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .ba-points li { font-size: 14px; line-height: 1.7; padding-left: 14px; position: relative; }
+  .ba-points li::before { content: '—'; position: absolute; left: 0; color: var(--coral); }
+
+  /* Image frame */
+  .img-frame {
+    border: 1px solid var(--border);
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .img-frame img { width: 100%; display: block; max-height: 50vh; object-fit: contain; object-position: top; background: #f0ede8; }
+  .img-caption { font-size: 12px; letter-spacing: 0.1em; color: var(--muted); padding-top: 8px; }
+
+  /* Steps row */
+  .steps-strip {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 24px;
+  }
+  .step-cell { background: var(--cream); padding: 20px 16px; }
+  .step-cell:nth-child(odd) { background: var(--black); color: var(--cream); }
+  .step-n { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; opacity: 0.15; }
+  .step-img { width: 100%; margin-top: 8px; display: block; border: 1px solid var(--border); }
+
+  /* Features list */
+  .features-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    background: var(--cream);
+    margin-top: 40px;
+  }
+  .feat-card {
+    background: #fff;
+    color: var(--black);
+    padding: 32px;
+    border: 1.5px solid var(--black);
+    display: flex; gap: 20px; align-items: flex-start;
+  }
+  .feat-card:nth-child(1) { background: var(--coral); color: var(--black); }
+  .feat-card:nth-child(4) { background: var(--coral); color: var(--black); }
+  .feat-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: currentColor; flex-shrink: 0; margin-top: 5px; opacity: 0.5;
+  }
+  .feat-title { font-size: 14px; font-weight: 500; margin-bottom: 6px; }
+  .feat-desc { font-size: 14px; line-height: 1.7; opacity: 0.7; }
+
+  /* ── CTA ── */
+  .cs-cta {
+    padding: 100px 60px;
+    background: var(--black);
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .cs-cta-bg {
+    font-family: 'Playfair Display', serif;
+    font-size: 200px; font-weight: 900;
+    color: #fff; opacity: 0.03;
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    white-space: nowrap; pointer-events: none;
+    letter-spacing: -8px;
+  }
+  .cs-cta-label { font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+  .cs-cta-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 4vw, 56px);
+    font-weight: 900; color: var(--cream); line-height: 1.1;
+    margin-bottom: 40px; letter-spacing: -1.5px;
+  }
+  .cs-cta-heading em { font-style: italic; color: var(--yellow); }
+  .cs-cta-link {
+    font-size: 12px; letter-spacing: 0.1em;
+    color: var(--cream); text-decoration: none;
+    border-bottom: 1px solid var(--coral); padding-bottom: 3px;
+    transition: color 0.2s, background 0.2s;
+  }
+  .cs-cta-link:hover { color: var(--black); background: var(--yellow); border-color: var(--yellow); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--black);
+    color: var(--cream);
+    padding: 24px 60px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid #333;
+  }
+  .footer-copy { font-size: 10px; letter-spacing: 0.1em; color: #555; }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #555; text-decoration: none; }
+  .footer-links a:hover { color: var(--yellow); }
+
+  /* ── NOISE ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 1000; opacity: 0.5;
+  }
+
+  /* ── REVEAL ── */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body onmousemove="__cm(event)">
+<script>
+function __cm(e) {
+  var d = document.getElementById('c-dot');
+  var r = document.getElementById('c-ring');
+  if (d) { d.style.left = (e.clientX - 5) + 'px'; d.style.top = (e.clientY - 5) + 'px'; }
+  if (r) { r.style.left = (e.clientX - 17) + 'px'; r.style.top = (e.clientY - 17) + 'px'; }
+}
+</script>
+<div class="c-dot" id="c-dot"></div>
+<div class="c-ring" id="c-ring"></div>
+<nav>
+  <a href="krupalijain-fixed.html" class="logo">
+    <div class="box"><span class="box-letter">KJ</span></div>
+  </a>
+  <a href="krupalijain-fixed.html#work" class="nav-back">← Back to Work</a>
+  <ul class="nav-links">
+    <li><a href="krupalijain-fixed.html#about">About</a></li>
+    <li><a href="krupalijain-fixed.html#footer">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="cs-hero">
+  <div class="cs-hero-left">
+    <p class="cs-eyebrow">Case Study · 04</p>
+    <h1 class="cs-title">Story<em>Talkies</em></h1>
+    <p class="cs-subtitle">A UX design project for a movie ticket booking app — enabling movie lovers to browse, select seats, and book tickets digitally, eliminating queues and physical tickets entirely.</p>
+    <div class="cs-tags">
+      <span class="cs-tag fill">UX Design</span>
+      <span class="cs-tag fill">Mobile App</span>
+      <span class="cs-tag">User Research</span>
+      <span class="cs-tag">Prototyping</span>
+    </div>
+  </div>
+  <div class="cs-meta">
+    <div class="cs-meta-item">
+      <p class="cs-meta-label">Role</p>
+      <p class="cs-meta-value">UX Designer — Interviews, wireframing, low & high-fidelity prototyping, usability studies, accessibility</p>
+    </div>
+    <div class="cs-meta-item">
+      <p class="cs-meta-label">Duration</p>
+      <p class="cs-meta-value">May – June 2022</p>
+    </div>
+    <div class="cs-meta-item">
+      <p class="cs-meta-label">Platform</p>
+      <p class="cs-meta-value">Mobile Application (iOS & Android)</p>
+    </div>
+  </div>
+</section>
+
+<!-- OVERVIEW STRIP -->
+<div class="cs-overview reveal">
+  <div class="cs-overview-item">
+    <p class="cs-overview-num">2</p>
+    <p class="cs-overview-label">Usability Study Rounds</p>
+  </div>
+  <div class="cs-overview-item">
+    <p class="cs-overview-num">3</p>
+    <p class="cs-overview-label">User Pain Points</p>
+  </div>
+  <div class="cs-overview-item">
+    <p class="cs-overview-num">2</p>
+    <p class="cs-overview-label">Competitors Audited</p>
+  </div>
+  <div class="cs-overview-item">
+    <p class="cs-overview-num">0</p>
+    <p class="cs-overview-label">Queues Needed</p>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">The Project</p>
+  <h2 class="cs-section-heading">What is <em style="font-style:italic;color:var(--black);background:linear-gradient(transparent 25%, var(--yellow) 25%);padding:0 6px;">StoryTalkies?</em></h2>
+  <p class="cs-body">StoryTalkies is an online platform for booking movie tickets at specific theatres. Chosen as a sample problem statement to learn Adobe XD and take a complete grasp of the end-to-end design process.</p>
+  <p class="cs-body">The goal was to enable all movie lovers to select and book tickets in advance without waiting in queues — giving users freedom to choose the movie, preferred date and time, and specific seat. Digital tickets eliminate the need for physical printouts entirely.</p>
+  <p class="cs-body" style="font-family:'Playfair Display',serif;font-style:italic;font-size:20px;color:var(--black);border-left:3px solid var(--coral);padding-left:20px;margin-top:36px;">"StoryTalkies is an app enabling movie lovers to book tickets without waiting in queues."</p>
+
+  <div class="features-grid" style="margin-top:48px">
+    <div class="feat-card">
+      <div class="feat-dot"></div>
+      <div><p class="feat-title">Movie Discovery</p><p class="feat-desc">Browse latest releases, upcoming films, and trailers from nearby theatres.</p></div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-dot"></div>
+      <div><p class="feat-title">Seat Selection</p><p class="feat-desc">Choose your exact preferred seat from an interactive theatre map.</p></div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-dot"></div>
+      <div><p class="feat-title">Date & Time Picker</p><p class="feat-desc">Select your preferred show time and date in a single streamlined step.</p></div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-dot"></div>
+      <div><p class="feat-title">Digital Tickets</p><p class="feat-desc">Receive soft-copy tickets instantly — no printing, no queues at the counter.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- USER RESEARCH -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">User Research</p>
+  <h2 class="cs-section-heading">Understanding <em style="font-style:italic;color:var(--coral);">the user.</em></h2>
+  <p class="cs-body">Surveys and interviews were conducted with college students and working adults, with a focus on the tech-savvy generation. Questions ranged from how often they watch movies, to how far in advance they plan, and what frustrates them most about current booking methods.</p>
+  <p class="cs-body">The user group confirmed initial assumptions — the young generation strongly prefers digital booking and soft-copy tickets over standing in queues for paper tickets.</p>
+
+  <div class="rq-list" style="margin-top:40px">
+    <div class="rq-item"><span class="rq-num">01</span><span class="rq-text">How many movies do you usually watch in theatre every month?</span></div>
+    <div class="rq-item"><span class="rq-num">02</span><span class="rq-text">Where do you get information about upcoming movies at the theatre?</span></div>
+    <div class="rq-item"><span class="rq-num">03</span><span class="rq-text">How far in advance is your plan usually in place?</span></div>
+    <div class="rq-item"><span class="rq-num">04</span><span class="rq-text">Do you check reviews before booking?</span></div>
+    <div class="rq-item"><span class="rq-num">05</span><span class="rq-text">How do you make the bookings — offline or online?</span></div>
+    <div class="rq-item"><span class="rq-num">06</span><span class="rq-text">In case of online, which platform do you use?</span></div>
+    <div class="rq-item"><span class="rq-num">07</span><span class="rq-text">What do you dislike about your current booking experience?</span></div>
+  </div>
+</section>
+
+<!-- PAIN POINTS -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Pain Points</p>
+  <h2 class="cs-section-heading"><em style="font-style:normal;background:linear-gradient(transparent 25%, var(--yellow) 25%);padding:0 6px;">Three</em> pain points,<br>one <em style="font-style:italic;color:var(--coral);">broken</em> experience.</h2>
+
+  <div class="problem-grid" style="grid-template-columns:1fr 1fr 1fr;margin-top:40px">
+    <div class="problem-card" style="background:var(--black);color:var(--cream);">
+      <p class="problem-num">01</p>
+      <p class="problem-title">Waiting in Queue</p>
+      <p class="problem-desc" style="color:rgba(245,240,232,0.8);">Waiting in queue to get tickets consumes a lot of time and is exhausting — especially for popular films and weekend shows.</p>
+    </div>
+    <div class="problem-card" style="background:var(--yellow);color:var(--black);">
+      <p class="problem-num">02</p>
+      <p class="problem-title">No Seat Choice</p>
+      <p class="problem-desc" style="color:var(--black);">Seat selection in the queue-based system is random — the chances of getting preferred seats are very low.</p>
+    </div>
+    <div class="problem-card" style="background:var(--coral);color:var(--black);">
+      <p class="problem-num">03</p>
+      <p class="problem-title">Hard to Find Info</p>
+      <p class="problem-desc" style="color:var(--black);">Information about upcoming movies at nearby theatres and show timings is scattered and difficult to find quickly.</p>
+    </div>
+  </div>
+</section>
+
+<!-- USER PERSONA -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">User Persona</p>
+  <h2 class="cs-section-heading">A user <em style="font-style:italic;color:var(--coral);">example.</em></h2>
+  <p class="cs-body">Shiply is an undergraduate student who loves watching movies with friends. She needs an app to check ticket availability and book in advance — so she and her friends can show up at the theatre stress-free with their seats already secured.</p>
+
+  <div class="img-frame" style="margin-top:32px">
+    <img src="https://static.wixstatic.com/media/f74026_c41d4b92e36c4b7cb0bac2f827d964e6~mv2.png/v1/fill/w_980,h_607,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_c41d4b92e36c4b7cb0bac2f827d964e6~mv2.png" alt="User Persona">
+  </div>
+  <p class="img-caption">User persona — Shiply, undergraduate student and frequent movie-goer</p>
+  <div class="img-frame" style="margin-top:16px">
+    <img src="https://static.wixstatic.com/media/f74026_3cafa7e308824a18a210a63a858f094e~mv2.png/v1/fill/w_980,h_483,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_3cafa7e308824a18a210a63a858f094e~mv2.png" alt="User Journey Map">
+  </div>
+  <p class="img-caption">User journey map — Shiply's current booking experience</p>
+</section>
+
+<!-- COMPETITIVE AUDIT -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Competitive Audit</p>
+  <h2 class="cs-section-heading">Learning from <em style="font-style:italic;color:var(--coral);">competitors.</em></h2>
+  <p class="cs-body">Potential competitors were evaluated to understand user pain points with existing products, and to identify what users might expect from a new solution.</p>
+
+  <div class="problem-grid" style="margin-top:40px">
+    <div class="problem-card" style="background:var(--black);color:var(--cream);">
+      <p class="problem-num" style="opacity:0.15;">B</p>
+      <p class="problem-title">BookMyShow</p>
+      <p class="problem-desc" style="color:rgba(245,240,232,0.8);"><strong style="color:var(--yellow);">Strength:</strong> Covers movies plus other events in nearby areas.<br><br><strong style="color:var(--yellow);">Weakness:</strong> Too many screens in the booking flow — affects experience.<br><br><strong style="color:var(--coral);">Opportunity:</strong> Use AI/ML to predict and recommend movies for customers.</p>
+    </div>
+    <div class="problem-card" style="background:#fff;color:var(--black);">
+      <p class="problem-num">J</p>
+      <p class="problem-title">JusTickets</p>
+      <p class="problem-desc" style="color:var(--muted);"><strong style="color:var(--black);">Strength:</strong> Specific filters make selection easy; available across many cities.<br><br><strong style="color:var(--black);">Weakness:</strong> No language selection; limited theatre availability.<br><br><strong style="color:var(--coral);">Opportunity:</strong> Include more theatre options to improve customer choice.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PAPER WIREFRAMES -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Design Process</p>
+  <h2 class="cs-section-heading">Starting with <em style="font-style:italic;color:var(--coral);">paper.</em></h2>
+  <p class="cs-body">Drafting iterations on paper first ensured that elements making it to digital wireframes were well-suited to address user pain points. The home screen prioritises showing the latest and upcoming movies along with their trailers.</p>
+
+  <div class="img-frame" style="margin-top:32px">
+    <img src="https://static.wixstatic.com/media/f74026_e561f4bf1ee240468456ee4fb7a32e66~mv2.png/v1/fill/w_980,h_404,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_e561f4bf1ee240468456ee4fb7a32e66~mv2.png" alt="Paper Wireframes">
+  </div>
+  <p class="img-caption">Paper wireframes — layout iterations for key screens</p>
+</section>
+
+<!-- DIGITAL WIREFRAMES -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Digital Wireframes</p>
+  <h2 class="cs-section-heading">From paper to <em style="font-style:italic;color:var(--coral);">pixels.</em></h2>
+  <p class="cs-body">Screen designs were continuously grounded in feedback and findings from user research — every decision driven by real user needs rather than assumptions.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:32px;">
+    <div class="img-frame">
+      <img src="https://static.wixstatic.com/media/f74026_28a77a686e45450592e9e6b44e6ecb06~mv2.png/v1/fill/w_980,h_792,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_28a77a686e45450592e9e6b44e6ecb06~mv2.png" alt="Digital Wireframes 1">
+    </div>
+    <div class="img-frame">
+      <img src="https://static.wixstatic.com/media/f74026_6545f950ad7842f8b943ee33d11388ff~mv2.png/v1/fill/w_980,h_758,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_6545f950ad7842f8b943ee33d11388ff~mv2.png" alt="Digital Wireframes 2">
+    </div>
+  </div>
+  <p class="img-caption">Digital wireframes — home, movie listing, seat selection and booking flow</p>
+</section>
+
+<!-- LOW FI PROTOTYPE -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Low Fidelity Prototype</p>
+  <h2 class="cs-section-heading">Testing the <em style="font-style:italic;color:var(--coral);">flow.</em></h2>
+  <p class="cs-body">A low-fidelity prototype was created from the completed digital wireframes to test the primary user flow — browsing movies, selecting seats, and completing a booking — before committing to high-fidelity design.</p>
+
+  <div class="img-frame" style="margin-top:32px">
+    <img src="https://static.wixstatic.com/media/f74026_58997f578c3b4cdb97c4474506bf2ca7~mv2.png/v1/fill/w_980,h_543,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_58997f578c3b4cdb97c4474506bf2ca7~mv2.png" alt="Low Fidelity Prototype">
+  </div>
+  <p class="img-caption">Low-fidelity prototype — end-to-end booking user flow</p>
+</section>
+
+<!-- USABILITY STUDY -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Usability Study</p>
+  <h2 class="cs-section-heading"><em style="font-style:normal;background:linear-gradient(transparent 25%, var(--yellow) 25%);padding:0 6px;">Two</em> rounds of testing,<br>one <em style="font-style:italic;color:var(--coral);">refined</em> product.</h2>
+  <p class="cs-body">Two rounds of usability studies were conducted. The first guided the transition from wireframes to mockups; the second used a high-fidelity prototype to reveal what still needed refinement.</p>
+
+  <div class="problem-grid" style="grid-template-columns:1fr 1fr;margin-top:40px">
+    <div class="problem-card" style="background:var(--black);color:var(--cream);">
+      <p class="problem-num" style="opacity:0.12;">!</p>
+      <p class="problem-title">Navigation Issues</p>
+      <p class="problem-desc" style="color:rgba(245,240,232,0.8);">The plan new event option was unclear. Reaching back to the home screen was complicated. Vendor selection was confusing.</p>
+    </div>
+    <div class="problem-card" style="background:var(--yellow);color:var(--black);">
+      <p class="problem-num" style="opacity:0.12;">!</p>
+      <p class="problem-title">Customisation Needed</p>
+      <p class="problem-desc" style="color:var(--black);">Users wanted to add multiple bookings simultaneously, and wanted more customisation options for themes and preferences.</p>
+    </div>
+  </div>
+</section>
+
+<!-- BEFORE/AFTER -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Refine the Design</p>
+  <h2 class="cs-section-heading">Before & <em style="font-style:italic;color:var(--coral);">after</em> usability.</h2>
+  <p class="cs-body">Early designs placed seat selection and date/time on separate screens. After usability studies, these were combined into a single screen — making the process far more streamlined for customers.</p>
+
+  <div class="before-after" style="margin-top:32px;align-items:start">
+    <div>
+      <p style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">Before</p>
+      <div class="img-frame">
+        <img src="https://static.wixstatic.com/media/f74026_3052b03d92144608af0f593b859f7955~mv2.png/v1/fill/w_757,h_477,al_c,q_90,enc_avif,quality_auto/f74026_3052b03d92144608af0f593b859f7955~mv2.png" alt="Before">
+      </div>
+    </div>
+    <div>
+      <p style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">After</p>
+      <div class="img-frame">
+        <img src="https://static.wixstatic.com/media/f74026_b6eda5c175534321bf7b90a978bcc24f~mv2.png/v1/fill/w_727,h_521,al_c,q_90,enc_avif,quality_auto/f74026_b6eda5c175534321bf7b90a978bcc24f~mv2.png" alt="After">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL MOCKUPS -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Final Mockups</p>
+  <h2 class="cs-section-heading">The final <em style="font-style:italic;color:var(--coral);">design.</em></h2>
+  <p class="cs-body">The final mockups reflect all iterations from research and usability testing — an intuitive, frictionless interface that makes booking a movie feel effortless.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:32px;">
+    <div class="img-frame">
+      <img src="https://static.wixstatic.com/media/f74026_04411102692546c6ae9c8678165b2a60~mv2.png/v1/fill/w_601,h_1014,al_c,q_90,enc_avif,quality_auto/f74026_04411102692546c6ae9c8678165b2a60~mv2.png" alt="Final Mockup 1">
+    </div>
+    <div class="img-frame">
+      <img src="https://static.wixstatic.com/media/f74026_cac2f8a8a8854c00b62b05cf3f2f8125~mv2.png/v1/fill/w_526,h_1053,al_c,q_90,enc_avif,quality_auto/f74026_cac2f8a8a8854c00b62b05cf3f2f8125~mv2.png" alt="Final Mockup 2">
+    </div>
+    <div class="img-frame">
+      <img src="https://static.wixstatic.com/media/f74026_c704f5f62601437eb17139fde4d9d249~mv2.png/v1/fill/w_720,h_561,al_c,q_90,enc_avif,quality_auto/f74026_c704f5f62601437eb17139fde4d9d249~mv2.png" alt="Final Mockup 3">
+    </div>
+    <div class="img-frame">
+      <img src="https://static.wixstatic.com/media/f74026_e3d8e787528a43bea1a3a2b183ef56b5~mv2.png/v1/fill/w_753,h_541,al_c,q_90,enc_avif,quality_auto/f74026_e3d8e787528a43bea1a3a2b183ef56b5~mv2.png" alt="Final Mockup 4">
+    </div>
+  </div>
+  <p class="img-caption">Final high-fidelity mockups — home, movie details, seat selection, and booking confirmation</p>
+</section>
+
+<!-- TAKEAWAYS -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Takeaways</p>
+  <h2 class="cs-section-heading">Impact & <em style="font-style:italic;color:var(--coral);">learnings.</em></h2>
+
+  <div class="problem-grid" style="margin-top:40px">
+    <div class="problem-card" style="background:var(--black);color:var(--cream);">
+      <p class="problem-num" style="opacity:0.12;">★</p>
+      <p class="problem-title">Impact</p>
+      <p class="problem-desc" style="color:rgba(245,240,232,0.8);">The app makes users feel like their needs are truly taken care of. From peer feedback: <em style="font-style:italic;">"The app designs made it so easy to plan my events! I would definitely use this app."</em></p>
+    </div>
+    <div class="problem-card" style="background:var(--yellow);color:var(--black);">
+      <p class="problem-num" style="opacity:0.12;">✎</p>
+      <p class="problem-title">What I Learned</p>
+      <p class="problem-desc" style="color:var(--black);">Designing StoryTalkies confirmed that first ideas are only the beginning. Usability studies and peer feedback shaped every iteration — great design is a conversation with real users.</p>
+    </div>
+  </div>
+
+  <div style="margin-top:40px;border:1px solid var(--border);padding:36px;">
+    <p style="font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:24px;">Next Steps</p>
+    <div style="display:flex;flex-direction:column;gap:20px;">
+      <div style="display:grid;grid-template-columns:48px 1fr;gap:20px;border-bottom:1px solid var(--border);padding-bottom:20px;">
+        <span style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--coral);">01</span>
+        <p style="font-size:14px;line-height:1.7;color:var(--black);">Conduct another round of usability studies to validate whether the pain points users experienced have been effectively addressed.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:48px 1fr;gap:20px;">
+        <span style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--coral);">02</span>
+        <p style="font-size:14px;line-height:1.7;color:var(--black);">Conduct more user research to determine any new areas of need as the platform expands to new cities and theatre chains.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cs-cta">
+  <div class="cs-cta-bg">Talk?</div>
+  <p class="cs-cta-label">↳ Let's connect</p>
+  <h2 class="cs-cta-heading">Have a project<br>in <em>mind?</em></h2>
+  <a href="mailto:designer.kj1411@gmail.com" class="cs-cta-link">designer.kj1411@gmail.com</a>
+</section>
+<footer id="footer">
+  <p class="footer-copy">© 2025 Krupali Jain — All rights reserved</p>
+  <div class="footer-links">
+    <a href="#">LinkedIn</a><a href="#">Resume</a><a href="index.html">Back to Portfolio</a>
+  </div>
+</footer>
+<script>
+  document.querySelectorAll('a,button').forEach(function(el){
+    el.addEventListener('mouseenter',function(){var r=document.getElementById('c-ring'),d=document.getElementById('c-dot');if(r)r.classList.add('on');if(d)d.style.background='var(--coral)';});
+    el.addEventListener('mouseleave',function(){var r=document.getElementById('c-ring'),d=document.getElementById('c-dot');if(r)r.classList.remove('on');if(d)d.style.background='var(--yellow)';});
+  });
+  var obs=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting)x.target.classList.add('visible');});},{threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el);});
+</script>
+</body></html>

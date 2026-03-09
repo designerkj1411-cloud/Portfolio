@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WeddingMakers — Krupali Jain</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --black: #1A1A1A;
+    --yellow: #D4FF4A;
+    --coral: #FF6B47;
+    --muted: #8A8070;
+    --border: #C8C0B0;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; cursor: none !important; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--black);
+    font-family: 'DM Mono', monospace;
+    overflow-x: hidden;
+  }
+
+  /* ── CURSOR ── */
+  .c-dot {
+    width: 10px; height: 10px;
+    background: var(--yellow);
+    border: 1.5px solid var(--black);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    z-index: 999999; pointer-events: none;
+    transition: background 0.2s, width 0.2s, height 0.2s;
+  }
+  .c-ring {
+    width: 34px; height: 34px;
+    border: 1.5px solid var(--black);
+    border-radius: 50%; background: transparent;
+    position: fixed; top: 0; left: 0;
+    z-index: 999998; pointer-events: none;
+    transition: background 0.2s, border-color 0.2s, width 0.2s, height 0.2s;
+  }
+  .c-ring.on { background: rgba(255,107,71,0.12); border-color: var(--coral); width: 44px; height: 44px; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 60px;
+    background: rgba(245,240,232,0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    text-decoration: none;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .box {
+    width: 36px; height: 36px;
+    background: var(--black);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .box::after {
+    content: '';
+    position: absolute; inset: 0;
+    border: 1.5px solid var(--black);
+    transform: translate(3px, 3px);
+    transition: transform 0.2s;
+  }
+  .box-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px; font-weight: 900;
+    color: var(--yellow); z-index: 1;
+  }
+  .logo:hover .box::after { transform: translate(5px, 5px); }
+  .nav-links { display: flex; gap: 40px; list-style: none; }
+  .nav-links a {
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    text-decoration: none; color: var(--black); position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -2px; left: 0;
+    width: 0; height: 1.5px; background: var(--coral);
+    transition: width 0.3s;
+  }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-back {
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    text-decoration: none; color: var(--muted);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .nav-back:hover { color: var(--coral); }
+
+  /* ── HERO ── */
+  .cs-hero {
+    padding: 140px 60px 80px;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: end;
+  }
+  .cs-eyebrow {
+    font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 20px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .cs-eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--coral); display: inline-block; }
+  .cs-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(40px, 5vw, 68px);
+    font-weight: 900; line-height: 1.05;
+    letter-spacing: -2px;
+  }
+  .cs-title em { font-style: italic; color: var(--coral); }
+  .cs-subtitle {
+    font-size: 14px; line-height: 1.8; color: var(--muted);
+    margin-top: 24px; max-width: 100%;
+  }
+  .cs-meta { display: flex; flex-direction: column; gap: 24px; padding-bottom: 8px; }
+  .cs-meta-item {}
+  .cs-meta-label { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .cs-meta-value { font-size: 14px; line-height: 1.7; color: var(--black); }
+  .cs-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 28px; }
+  .cs-tag {
+    font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase;
+    border: 1px solid var(--black); padding: 5px 12px;
+  }
+  .cs-tag.fill { background: var(--black); color: var(--cream); }
+
+  /* ── SECTION BASE ── */
+  .cs-section {
+    padding: 80px 60px;
+    border-bottom: 1px solid var(--border);
+  }
+  .cs-section-label {
+    font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .cs-section-label::before { content: '↳'; color: var(--coral); }
+  .cs-section-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 3.5vw, 44px);
+    font-weight: 900; line-height: 1.1;
+    letter-spacing: -1px; margin-bottom: 32px;
+  }
+  .cs-body {
+    font-size: 14px; line-height: 1.9; color: var(--muted);
+    max-width: 100%;
+  }
+  .cs-body + .cs-body { margin-top: 16px; }
+
+  /* ── OVERVIEW STRIP ── */
+  .cs-overview {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-bottom: 1px solid var(--border);
+    background: var(--black);
+  }
+  .cs-overview-item {
+    padding: 24px 40px;
+    border-right: 1px solid #333;
+  }
+  .cs-overview-item:last-child { border-right: none; }
+  .cs-overview-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 40px; font-weight: 900;
+    color: var(--yellow); line-height: 1; margin-bottom: 8px;
+  }
+  .cs-overview-label { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(245,240,232,0.5); }
+
+  /* ── PROBLEM GRID ── */
+  .problem-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 48px;
+  }
+  .problem-card {
+    background: var(--cream);
+    padding: 36px;
+  }
+  .problem-card:nth-child(1) { background: var(--black); color: var(--cream); }
+  .problem-card:nth-child(2) { background: var(--yellow); color: var(--black); }
+  .problem-card:nth-child(3) { background: var(--coral); color: var(--black); }
+  .problem-card:nth-child(4) { background: #fff; color: var(--black); }
+  .problem-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 56px; font-weight: 900;
+    opacity: 0.08; line-height: 1; margin-bottom: 12px;
+  }
+  .problem-card:nth-child(1) .problem-num,
+  .problem-card:nth-child(4) .problem-num { opacity: 0.15; }
+  .problem-card:nth-child(1) .problem-desc { color: rgba(245,240,232,0.8); }
+  .problem-card:nth-child(2) .problem-desc { color: var(--black); }
+  .problem-card:nth-child(3) .problem-desc { color: var(--black); }
+  .problem-card:nth-child(4) .problem-desc { color: var(--muted); }
+  .problem-title {
+    font-size: 15px; font-weight: 500; line-height: 1.4;
+    margin-bottom: 10px;
+  }
+  .problem-desc { font-size: 13px; line-height: 1.8; color: var(--muted); }
+
+  /* ── RESEARCH QUESTIONS ── */
+  .rq-list {
+    margin-top: 40px;
+    display: flex; flex-direction: column;
+  }
+  .rq-item {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 24px;
+    align-items: baseline;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border);
+    transition: padding-left 0.2s;
+  }
+  .rq-item:first-child { border-top: 1px solid var(--border); }
+  .rq-item:hover { padding-left: 8px; }
+  .rq-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 900;
+    color: var(--border);
+  }
+  .rq-item:hover .rq-num { color: var(--coral); }
+  .rq-text { font-size: 14px; line-height: 1.7; color: var(--black); }
+
+  /* ── DESIGN CHANGES ── */
+  .change-list { margin-top: 48px; display: flex; flex-direction: column; gap: 80px; }
+  .change-item {}
+  .change-header {
+    display: flex; align-items: baseline; gap: 20px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .change-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 64px; font-weight: 900;
+    line-height: 1; color: var(--border);
+    flex-shrink: 0;
+  }
+  .change-title-block {}
+  .change-tag { font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--coral); margin-bottom: 4px; }
+  .change-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; }
+  .change-body { font-size: 14px; line-height: 1.85; color: var(--muted); margin-bottom: 28px; max-width: 100%; }
+
+  /* Before / After */
+  .before-after {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;
+  }
+  .ba-box { padding: 20px; }
+  .ba-box.before { background: var(--coral); border: 1px solid var(--coral); color: var(--black); }
+  .ba-box.after  { background: var(--black); color: var(--cream); }
+  .ba-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 12px; opacity: 0.7; }
+  .ba-box.before .ba-label { color: var(--black); }
+  .ba-box.before .ba-points li { color: var(--black); }
+  .ba-box.before .ba-points li::before { color: var(--black); }
+  .ba-box.after .ba-label { color: #fff; }
+  .ba-points { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .ba-points li { font-size: 14px; line-height: 1.7; padding-left: 14px; position: relative; }
+  .ba-points li::before { content: '—'; position: absolute; left: 0; color: var(--coral); }
+
+  /* Image frame */
+  .img-frame {
+    border: 1px solid var(--border);
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .img-frame img { width: 100%; display: block; max-height: 50vh; object-fit: contain; object-position: top; background: #f0ede8; }
+  .img-caption { font-size: 12px; letter-spacing: 0.1em; color: var(--muted); padding-top: 8px; }
+
+  /* Steps row */
+  .steps-strip {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 24px;
+  }
+  .step-cell { background: var(--cream); padding: 20px 16px; }
+  .step-cell:nth-child(odd) { background: var(--black); color: var(--cream); }
+  .step-n { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; opacity: 0.15; }
+  .step-img { width: 100%; margin-top: 8px; display: block; border: 1px solid var(--border); }
+
+  /* Features list */
+  .features-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    background: var(--cream);
+    margin-top: 40px;
+  }
+  .feat-card {
+    background: #fff;
+    color: var(--black);
+    padding: 32px;
+    border: 1.5px solid var(--black);
+    display: flex; gap: 20px; align-items: flex-start;
+  }
+  .feat-card:nth-child(1) { background: var(--coral); color: var(--black); }
+  .feat-card:nth-child(4) { background: var(--coral); color: var(--black); }
+  .feat-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: currentColor; flex-shrink: 0; margin-top: 5px; opacity: 0.5;
+  }
+  .feat-title { font-size: 14px; font-weight: 500; margin-bottom: 6px; }
+  .feat-desc { font-size: 14px; line-height: 1.7; opacity: 0.7; }
+
+  /* ── CTA ── */
+  .cs-cta {
+    padding: 100px 60px;
+    background: var(--black);
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .cs-cta-bg {
+    font-family: 'Playfair Display', serif;
+    font-size: 200px; font-weight: 900;
+    color: #fff; opacity: 0.03;
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    white-space: nowrap; pointer-events: none;
+    letter-spacing: -8px;
+  }
+  .cs-cta-label { font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+  .cs-cta-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 4vw, 56px);
+    font-weight: 900; color: var(--cream); line-height: 1.1;
+    margin-bottom: 40px; letter-spacing: -1.5px;
+  }
+  .cs-cta-heading em { font-style: italic; color: var(--yellow); }
+  .cs-cta-link {
+    font-size: 12px; letter-spacing: 0.1em;
+    color: var(--cream); text-decoration: none;
+    border-bottom: 1px solid var(--coral); padding-bottom: 3px;
+    transition: color 0.2s, background 0.2s;
+  }
+  .cs-cta-link:hover { color: var(--black); background: var(--yellow); border-color: var(--yellow); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--black);
+    color: var(--cream);
+    padding: 24px 60px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid #333;
+  }
+  .footer-copy { font-size: 10px; letter-spacing: 0.1em; color: #555; }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #555; text-decoration: none; }
+  .footer-links a:hover { color: var(--yellow); }
+
+  /* ── NOISE ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 1000; opacity: 0.5;
+  }
+
+  /* ── REVEAL ── */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body onmousemove="__cm(event)">
+<script>
+function __cm(e) {
+  var d = document.getElementById('c-dot');
+  var r = document.getElementById('c-ring');
+  if (d) { d.style.left = (e.clientX - 5) + 'px'; d.style.top = (e.clientY - 5) + 'px'; }
+  if (r) { r.style.left = (e.clientX - 17) + 'px'; r.style.top = (e.clientY - 17) + 'px'; }
+}
+</script>
+<div class="c-dot" id="c-dot"></div>
+<div class="c-ring" id="c-ring"></div>
+<nav>
+  <a href="krupalijain-fixed.html" class="logo">
+    <div class="box"><span class="box-letter">KJ</span></div>
+  </a>
+  <a href="krupalijain-fixed.html#work" class="nav-back">← Back to Work</a>
+  <ul class="nav-links">
+    <li><a href="krupalijain-fixed.html#about">About</a></li>
+    <li><a href="krupalijain-fixed.html#footer">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="cs-hero">
+  <div class="cs-hero-left">
+    <p class="cs-eyebrow">Case Study · 06</p>
+    <h1 class="cs-title">Wedding<em>Makers</em></h1>
+    <p class="cs-subtitle">A B2B mobile app designed to support event planners in managing schedules, vendors and stakeholders — transforming a chaotic, manual process into a structured, professional workflow.</p>
+    <div class="cs-tags">
+      <span class="cs-tag fill">UX Design</span>
+      <span class="cs-tag fill">B2B Mobile</span>
+      <span class="cs-tag">Event Tech</span>
+      <span class="cs-tag">Prototyping</span>
+    </div>
+  </div>
+  <div class="cs-meta">
+    <div class="cs-meta-item">
+      <p class="cs-meta-label">Role</p>
+      <p class="cs-meta-value">UX Designer — Interviews, wireframing, low & high-fidelity prototyping, usability studies, accessibility</p>
+    </div>
+    <div class="cs-meta-item">
+      <p class="cs-meta-label">Duration</p>
+      <p class="cs-meta-value">July – August 2022</p>
+    </div>
+    <div class="cs-meta-item">
+      <p class="cs-meta-label">Platform</p>
+      <p class="cs-meta-value">B2B Mobile Application</p>
+    </div>
+  </div>
+</section>
+
+<!-- OVERVIEW STRIP -->
+<div class="cs-overview reveal">
+  <div class="cs-overview-item">
+    <p class="cs-overview-num">7</p>
+    <p class="cs-overview-label">Usability Participants</p>
+  </div>
+  <div class="cs-overview-item">
+    <p class="cs-overview-num">3</p>
+    <p class="cs-overview-label">Core Pain Points</p>
+  </div>
+  <div class="cs-overview-item">
+    <p class="cs-overview-num">2</p>
+    <p class="cs-overview-label">Competitors Audited</p>
+  </div>
+  <div class="cs-overview-item">
+    <p class="cs-overview-num">B2B</p>
+    <p class="cs-overview-label">Event Management</p>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">The Project</p>
+  <h2 class="cs-section-heading">What is <em style="font-style:italic;color:var(--black);background:linear-gradient(transparent 25%, var(--yellow) 25%);padding:0 6px;">WeddingMakers?</em></h2>
+  <p class="cs-body">WeddingMakers is a B2B mobile app designed to support event planners in planning event schedules and managing vendors and other stakeholders. The concept emerged from observing the inefficiencies in the daily life of event managers — a process that is largely manual, highly operational, and deeply stressful.</p>
+  <p class="cs-body">There is a clear need to improve their productivity, save time, and help them operate professionally. WeddingMakers is the all-in-one event management platform for event managers.</p>
+  <p class="cs-body" style="font-family:'Playfair Display',serif;font-style:italic;font-size:20px;color:var(--black);border-left:3px solid var(--coral);padding-left:20px;margin-top:36px;">"WeddingMakers is the all-in-one event management platform for event managers."</p>
+
+  <div class="features-grid" style="margin-top:48px">
+    <div class="feat-card">
+      <div class="feat-dot"></div>
+      <div><p class="feat-title">Event Scheduling</p><p class="feat-desc">Plan and manage multiple events simultaneously with structured timelines and task tracking.</p></div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-dot"></div>
+      <div><p class="feat-title">Vendor Management</p><p class="feat-desc">Track progress across multiple vendors in a single place — no more spreadsheets or missed follow-ups.</p></div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-dot"></div>
+      <div><p class="feat-title">Stakeholder Coordination</p><p class="feat-desc">Manage communication and dependencies with clients, vendors, and team members in one app.</p></div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-dot"></div>
+      <div><p class="feat-title">Progress Tracking</p><p class="feat-desc">Visual task progress across all active events — never miss a critical follow-up again.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- USER RESEARCH -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">User Research</p>
+  <h2 class="cs-section-heading">Understanding <em style="font-style:italic;color:var(--coral);">the user.</em></h2>
+  <p class="cs-body">Interviews with event managers — especially wedding planners — were conducted to understand user needs. Questions ranged from the number of events managed simultaneously, to vendor connections, and the tools currently being used.</p>
+  <p class="cs-body">Research revealed that planning is not the only bottleneck — tracking and managing multiple vendors simultaneously is an even bigger challenge than the initial planning itself.</p>
+
+  <div class="rq-list" style="margin-top:40px">
+    <div class="rq-item"><span class="rq-num">01</span><span class="rq-text">How many events does an event manager plan at a time?</span></div>
+    <div class="rq-item"><span class="rq-num">02</span><span class="rq-text">Who are the stakeholders involved in any event?</span></div>
+    <div class="rq-item"><span class="rq-num">03</span><span class="rq-text">What are the dependencies on clients and vendors?</span></div>
+    <div class="rq-item"><span class="rq-num">04</span><span class="rq-text">Before confirming a booking, what information is exchanged between stakeholders?</span></div>
+    <div class="rq-item"><span class="rq-num">05</span><span class="rq-text">Once a booking is confirmed, what are the next steps?</span></div>
+    <div class="rq-item"><span class="rq-num">06</span><span class="rq-text">What is the typical timeline of each step after booking?</span></div>
+    <div class="rq-item"><span class="rq-num">07</span><span class="rq-text">Are there any current tools or apps being used for the process?</span></div>
+    <div class="rq-item"><span class="rq-num">08</span><span class="rq-text">What is the frequency of interaction with each stakeholder?</span></div>
+    <div class="rq-item"><span class="rq-num">09</span><span class="rq-text">If a tool is being used, what are its current limitations?</span></div>
+  </div>
+</section>
+
+<!-- PAIN POINTS -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Pain Points</p>
+  <h2 class="cs-section-heading"><em style="font-style:normal;background:linear-gradient(transparent 25%, var(--yellow) 25%);padding:0 6px;">Three</em> pain points,<br>one <em style="font-style:italic;color:var(--coral);">chaotic</em> workflow.</h2>
+
+  <div class="problem-grid" style="grid-template-columns:1fr 1fr 1fr;margin-top:40px">
+    <div class="problem-card" style="background:var(--black);color:var(--cream);">
+      <p class="problem-num">01</p>
+      <p class="problem-title">Managing Multiple Events</p>
+      <p class="problem-desc" style="color:rgba(245,240,232,0.8);">Planning multiple events simultaneously creates numerous tasks every day. Tracking to-dos and their progress becomes a nightmare.</p>
+    </div>
+    <div class="problem-card" style="background:var(--yellow);color:var(--black);">
+      <p class="problem-num">02</p>
+      <p class="problem-title">No Structured Management</p>
+      <p class="problem-desc" style="color:var(--black);">Different stages within a single event involve numerous stakeholders. The lack of a structured approach creates operational chaos.</p>
+    </div>
+    <div class="problem-card" style="background:var(--coral);color:var(--black);">
+      <p class="problem-num">03</p>
+      <p class="problem-title">Too Many Vendors</p>
+      <p class="problem-desc" style="color:var(--black);">Different vendors for different tasks make tracking everyone's progress extremely difficult — things fall through the cracks.</p>
+    </div>
+  </div>
+</section>
+
+<!-- USER PERSONA -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">User Persona</p>
+  <h2 class="cs-section-heading">A user <em style="font-style:italic;color:var(--coral);">example.</em></h2>
+  <p class="cs-body">Sangita is an event planner who needs an app for managing teams, vendors, and event planning — because manually tracking all tasks is complicated and she frequently misses critical follow-ups.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:32px;">
+    <div class="img-frame"><img src="https://static.wixstatic.com/media/f74026_39ff4cbc001d445782026fc7d10ac98e~mv2.png/v1/fill/w_980,h_548,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_39ff4cbc001d445782026fc7d10ac98e~mv2.png" alt="User Research"></div>
+    <div class="img-frame"><img src="https://static.wixstatic.com/media/f74026_dad08e72152f4ef3a0bf73444b555c55~mv2.png/v1/fill/w_980,h_544,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_dad08e72152f4ef3a0bf73444b555c55~mv2.png" alt="User Journey"></div>
+  </div>
+  <div class="img-frame" style="margin-top:16px">
+    <img src="https://static.wixstatic.com/media/f74026_e30d054b116d47b69d8d4426f71090be~mv2.png/v1/fill/w_980,h_548,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_e30d054b116d47b69d8d4426f71090be~mv2.png" alt="User Persona">
+  </div>
+  <p class="img-caption">User persona — Sangita, event planner managing multiple weddings simultaneously</p>
+</section>
+
+<!-- COMPETITIVE AUDIT -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Competitive Audit</p>
+  <h2 class="cs-section-heading">Learning from <em style="font-style:italic;color:var(--coral);">competitors.</em></h2>
+  <p class="cs-body">Potential competitors were evaluated to identify user pain points with existing products and understand what users might expect from a new solution.</p>
+
+  <div class="problem-grid" style="margin-top:40px">
+    <div class="problem-card" style="background:var(--black);color:var(--cream);">
+      <p class="problem-num" style="opacity:0.15;">W</p>
+      <p class="problem-title">WedMeGood</p>
+      <p class="problem-desc" style="color:rgba(245,240,232,0.8);"><strong style="color:var(--yellow);">Strength:</strong> Very good visual appeal; caters to all price ranges.<br><br><strong style="color:var(--yellow);">Weakness:</strong> Only helps users find vendors — no booking or status tracking.<br><br><strong style="color:var(--coral);">Opportunity:</strong> In-app event planning and B2B customisation for business owners.</p>
+    </div>
+    <div class="problem-card" style="background:#fff;color:var(--black);">
+      <p class="problem-num">C</p>
+      <p class="problem-title">CaterNinja</p>
+      <p class="problem-desc" style="color:var(--muted);"><strong style="color:var(--black);">Strength:</strong> Customisation options; offers setup and service along with food.<br><br><strong style="color:var(--black);">Weakness:</strong> No language options; no restaurant selection for customers.<br><br><strong style="color:var(--coral);">Opportunity:</strong> Restaurant selection to ensure customer satisfaction and bulk order incentives.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PAPER WIREFRAMES -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Design Process</p>
+  <h2 class="cs-section-heading">Starting with <em style="font-style:italic;color:var(--coral);">paper.</em></h2>
+  <p class="cs-body">Paper iterations of each screen ensured elements making it to digital wireframes would address user pain points. The home screen prioritises: (1) adding a new event and (2) accessing upcoming events.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:32px;">
+    <div class="img-frame"><img src="https://static.wixstatic.com/media/f74026_4fa5cda35d874a6a9d462f77c7f7fa72~mv2.png/v1/fill/w_722,h_982,al_c,q_90,enc_avif,quality_auto/f74026_4fa5cda35d874a6a9d462f77c7f7fa72~mv2.png" alt="Paper Wireframe 1"></div>
+    <div class="img-frame"><img src="https://static.wixstatic.com/media/f74026_86133d6db6d345caa8e29aa53e29189e~mv2.png/v1/fill/w_719,h_979,al_c,q_90,enc_avif,quality_auto/f74026_86133d6db6d345caa8e29aa53e29189e~mv2.png" alt="Paper Wireframe 2"></div>
+    <div class="img-frame"><img src="https://static.wixstatic.com/media/f74026_5fea706611c34f2c8fa6cab326f0d710~mv2.png/v1/fill/w_722,h_980,al_c,q_90,enc_avif,quality_auto/f74026_5fea706611c34f2c8fa6cab326f0d710~mv2.png" alt="Paper Wireframe 3"></div>
+    <div class="img-frame"><img src="https://static.wixstatic.com/media/f74026_65b853a593374093addc868cb6596486~mv2.png/v1/fill/w_723,h_980,al_c,q_90,enc_avif,quality_auto/f74026_65b853a593374093addc868cb6596486~mv2.png" alt="Paper Wireframe 4"></div>
+    <div class="img-frame"><img src="https://static.wixstatic.com/media/f74026_2cb11b10734d4441a74b21e37fd8e87f~mv2.png/v1/fill/w_717,h_983,al_c,q_90,enc_avif,quality_auto/f74026_2cb11b10734d4441a74b21e37fd8e87f~mv2.png" alt="Paper Wireframe 5"></div>
+    <div class="img-frame"><img src="https://static.wixstatic.com/media/f74026_e04a936814c948a28b57f17fd6a705e0~mv2.png/v1/fill/w_723,h_985,al_c,q_90,enc_avif,quality_auto/f74026_e04a936814c948a28b57f17fd6a705e0~mv2.png" alt="Paper Wireframe 6"></div>
+  </div>
+  <p class="img-caption">Paper wireframes — all key screens explored before moving to digital</p>
+</section>
+
+<!-- DIGITAL WIREFRAMES -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Digital Wireframes</p>
+  <h2 class="cs-section-heading">From paper to <em style="font-style:italic;color:var(--coral);">pixels.</em></h2>
+  <p class="cs-body">Screen designs were grounded in feedback and findings from user research — every decision driven by real user needs rather than assumptions.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:32px;">
+    <div class="img-frame">
+      <img src="https://static.wixstatic.com/media/f74026_fb5a5173ee8242d9a12de049b64ff94c~mv2.png/v1/fill/w_980,h_878,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_fb5a5173ee8242d9a12de049b64ff94c~mv2.png" alt="Digital Wireframes 1">
+    </div>
+    <div class="img-frame">
+      <img src="https://static.wixstatic.com/media/f74026_5cb4c088026c4e9bbcf3049425e74624~mv2.png/v1/fill/w_980,h_836,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_5cb4c088026c4e9bbcf3049425e74624~mv2.png" alt="Digital Wireframes 2">
+    </div>
+  </div>
+  <p class="img-caption">Digital wireframes — home, event management, vendor management and booking screens</p>
+</section>
+
+<!-- USABILITY STUDY -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Usability Study</p>
+  <h2 class="cs-section-heading"><em style="font-style:normal;background:linear-gradient(transparent 25%, var(--yellow) 25%);padding:0 6px;">Seven</em> participants,<br>one <em style="font-style:italic;color:var(--coral);">clear</em> direction.</h2>
+  <p class="cs-body">An unmoderated usability study was conducted with 7 participants — including event managers with multiple active events, and individual vendors — to see how both sides of the marketplace experienced the app. Sessions ran 15–20 minutes each.</p>
+
+  <div class="img-frame" style="margin-top:32px">
+    <img src="https://static.wixstatic.com/media/f74026_7cd4d6001e6e4a61a2e16840440a59c2~mv2.png/v1/fill/w_980,h_774,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_7cd4d6001e6e4a61a2e16840440a59c2~mv2.png" alt="Affinity Map">
+  </div>
+  <p class="img-caption">Affinity map — synthesising insights from usability study participants</p>
+
+  <div class="problem-grid" style="grid-template-columns:1fr 1fr;margin-top:32px">
+    <div class="problem-card" style="background:var(--black);color:var(--cream);">
+      <p class="problem-num" style="opacity:0.12;">!</p>
+      <p class="problem-title">Navigation & Clarity</p>
+      <p class="problem-desc" style="color:rgba(245,240,232,0.8);">The new event option was unclear. Vendor selection was confusing. Reaching back to the home screen was complicated for users.</p>
+    </div>
+    <div class="problem-card" style="background:var(--yellow);color:var(--black);">
+      <p class="problem-num" style="opacity:0.12;">!</p>
+      <p class="problem-title">Customisation & Scale</p>
+      <p class="problem-desc" style="color:var(--black);">Users wanted to manage multiple events simultaneously with better customisation options for themes and event-specific workflows.</p>
+    </div>
+  </div>
+</section>
+
+<!-- BEFORE/AFTER -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Refine the Design</p>
+  <h2 class="cs-section-heading">Before & <em style="font-style:italic;color:var(--coral);">after</em> usability.</h2>
+  <p class="cs-body">Early designs allowed planning new events but lacked customisation. After usability studies, the home screen was updated with two distinct sections — Add New Event and My Events — allowing for continuous, customisable event management.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:32px;">
+    <div>
+      <p style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">Before — Home Screen</p>
+      <div class="img-frame"><img src="https://static.wixstatic.com/media/f74026_34d9f8335bf54f949a23c75829178389~mv2.png/v1/fill/w_683,h_1338,al_c,q_90,enc_avif,quality_auto/f74026_34d9f8335bf54f949a23c75829178389~mv2.png" alt="Before Home"></div>
+    </div>
+    <div>
+      <p style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">After — Home Screen</p>
+      <div class="img-frame"><img src="https://static.wixstatic.com/media/f74026_7242addbd7f8446f8173e461e15df58e~mv2.png/v1/fill/w_542,h_1164,al_c,q_90,enc_avif,quality_auto/f74026_7242addbd7f8446f8173e461e15df58e~mv2.png" alt="After Home"></div>
+    </div>
+    <div>
+      <p style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">Before — Details Screen</p>
+      <div class="img-frame"><img src="https://static.wixstatic.com/media/f74026_3915cecfb317473eb5dfc5b5c7dbf98f~mv2.png/v1/fill/w_584,h_1240,al_c,q_90,enc_avif,quality_auto/f74026_3915cecfb317473eb5dfc5b5c7dbf98f~mv2.png" alt="Before Details"></div>
+    </div>
+    <div>
+      <p style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">After — Details Screen</p>
+      <div class="img-frame"><img src="https://static.wixstatic.com/media/f74026_a90f8a49e08443fb869b4e163c864404~mv2.png/v1/fill/w_682,h_1342,al_c,q_90,enc_avif,quality_auto/f74026_a90f8a49e08443fb869b4e163c864404~mv2.png" alt="After Details"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL MOCKUPS -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Final Mockups</p>
+  <h2 class="cs-section-heading">The final <em style="font-style:italic;color:var(--coral);">design.</em></h2>
+  <p class="cs-body">The final high-fidelity prototype presents clean user flows for planning and managing an event — from creating a new event to tracking vendor progress and viewing booking details.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:32px;">
+    <div class="img-frame"><img src="https://static.wixstatic.com/media/f74026_647e2a78ca224c8786b2856dc31d3965~mv2.png/v1/fill/w_679,h_1341,al_c,q_90,enc_avif,quality_auto/f74026_647e2a78ca224c8786b2856dc31d3965~mv2.png" alt="Final 1"></div>
+    <div class="img-frame"><img src="https://static.wixstatic.com/media/f74026_a90f8a49e08443fb869b4e163c864404~mv2.png/v1/fill/w_682,h_1342,al_c,q_90,enc_avif,quality_auto/f74026_a90f8a49e08443fb869b4e163c864404~mv2.png" alt="Final 2"></div>
+    <div class="img-frame"><img src="https://static.wixstatic.com/media/f74026_34d9f8335bf54f949a23c75829178389~mv2.png/v1/fill/w_683,h_1338,al_c,q_90,enc_avif,quality_auto/f74026_34d9f8335bf54f949a23c75829178389~mv2.png" alt="Final 3"></div>
+    <div class="img-frame"><img src="https://static.wixstatic.com/media/f74026_5e63a64618e94a24ae0412b3ebb8bc3c~mv2.png/v1/fill/w_684,h_1337,al_c,q_90,enc_avif,quality_auto/f74026_5e63a64618e94a24ae0412b3ebb8bc3c~mv2.png" alt="Final 4"></div>
+  </div>
+  <p class="img-caption">Final mockups — home, event details, booking details, and vendor management</p>
+
+  <div style="margin-top:40px;padding:28px;background:var(--black);display:flex;align-items:center;gap:20px;">
+    <div>
+      <p style="font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">High Fidelity Prototype</p>
+      <p style="font-size:14px;color:rgba(245,240,232,0.8);line-height:1.6;margin-bottom:16px;">The final prototype presents clean user flows for planning and managing events end-to-end.</p>
+      <a href="https://www.figma.com/proto/NdN8yUFHQ0WokbxlGZUzF8/orange_WeddingMakers?node-id=1-23309&p=f&t=UdmDBJP4Mt8c66a7-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=1%3A23309" target="_blank" style="display:inline-block;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;background:var(--yellow);color:var(--black);padding:10px 20px;text-decoration:none;">View Prototype →</a>
+    </div>
+  </div>
+</section>
+
+<!-- TAKEAWAYS -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Takeaways</p>
+  <h2 class="cs-section-heading">Impact & <em style="font-style:italic;color:var(--coral);">learnings.</em></h2>
+
+  <div class="problem-grid" style="margin-top:40px">
+    <div class="problem-card" style="background:var(--black);color:var(--cream);">
+      <p class="problem-num" style="opacity:0.12;">★</p>
+      <p class="problem-title">Impact</p>
+      <p class="problem-desc" style="color:rgba(245,240,232,0.8);">The app makes users feel their needs are truly taken care of. From peer feedback: <em style="font-style:italic;">"The app designs made it so easy to plan my events! I would definitely use this app for managing all my events."</em></p>
+    </div>
+    <div class="problem-card" style="background:var(--yellow);color:var(--black);">
+      <p class="problem-num" style="opacity:0.12;">✎</p>
+      <p class="problem-title">What I Learned</p>
+      <p class="problem-desc" style="color:var(--black);">Designing WeddingMakers confirmed that first ideas are only the beginning. Usability studies and peer feedback shaped every single iteration — great design is a constant conversation with real users.</p>
+    </div>
+  </div>
+
+  <div style="margin-top:40px;border:1px solid var(--border);padding:36px;">
+    <p style="font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:24px;">Next Steps</p>
+    <div style="display:flex;flex-direction:column;gap:20px;">
+      <div style="display:grid;grid-template-columns:48px 1fr;gap:20px;border-bottom:1px solid var(--border);padding-bottom:20px;">
+        <span style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--coral);">01</span>
+        <p style="font-size:14px;line-height:1.7;color:var(--black);">Conduct another round of usability studies to validate whether the pain points users experienced have been effectively addressed.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:48px 1fr;gap:20px;">
+        <span style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--coral);">02</span>
+        <p style="font-size:14px;line-height:1.7;color:var(--black);">Conduct more user research to determine any new areas of need as the platform expands beyond wedding planning.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cs-cta">
+  <div class="cs-cta-bg">Talk?</div>
+  <p class="cs-cta-label">↳ Let's connect</p>
+  <h2 class="cs-cta-heading">Have a project<br>in <em>mind?</em></h2>
+  <a href="mailto:designer.kj1411@gmail.com" class="cs-cta-link">designer.kj1411@gmail.com</a>
+</section>
+<footer id="footer">
+  <p class="footer-copy">© 2025 Krupali Jain — All rights reserved</p>
+  <div class="footer-links">
+    <a href="#">LinkedIn</a><a href="#">Resume</a><a href="index.html">Back to Portfolio</a>
+  </div>
+</footer>
+<script>
+  document.querySelectorAll('a,button').forEach(function(el){
+    el.addEventListener('mouseenter',function(){var r=document.getElementById('c-ring'),d=document.getElementById('c-dot');if(r)r.classList.add('on');if(d)d.style.background='var(--coral)';});
+    el.addEventListener('mouseleave',function(){var r=document.getElementById('c-ring'),d=document.getElementById('c-dot');if(r)r.classList.remove('on');if(d)d.style.background='var(--yellow)';});
+  });
+  var obs=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting)x.target.classList.add('visible');});},{threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el);});
+</script>
+</body></html>

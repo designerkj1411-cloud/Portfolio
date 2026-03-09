@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bytebeam Website — Krupali Jain</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --black: #1A1A1A;
+    --yellow: #D4FF4A;
+    --coral: #FF6B47;
+    --muted: #8A8070;
+    --border: #C8C0B0;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; cursor: none !important; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--black);
+    font-family: 'DM Mono', monospace;
+    overflow-x: hidden;
+  }
+
+  /* ── CURSOR ── */
+  .c-dot {
+    width: 10px; height: 10px;
+    background: var(--yellow);
+    border: 1.5px solid var(--black);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    z-index: 999999; pointer-events: none;
+    transition: background 0.2s, width 0.2s, height 0.2s;
+  }
+  .c-ring {
+    width: 34px; height: 34px;
+    border: 1.5px solid var(--black);
+    border-radius: 50%; background: transparent;
+    position: fixed; top: 0; left: 0;
+    z-index: 999998; pointer-events: none;
+    transition: background 0.2s, border-color 0.2s, width 0.2s, height 0.2s;
+  }
+  .c-ring.on { background: rgba(255,107,71,0.12); border-color: var(--coral); width: 44px; height: 44px; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 60px;
+    background: rgba(245,240,232,0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    text-decoration: none;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .box {
+    width: 36px; height: 36px;
+    background: var(--black);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .box::after {
+    content: '';
+    position: absolute; inset: 0;
+    border: 1.5px solid var(--black);
+    transform: translate(3px, 3px);
+    transition: transform 0.2s;
+  }
+  .box-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px; font-weight: 900;
+    color: var(--yellow); z-index: 1;
+  }
+  .logo:hover .box::after { transform: translate(5px, 5px); }
+  .nav-links { display: flex; gap: 40px; list-style: none; }
+  .nav-links a {
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    text-decoration: none; color: var(--black); position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -2px; left: 0;
+    width: 0; height: 1.5px; background: var(--coral);
+    transition: width 0.3s;
+  }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-back {
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    text-decoration: none; color: var(--muted);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .nav-back:hover { color: var(--coral); }
+
+  /* ── HERO ── */
+  .cs-hero {
+    padding: 140px 60px 80px;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: end;
+  }
+  .cs-eyebrow {
+    font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 20px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .cs-eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--coral); display: inline-block; }
+  .cs-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(40px, 5vw, 68px);
+    font-weight: 900; line-height: 1.05;
+    letter-spacing: -2px;
+  }
+  .cs-title em { font-style: italic; color: var(--coral); }
+  .cs-subtitle {
+    font-size: 14px; line-height: 1.8; color: var(--muted);
+    margin-top: 24px; max-width: 100%;
+  }
+  .cs-meta { display: flex; flex-direction: column; gap: 24px; padding-bottom: 8px; }
+  .cs-meta-item {}
+  .cs-meta-label { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .cs-meta-value { font-size: 14px; line-height: 1.7; color: var(--black); }
+  .cs-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 28px; }
+  .cs-tag {
+    font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase;
+    border: 1px solid var(--black); padding: 5px 12px;
+  }
+  .cs-tag.fill { background: var(--black); color: var(--cream); }
+
+  /* ── SECTION BASE ── */
+  .cs-section {
+    padding: 80px 60px;
+    border-bottom: 1px solid var(--border);
+  }
+  .cs-section-label {
+    font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .cs-section-label::before { content: '↳'; color: var(--coral); }
+  .cs-section-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 3.5vw, 44px);
+    font-weight: 900; line-height: 1.1;
+    letter-spacing: -1px; margin-bottom: 32px;
+  }
+  .cs-body {
+    font-size: 14px; line-height: 1.9; color: var(--muted);
+    max-width: 100%;
+  }
+  .cs-body + .cs-body { margin-top: 16px; }
+
+  /* ── OVERVIEW STRIP ── */
+  .cs-overview {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-bottom: 1px solid var(--border);
+    background: var(--black);
+  }
+  .cs-overview-item {
+    padding: 24px 40px;
+    border-right: 1px solid #333;
+  }
+  .cs-overview-item:last-child { border-right: none; }
+  .cs-overview-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 40px; font-weight: 900;
+    color: var(--yellow); line-height: 1; margin-bottom: 8px;
+  }
+  .cs-overview-label { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(245,240,232,0.5); }
+
+  /* ── PROBLEM GRID ── */
+  .problem-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 48px;
+  }
+  .problem-card {
+    background: var(--cream);
+    padding: 36px;
+  }
+  .problem-card:nth-child(1) { background: var(--black); color: var(--cream); }
+  .problem-card:nth-child(2) { background: var(--yellow); color: var(--black); }
+  .problem-card:nth-child(3) { background: var(--coral); color: var(--black); }
+  .problem-card:nth-child(4) { background: #fff; color: var(--black); }
+  .problem-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 56px; font-weight: 900;
+    opacity: 0.08; line-height: 1; margin-bottom: 12px;
+  }
+  .problem-card:nth-child(1) .problem-num,
+  .problem-card:nth-child(4) .problem-num { opacity: 0.15; }
+  .problem-card:nth-child(1) .problem-desc { color: rgba(245,240,232,0.8); }
+  .problem-card:nth-child(2) .problem-desc { color: var(--black); }
+  .problem-card:nth-child(3) .problem-desc { color: var(--black); }
+  .problem-card:nth-child(4) .problem-desc { color: var(--muted); }
+  .problem-title {
+    font-size: 15px; font-weight: 500; line-height: 1.4;
+    margin-bottom: 10px;
+  }
+  .problem-desc { font-size: 13px; line-height: 1.8; color: var(--muted); }
+
+  /* ── RESEARCH QUESTIONS ── */
+  .rq-list {
+    margin-top: 40px;
+    display: flex; flex-direction: column;
+  }
+  .rq-item {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 24px;
+    align-items: baseline;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border);
+    transition: padding-left 0.2s;
+  }
+  .rq-item:first-child { border-top: 1px solid var(--border); }
+  .rq-item:hover { padding-left: 8px; }
+  .rq-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 900;
+    color: var(--border);
+  }
+  .rq-item:hover .rq-num { color: var(--coral); }
+  .rq-text { font-size: 14px; line-height: 1.7; color: var(--black); }
+
+  /* ── DESIGN CHANGES ── */
+  .change-list { margin-top: 48px; display: flex; flex-direction: column; gap: 80px; }
+  .change-item {}
+  .change-header {
+    display: flex; align-items: baseline; gap: 20px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .change-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 64px; font-weight: 900;
+    line-height: 1; color: var(--border);
+    flex-shrink: 0;
+  }
+  .change-title-block {}
+  .change-tag { font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--coral); margin-bottom: 4px; }
+  .change-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; }
+  .change-body { font-size: 14px; line-height: 1.85; color: var(--muted); margin-bottom: 28px; max-width: 100%; }
+
+  /* Before / After */
+  .before-after {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;
+  }
+  .ba-box { padding: 20px; }
+  .ba-box.before { background: var(--coral); border: 1px solid var(--coral); color: var(--black); }
+  .ba-box.after  { background: var(--black); color: var(--cream); }
+  .ba-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 12px; opacity: 0.7; }
+  .ba-box.before .ba-label { color: var(--black); }
+  .ba-box.before .ba-points li { color: var(--black); }
+  .ba-box.before .ba-points li::before { color: var(--black); }
+  .ba-box.after .ba-label { color: #fff; }
+  .ba-points { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .ba-points li { font-size: 14px; line-height: 1.7; padding-left: 14px; position: relative; }
+  .ba-points li::before { content: '—'; position: absolute; left: 0; color: var(--coral); }
+
+  /* Image frame */
+  .img-frame {
+    border: 1px solid var(--border);
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .img-frame img { width: 100%; display: block; max-height: 50vh; object-fit: contain; object-position: top; background: #f0ede8; }
+  .img-caption { font-size: 12px; letter-spacing: 0.1em; color: var(--muted); padding-top: 8px; }
+
+  /* Steps row */
+  .steps-strip {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 24px;
+  }
+  .step-cell { background: var(--cream); padding: 20px 16px; }
+  .step-cell:nth-child(odd) { background: var(--black); color: var(--cream); }
+  .step-n { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; opacity: 0.15; }
+  .step-img { width: 100%; margin-top: 8px; display: block; border: 1px solid var(--border); }
+
+  /* Features list */
+  .features-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    background: var(--cream);
+    margin-top: 40px;
+  }
+  .feat-card {
+    background: #fff;
+    color: var(--black);
+    padding: 32px;
+    border: 1.5px solid var(--black);
+    display: flex; gap: 20px; align-items: flex-start;
+  }
+  .feat-card:nth-child(1) { background: var(--coral); color: var(--black); }
+  .feat-card:nth-child(4) { background: var(--coral); color: var(--black); }
+  .feat-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: currentColor; flex-shrink: 0; margin-top: 5px; opacity: 0.5;
+  }
+  .feat-title { font-size: 14px; font-weight: 500; margin-bottom: 6px; }
+  .feat-desc { font-size: 14px; line-height: 1.7; opacity: 0.7; }
+
+  /* ── CTA ── */
+  .cs-cta {
+    padding: 100px 60px;
+    background: var(--black);
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .cs-cta-bg {
+    font-family: 'Playfair Display', serif;
+    font-size: 200px; font-weight: 900;
+    color: #fff; opacity: 0.03;
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    white-space: nowrap; pointer-events: none;
+    letter-spacing: -8px;
+  }
+  .cs-cta-label { font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+  .cs-cta-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 4vw, 56px);
+    font-weight: 900; color: var(--cream); line-height: 1.1;
+    margin-bottom: 40px; letter-spacing: -1.5px;
+  }
+  .cs-cta-heading em { font-style: italic; color: var(--yellow); }
+  .cs-cta-link {
+    font-size: 12px; letter-spacing: 0.1em;
+    color: var(--cream); text-decoration: none;
+    border-bottom: 1px solid var(--coral); padding-bottom: 3px;
+    transition: color 0.2s, background 0.2s;
+  }
+  .cs-cta-link:hover { color: var(--black); background: var(--yellow); border-color: var(--yellow); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--black);
+    color: var(--cream);
+    padding: 24px 60px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid #333;
+  }
+  .footer-copy { font-size: 10px; letter-spacing: 0.1em; color: #555; }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #555; text-decoration: none; }
+  .footer-links a:hover { color: var(--yellow); }
+
+  /* ── NOISE ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 1000; opacity: 0.5;
+  }
+
+  /* ── REVEAL ── */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body onmousemove="__cm(event)">
+
+<script>
+function __cm(e) {
+  var d = document.getElementById('c-dot');
+  var r = document.getElementById('c-ring');
+  if (d) { d.style.left = (e.clientX - 5) + 'px'; d.style.top = (e.clientY - 5) + 'px'; }
+  if (r) { r.style.left = (e.clientX - 17) + 'px'; r.style.top = (e.clientY - 17) + 'px'; }
+}
+</script>
+<div class="c-dot" id="c-dot"></div>
+<div class="c-ring" id="c-ring"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="krupalijain-fixed.html" class="logo">
+    <div class="box"><span class="box-letter">KJ</span></div>
+  </a>
+  <a href="krupalijain-fixed.html#work" class="nav-back">← Back to Work</a>
+  <ul class="nav-links">
+    <li><a href="krupalijain-fixed.html#about">About</a></li>
+    <li><a href="krupalijain-fixed.html#footer">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="cs-hero">
+  <div class="cs-hero-left">
+    <p class="cs-eyebrow">Case Study · 02</p>
+    <h1 class="cs-title">Bytebeam <em>Website</em></h1>
+    <p class="cs-subtitle">Designing and developing a developer-friendly marketing website for Bytebeam — simplifying connectivity for new-age vehicles with clear product storytelling and functional hierarchy.</p>
+    <div class="cs-tags">
+      <span class="cs-tag fill">UI/UX Design</span>
+      <span class="cs-tag fill">Webflow Dev</span>
+      <span class="cs-tag">Marketing</span>
+      <span class="cs-tag">B2B</span>
+    </div>
+  </div>
+  <div class="cs-meta">
+    <div class="cs-meta-item">
+      <p class="cs-meta-label">Role</p>
+      <p class="cs-meta-value">UI/UX Designer & Webflow Developer — Requirements gathering, prototyping, design & development</p>
+    </div>
+    <div class="cs-meta-item">
+      <p class="cs-meta-label">Duration</p>
+      <p class="cs-meta-value">Oct 2023 – Ongoing</p>
+    </div>
+    <div class="cs-meta-item">
+      <p class="cs-meta-label">Team</p>
+      <p class="cs-meta-value">Achal Kothari (VP Business) · Isac Sam (Graphic Designer) · Krupali Jain (UI/UX)</p>
+    </div>
+  </div>
+</section>
+
+<!-- OVERVIEW STRIP -->
+<div class="cs-overview reveal">
+  <div class="cs-overview-item">
+    <p class="cs-overview-num">3</p>
+    <p class="cs-overview-label">Team Members</p>
+  </div>
+  <div class="cs-overview-item">
+    <p class="cs-overview-num">5+</p>
+    <p class="cs-overview-label">Key Sections Designed</p>
+  </div>
+  <div class="cs-overview-item">
+    <p class="cs-overview-num">B2B</p>
+    <p class="cs-overview-label">Developer-Focused</p>
+  </div>
+  <div class="cs-overview-item">
+    <p class="cs-overview-num">∞</p>
+    <p class="cs-overview-label">Connected Vehicles</p>
+  </div>
+</div>
+
+<!-- ABOUT PROJECT -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">The Project</p>
+  <h2 class="cs-section-heading">What is <em style="font-style:italic;color:var(--black);background:linear-gradient(transparent 25%, var(--yellow) 25%);padding:0 6px;">Bytebeam?</em></h2>
+  <p class="cs-body">Bytebeam is the one-stop solution for connected vehicles — offering seamless integration that boosts vehicle capabilities with comprehensive health monitoring, over-the-air updates, remote diagnostics, and driver monitoring.</p>
+  <p class="cs-body">The goal was to design and develop a website that communicates this complex value proposition clearly to both technical and business stakeholders, while remaining visually compelling and easy to navigate.</p>
+  <p class="cs-body" style="font-family:'Playfair Display',serif;font-style:italic;font-size:22px;color:var(--black);border-left:3px solid var(--coral);padding-left:20px;margin-top:36px;">"Simplifying connectivity for new age vehicles"</p>
+
+  <div class="features-grid" style="margin-top:48px">
+    <div class="feat-card">
+      <div class="feat-dot"></div>
+      <div><p class="feat-title">Health Monitoring</p><p class="feat-desc">Comprehensive real-time vehicle health data and diagnostics.</p></div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-dot"></div>
+      <div><p class="feat-title">OTA Updates</p><p class="feat-desc">Seamless over-the-air firmware updates for connected fleets.</p></div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-dot"></div>
+      <div><p class="feat-title">Remote Diagnostics</p><p class="feat-desc">Deep device-level diagnostics and error analysis in the cloud.</p></div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-dot"></div>
+      <div><p class="feat-title">Driver Monitoring</p><p class="feat-desc">Behavioural insights and safety metrics for fleet operators.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- COLOR THEME -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Design System</p>
+  <h2 class="cs-section-heading">Colour <em style="font-style:italic;color:var(--coral);">theme</em> & tokens.</h2>
+  <p class="cs-body">The visual identity was built around a dark, technical aesthetic — signalling trust and precision for engineering teams, while remaining approachable for business buyers. The palette anchors on deep navy and electric accents.</p>
+  <div class="img-frame" style="margin-top:32px">
+    <img src="https://static.wixstatic.com/media/f74026_105277c9c1214842956612d7d4df1b86~mv2.png/v1/fill/w_980,h_300,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_105277c9c1214842956612d7d4df1b86~mv2.png" alt="Color Theme">
+  </div>
+  <p class="img-caption">Bytebeam brand colour palette and usage guidelines</p>
+</section>
+
+<!-- TASK BAR & CTA -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Navigation & CTA</p>
+  <h2 class="cs-section-heading">Task bar & <em style="font-style:italic;color:var(--coral);">call to action.</em></h2>
+  <p class="cs-body">The navigation and CTA elements were designed to guide users seamlessly from awareness to conversion — balancing product discoverability with clear action pathways for both developers and decision-makers. Primary actions are always visible without overwhelming the experience.</p>
+  <div class="img-frame" style="margin-top:32px">
+    <img src="https://static.wixstatic.com/media/f74026_430d4440c85c4ba58666f01812799c72~mv2.png/v1/fill/w_980,h_235,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_430d4440c85c4ba58666f01812799c72~mv2.png" alt="Task Bar and CTA">
+  </div>
+  <p class="img-caption">Navigation bar and primary CTA design</p>
+</section>
+
+<!-- FEATURE PAGES -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Feature Pages</p>
+  <h2 class="cs-section-heading">Feature page <em style="font-style:italic;color:var(--coral);">design.</em></h2>
+  <p class="cs-body">Each product feature was given its own dedicated page — translating technical capabilities into user-friendly narratives. Layouts guide the reader from problem to solution using clear hierarchy, intentional whitespace, and strong visual anchors.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:32px;">
+    <div class="img-frame">
+      <img src="https://static.wixstatic.com/media/f74026_5e44f9563f55461d94c3ec9d1dc42e1e~mv2.png/v1/fill/w_980,h_505,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_5e44f9563f55461d94c3ec9d1dc42e1e~mv2.png" alt="Feature Page 1">
+    </div>
+    <div class="img-frame">
+      <img src="https://static.wixstatic.com/media/f74026_923edc3f087d4af28f57d3609e819d25~mv2.png/v1/fill/w_980,h_456,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_923edc3f087d4af28f57d3609e819d25~mv2.png" alt="Feature Page 2">
+    </div>
+  </div>
+  <p class="img-caption">Feature pages — Fleet Management and OTA Updates</p>
+</section>
+
+<!-- BLOG SECTION -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Content & Blog</p>
+  <h2 class="cs-section-heading">Blog <em style="font-style:italic;color:var(--coral);">section.</em></h2>
+  <p class="cs-body">A dedicated blog section was designed to support Bytebeam's content marketing strategy — helping the brand establish thought leadership in the connected vehicles space while driving organic traffic from technical audiences.</p>
+  <div class="img-frame" style="margin-top:32px">
+    <img src="https://static.wixstatic.com/media/f74026_a204bc492f52407891d32330a2998943~mv2.png/v1/fill/w_980,h_1089,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_a204bc492f52407891d32330a2998943~mv2.png" alt="Blog Section">
+  </div>
+  <p class="img-caption">Blog section layout with featured and recent articles</p>
+</section>
+
+<!-- SOCIAL PROOF -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Social Proof</p>
+  <h2 class="cs-section-heading">Selection UI & <em style="font-style:italic;color:var(--coral);">testimonials.</em></h2>
+  <p class="cs-body">To build trust with enterprise buyers, a customer carousel and testimonial section were designed — showcasing Bytebeam's client portfolio and real-world impact through social proof components that communicate scale and credibility at a glance.</p>
+
+  <div style="display:flex;flex-direction:column;gap:32px;margin-top:40px;">
+    <div>
+      <p class="cs-section-label" style="margin-bottom:12px;">01 — Testimonial</p>
+      <div class="img-frame" style="background:#1A1A1A;">
+        <video src="02_-_testimony_recording.mp4" autoplay loop muted playsinline style="width:100%;max-height:50vh;display:block;object-fit:contain;background:#1A1A1A;"></video>
+      </div>
+    </div>
+    <div>
+      <p class="cs-section-label" style="margin-bottom:12px;">02 — Collaborators</p>
+      <div class="img-frame" style="background:#1A1A1A;">
+        <video src="03_-_collaborators_recording.mp4" autoplay loop muted playsinline style="width:100%;max-height:50vh;display:block;object-fit:contain;background:#1A1A1A;"></video>
+      </div>
+    </div>
+    <div>
+      <p class="cs-section-label" style="margin-bottom:12px;">03 — Plan</p>
+      <div class="img-frame" style="background:#1A1A1A;">
+        <video src="04_-_plan_record.mp4" autoplay loop muted playsinline style="width:100%;max-height:50vh;display:block;object-fit:contain;background:#1A1A1A;"></video>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cs-cta">
+  <div class="cs-cta-bg">Talk?</div>
+  <p class="cs-cta-label">↳ Let's connect</p>
+  <h2 class="cs-cta-heading">Have a project<br>in <em>mind?</em></h2>
+  <a href="mailto:designer.kj1411@gmail.com" class="cs-cta-link">designer.kj1411@gmail.com</a>
+</section>
+
+<!-- FOOTER -->
+<footer id="footer">
+  <p class="footer-copy">© 2025 Krupali Jain — All rights reserved</p>
+  <div class="footer-links">
+    <a href="#">LinkedIn</a>
+    <a href="#">Resume</a>
+    <a href="index.html">Back to Portfolio</a>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('a, button').forEach(function(el) {
+    el.addEventListener('mouseenter', function() {
+      var r = document.getElementById('c-ring');
+      var d = document.getElementById('c-dot');
+      if (r) r.classList.add('on');
+      if (d) d.style.background = 'var(--coral)';
+    });
+    el.addEventListener('mouseleave', function() {
+      var r = document.getElementById('c-ring');
+      var d = document.getElementById('c-dot');
+      if (r) r.classList.remove('on');
+      if (d) d.style.background = 'var(--yellow)';
+    });
+  });
+
+  var revealEls = document.querySelectorAll('.reveal');
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  revealEls.forEach(function(el) { observer.observe(el); });
+</script>
+</body>
+</html>

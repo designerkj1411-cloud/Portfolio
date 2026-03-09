@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MentorMentee — Krupali Jain</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --black: #1A1A1A;
+    --yellow: #D4FF4A;
+    --coral: #FF6B47;
+    --muted: #8A8070;
+    --border: #C8C0B0;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; cursor: none !important; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--black);
+    font-family: 'DM Mono', monospace;
+    overflow-x: hidden;
+  }
+
+  /* ── CURSOR ── */
+  .c-dot {
+    width: 10px; height: 10px;
+    background: var(--yellow);
+    border: 1.5px solid var(--black);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    z-index: 999999; pointer-events: none;
+    transition: background 0.2s, width 0.2s, height 0.2s;
+  }
+  .c-ring {
+    width: 34px; height: 34px;
+    border: 1.5px solid var(--black);
+    border-radius: 50%; background: transparent;
+    position: fixed; top: 0; left: 0;
+    z-index: 999998; pointer-events: none;
+    transition: background 0.2s, border-color 0.2s, width 0.2s, height 0.2s;
+  }
+  .c-ring.on { background: rgba(255,107,71,0.12); border-color: var(--coral); width: 44px; height: 44px; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 60px;
+    background: rgba(245,240,232,0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    text-decoration: none;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .box {
+    width: 36px; height: 36px;
+    background: var(--black);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .box::after {
+    content: '';
+    position: absolute; inset: 0;
+    border: 1.5px solid var(--black);
+    transform: translate(3px, 3px);
+    transition: transform 0.2s;
+  }
+  .box-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px; font-weight: 900;
+    color: var(--yellow); z-index: 1;
+  }
+  .logo:hover .box::after { transform: translate(5px, 5px); }
+  .nav-links { display: flex; gap: 40px; list-style: none; }
+  .nav-links a {
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    text-decoration: none; color: var(--black); position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -2px; left: 0;
+    width: 0; height: 1.5px; background: var(--coral);
+    transition: width 0.3s;
+  }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-back {
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    text-decoration: none; color: var(--muted);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .nav-back:hover { color: var(--coral); }
+
+  /* ── HERO ── */
+  .cs-hero {
+    padding: 140px 60px 80px;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: end;
+  }
+  .cs-eyebrow {
+    font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 20px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .cs-eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--coral); display: inline-block; }
+  .cs-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(40px, 5vw, 68px);
+    font-weight: 900; line-height: 1.05;
+    letter-spacing: -2px;
+  }
+  .cs-title em { font-style: italic; color: var(--coral); }
+  .cs-subtitle {
+    font-size: 14px; line-height: 1.8; color: var(--muted);
+    margin-top: 24px; max-width: 100%;
+  }
+  .cs-meta { display: flex; flex-direction: column; gap: 24px; padding-bottom: 8px; }
+  .cs-meta-item {}
+  .cs-meta-label { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .cs-meta-value { font-size: 14px; line-height: 1.7; color: var(--black); }
+  .cs-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 28px; }
+  .cs-tag {
+    font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase;
+    border: 1px solid var(--black); padding: 5px 12px;
+  }
+  .cs-tag.fill { background: var(--black); color: var(--cream); }
+
+  /* ── SECTION BASE ── */
+  .cs-section {
+    padding: 80px 60px;
+    border-bottom: 1px solid var(--border);
+  }
+  .cs-section-label {
+    font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .cs-section-label::before { content: '↳'; color: var(--coral); }
+  .cs-section-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 3.5vw, 44px);
+    font-weight: 900; line-height: 1.1;
+    letter-spacing: -1px; margin-bottom: 32px;
+  }
+  .cs-body {
+    font-size: 14px; line-height: 1.9; color: var(--muted);
+    max-width: 100%;
+  }
+  .cs-body + .cs-body { margin-top: 16px; }
+
+  /* ── OVERVIEW STRIP ── */
+  .cs-overview {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-bottom: 1px solid var(--border);
+    background: var(--black);
+  }
+  .cs-overview-item {
+    padding: 24px 40px;
+    border-right: 1px solid #333;
+  }
+  .cs-overview-item:last-child { border-right: none; }
+  .cs-overview-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 40px; font-weight: 900;
+    color: var(--yellow); line-height: 1; margin-bottom: 8px;
+  }
+  .cs-overview-label { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(245,240,232,0.5); }
+
+  /* ── PROBLEM GRID ── */
+  .problem-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 48px;
+  }
+  .problem-card {
+    background: var(--cream);
+    padding: 36px;
+  }
+  .problem-card:nth-child(1) { background: var(--black); color: var(--cream); }
+  .problem-card:nth-child(2) { background: var(--yellow); color: var(--black); }
+  .problem-card:nth-child(3) { background: var(--coral); color: var(--black); }
+  .problem-card:nth-child(4) { background: #fff; color: var(--black); }
+  .problem-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 56px; font-weight: 900;
+    opacity: 0.08; line-height: 1; margin-bottom: 12px;
+  }
+  .problem-card:nth-child(1) .problem-num,
+  .problem-card:nth-child(4) .problem-num { opacity: 0.15; }
+  .problem-card:nth-child(1) .problem-desc { color: rgba(245,240,232,0.8); }
+  .problem-card:nth-child(2) .problem-desc { color: var(--black); }
+  .problem-card:nth-child(3) .problem-desc { color: var(--black); }
+  .problem-card:nth-child(4) .problem-desc { color: var(--muted); }
+  .problem-title {
+    font-size: 15px; font-weight: 500; line-height: 1.4;
+    margin-bottom: 10px;
+  }
+  .problem-desc { font-size: 13px; line-height: 1.8; color: var(--muted); }
+
+  /* ── RESEARCH QUESTIONS ── */
+  .rq-list {
+    margin-top: 40px;
+    display: flex; flex-direction: column;
+  }
+  .rq-item {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 24px;
+    align-items: baseline;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border);
+    transition: padding-left 0.2s;
+  }
+  .rq-item:first-child { border-top: 1px solid var(--border); }
+  .rq-item:hover { padding-left: 8px; }
+  .rq-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 900;
+    color: var(--border);
+  }
+  .rq-item:hover .rq-num { color: var(--coral); }
+  .rq-text { font-size: 14px; line-height: 1.7; color: var(--black); }
+
+  /* ── DESIGN CHANGES ── */
+  .change-list { margin-top: 48px; display: flex; flex-direction: column; gap: 80px; }
+  .change-item {}
+  .change-header {
+    display: flex; align-items: baseline; gap: 20px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .change-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 64px; font-weight: 900;
+    line-height: 1; color: var(--border);
+    flex-shrink: 0;
+  }
+  .change-title-block {}
+  .change-tag { font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--coral); margin-bottom: 4px; }
+  .change-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; }
+  .change-body { font-size: 14px; line-height: 1.85; color: var(--muted); margin-bottom: 28px; max-width: 100%; }
+
+  /* Before / After */
+  .before-after {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;
+  }
+  .ba-box { padding: 20px; }
+  .ba-box.before { background: var(--coral); border: 1px solid var(--coral); color: var(--black); }
+  .ba-box.after  { background: var(--black); color: var(--cream); }
+  .ba-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 12px; opacity: 0.7; }
+  .ba-box.before .ba-label { color: var(--black); }
+  .ba-box.before .ba-points li { color: var(--black); }
+  .ba-box.before .ba-points li::before { color: var(--black); }
+  .ba-box.after .ba-label { color: #fff; }
+  .ba-points { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .ba-points li { font-size: 14px; line-height: 1.7; padding-left: 14px; position: relative; }
+  .ba-points li::before { content: '—'; position: absolute; left: 0; color: var(--coral); }
+
+  /* Image frame */
+  .img-frame {
+    border: 1px solid var(--border);
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .img-frame img { width: 100%; display: block; max-height: 50vh; object-fit: contain; object-position: top; background: #f0ede8; }
+  .img-caption { font-size: 12px; letter-spacing: 0.1em; color: var(--muted); padding-top: 8px; }
+
+  /* Steps row */
+  .steps-strip {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 24px;
+  }
+  .step-cell { background: var(--cream); padding: 20px 16px; }
+  .step-cell:nth-child(odd) { background: var(--black); color: var(--cream); }
+  .step-n { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; opacity: 0.15; }
+  .step-img { width: 100%; margin-top: 8px; display: block; border: 1px solid var(--border); }
+
+  /* Features list */
+  .features-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    background: var(--cream);
+    margin-top: 40px;
+  }
+  .feat-card {
+    background: #fff;
+    color: var(--black);
+    padding: 32px;
+    border: 1.5px solid var(--black);
+    display: flex; gap: 20px; align-items: flex-start;
+  }
+  .feat-card:nth-child(1) { background: var(--coral); color: var(--black); }
+  .feat-card:nth-child(4) { background: var(--coral); color: var(--black); }
+  .feat-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: currentColor; flex-shrink: 0; margin-top: 5px; opacity: 0.5;
+  }
+  .feat-title { font-size: 14px; font-weight: 500; margin-bottom: 6px; }
+  .feat-desc { font-size: 14px; line-height: 1.7; opacity: 0.7; }
+
+  /* ── CTA ── */
+  .cs-cta {
+    padding: 100px 60px;
+    background: var(--black);
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .cs-cta-bg {
+    font-family: 'Playfair Display', serif;
+    font-size: 200px; font-weight: 900;
+    color: #fff; opacity: 0.03;
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    white-space: nowrap; pointer-events: none;
+    letter-spacing: -8px;
+  }
+  .cs-cta-label { font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+  .cs-cta-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 4vw, 56px);
+    font-weight: 900; color: var(--cream); line-height: 1.1;
+    margin-bottom: 40px; letter-spacing: -1.5px;
+  }
+  .cs-cta-heading em { font-style: italic; color: var(--yellow); }
+  .cs-cta-link {
+    font-size: 12px; letter-spacing: 0.1em;
+    color: var(--cream); text-decoration: none;
+    border-bottom: 1px solid var(--coral); padding-bottom: 3px;
+    transition: color 0.2s, background 0.2s;
+  }
+  .cs-cta-link:hover { color: var(--black); background: var(--yellow); border-color: var(--yellow); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--black);
+    color: var(--cream);
+    padding: 24px 60px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid #333;
+  }
+  .footer-copy { font-size: 10px; letter-spacing: 0.1em; color: #555; }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #555; text-decoration: none; }
+  .footer-links a:hover { color: var(--yellow); }
+
+  /* ── NOISE ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 1000; opacity: 0.5;
+  }
+
+  /* ── REVEAL ── */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body onmousemove="__cm(event)">
+
+<script>
+function __cm(e) {
+  var d = document.getElementById('c-dot');
+  var r = document.getElementById('c-ring');
+  if (d) { d.style.left = (e.clientX - 5) + 'px'; d.style.top = (e.clientY - 5) + 'px'; }
+  if (r) { r.style.left = (e.clientX - 17) + 'px'; r.style.top = (e.clientY - 17) + 'px'; }
+}
+</script>
+<div class="c-dot" id="c-dot"></div>
+<div class="c-ring" id="c-ring"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="krupalijain-fixed.html" class="logo">
+    <div class="box"><span class="box-letter">KJ</span></div>
+  </a>
+  <a href="krupalijain-fixed.html#work" class="nav-back">← Back to Work</a>
+  <ul class="nav-links">
+    <li><a href="krupalijain-fixed.html#about">About</a></li>
+    <li><a href="krupalijain-fixed.html#footer">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="cs-hero">
+  <div class="cs-hero-left">
+    <p class="cs-eyebrow">Case Study · 03</p>
+    <h1 class="cs-title">Mentor<em>Mentee</em></h1>
+    <p class="cs-subtitle">A UX design project for an online platform connecting career-changers with experienced mentors and curated upskilling resources — born from personal experience navigating a career switch.</p>
+    <div class="cs-tags">
+      <span class="cs-tag fill">UX Design</span>
+      <span class="cs-tag fill">Mobile App</span>
+      <span class="cs-tag">User Research</span>
+      <span class="cs-tag">Prototyping</span>
+    </div>
+  </div>
+  <div class="cs-meta">
+    <div class="cs-meta-item">
+      <p class="cs-meta-label">Role</p>
+      <p class="cs-meta-value">UX Designer — Interviews, wireframing, low & high-fidelity prototyping, usability studies, accessibility</p>
+    </div>
+    <div class="cs-meta-item">
+      <p class="cs-meta-label">Duration</p>
+      <p class="cs-meta-value">September – October 2022</p>
+    </div>
+    <div class="cs-meta-item">
+      <p class="cs-meta-label">Platform</p>
+      <p class="cs-meta-value">Mobile Application (iOS & Android)</p>
+    </div>
+  </div>
+</section>
+
+<!-- OVERVIEW STRIP -->
+<div class="cs-overview reveal">
+  <div class="cs-overview-item">
+    <p class="cs-overview-num">2</p>
+    <p class="cs-overview-label">Usability Study Rounds</p>
+  </div>
+  <div class="cs-overview-item">
+    <p class="cs-overview-num">3</p>
+    <p class="cs-overview-label">User Pain Points Identified</p>
+  </div>
+  <div class="cs-overview-item">
+    <p class="cs-overview-num">3</p>
+    <p class="cs-overview-label">Screen Sizes Designed</p>
+  </div>
+  <div class="cs-overview-item">
+    <p class="cs-overview-num">∞</p>
+    <p class="cs-overview-label">Careers Unlocked</p>
+  </div>
+</div>
+
+<!-- ABOUT PROJECT -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">The Project</p>
+  <h2 class="cs-section-heading">What is <em style="font-style:italic;color:var(--black);background:linear-gradient(transparent 25%, var(--yellow) 25%);padding:0 6px;">MentorMentee?</em></h2>
+  <p class="cs-body">MentorMentee is an online platform that helps individuals aspiring to build a career in a new field — connecting them with the right experienced mentors and providing curated training courses and live sessions by industry experts.</p>
+  <p class="cs-body">The journey of exploring a new field or growing in a specific one is always challenging. People struggle to find experienced guides who've walked the same path, and the right resources to upskill. I faced these challenges myself when I decided to switch careers — which is why this project is deeply personal.</p>
+  <p class="cs-body" style="font-family:'Playfair Display',serif;font-style:italic;font-size:20px;color:var(--black);border-left:3px solid var(--coral);padding-left:20px;margin-top:36px;">"MentorMentee helps people like me who want to build a career in an unexplored field by connecting with experienced people and the right upskilling resources."</p>
+
+  <div class="features-grid" style="margin-top:48px">
+    <div class="feat-card">
+      <div class="feat-dot"></div>
+      <div><p class="feat-title">Mentor Matching</p><p class="feat-desc">Connect with experienced professionals who have walked the same career path.</p></div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-dot"></div>
+      <div><p class="feat-title">Curated Courses</p><p class="feat-desc">Structured training programs and live sessions by industry experts.</p></div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-dot"></div>
+      <div><p class="feat-title">Career Exploration</p><p class="feat-desc">Understand day-to-day life in a role before committing to the switch.</p></div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-dot"></div>
+      <div><p class="feat-title">Upskilling Roadmap</p><p class="feat-desc">A clear, structured path to gain the competencies needed for a new career.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- USER RESEARCH -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">User Research</p>
+  <h2 class="cs-section-heading">Understanding <em style="font-style:italic;color:var(--coral);">the user.</em></h2>
+  <p class="cs-body">Surveys and interviews were conducted with college students, youngsters exploring career options, and professionals looking to change careers. Questions ranged from educational background to the specific challenges faced in making career decisions.</p>
+  <p class="cs-body">Since I had personally faced the same challenges, I was deeply empathetic to the problem. Speaking to people in my network revealed a clear pattern — almost everyone is in the same boat, whether they are fresh graduates or experienced professionals.</p>
+
+  <div class="rq-list" style="margin-top:40px">
+    <div class="rq-item"><span class="rq-num">01</span><span class="rq-text">What is your education qualification and past professional experience?</span></div>
+    <div class="rq-item"><span class="rq-num">02</span><span class="rq-text">What are your interests and hobbies? Is your education related to them?</span></div>
+    <div class="rq-item"><span class="rq-num">03</span><span class="rq-text">What challenges do you face in upskilling yourself?</span></div>
+    <div class="rq-item"><span class="rq-num">04</span><span class="rq-text">What do you want to pursue in the future as a career?</span></div>
+    <div class="rq-item"><span class="rq-num">05</span><span class="rq-text">Do you think you are well aware of this career path and the required skills?</span></div>
+    <div class="rq-item"><span class="rq-num">06</span><span class="rq-text">How do you plan to make this desired career switch — any upskilling plan?</span></div>
+    <div class="rq-item"><span class="rq-num">07</span><span class="rq-text">Do you find it challenging to find a mentor who can guide you?</span></div>
+    <div class="rq-item"><span class="rq-num">08</span><span class="rq-text">Have you taken guidance from an experienced person in this career move?</span></div>
+    <div class="rq-item"><span class="rq-num">09</span><span class="rq-text">Would you be keen to take courses from experienced professionals in this field?</span></div>
+  </div>
+</section>
+
+<!-- USER PAIN POINTS -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Pain Points</p>
+  <h2 class="cs-section-heading"><em style="font-style:normal;background:linear-gradient(transparent 25%, var(--yellow) 25%);padding:0 6px;">Three</em> pain points,<br>one <em style="font-style:italic;color:var(--coral);">broken</em> journey.</h2>
+  <p class="cs-body">Research confirmed that career confusion and lack of guidance is a universal problem — regardless of experience level or background.</p>
+
+  <div class="problem-grid" style="grid-template-columns: 1fr 1fr 1fr; margin-top:40px">
+    <div class="problem-card" style="background:var(--black);color:var(--cream);">
+      <p class="problem-num">01</p>
+      <p class="problem-title">Lack of Career Clarity</p>
+      <p class="problem-desc" style="color:rgba(245,240,232,0.8);">Not only fresh graduates but experienced professionals are unaware of all possible career options and their future growth paths.</p>
+    </div>
+    <div class="problem-card" style="background:var(--yellow);color:var(--black);">
+      <p class="problem-num">02</p>
+      <p class="problem-title">Interest vs. Reality Gap</p>
+      <p class="problem-desc" style="color:var(--black);">People can't imagine the day-to-day reality of a role — so they can't tell if it aligns with their actual interests before committing.</p>
+    </div>
+    <div class="problem-card" style="background:var(--coral);color:var(--black);">
+      <p class="problem-num">03</p>
+      <p class="problem-title">No Clear Upskilling Path</p>
+      <p class="problem-desc" style="color:var(--black);">Understanding the next steps to prepare for a new career is difficult — especially with so much conflicting content available online.</p>
+    </div>
+  </div>
+</section>
+
+<!-- USER PERSONA -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">User Persona</p>
+  <h2 class="cs-section-heading">A user <em style="font-style:italic;color:var(--coral);">example.</em></h2>
+  <p class="cs-body">Shlok is a fresh college graduate trying to understand career opportunities and chart a path to success. He believes a platform that connects him with multiple industry specialists could help him move in the right direction — but doesn't know where to start.</p>
+
+  <div class="img-frame" style="margin-top:32px">
+    <img src="https://static.wixstatic.com/media/f74026_15040dbef6f74e37938de28dd41929d3~mv2.png/v1/fill/w_980,h_605,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_15040dbef6f74e37938de28dd41929d3~mv2.png" alt="User Persona">
+  </div>
+  <p class="img-caption">User persona — Shlok, fresh graduate navigating career decisions</p>
+</section>
+
+<!-- COMPETITIVE AUDIT -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Competitive Audit</p>
+  <h2 class="cs-section-heading">Learning from <em style="font-style:italic;color:var(--coral);">competitors.</em></h2>
+  <p class="cs-body">To understand what problems users face with existing products — and what they expect from a new solution — a competitive audit of key players was conducted.</p>
+
+  <div class="problem-grid" style="margin-top:40px">
+    <div class="problem-card" style="background:var(--black);color:var(--cream);">
+      <p class="problem-num" style="opacity:0.15;">U</p>
+      <p class="problem-title">UStrive</p>
+      <p class="problem-desc" style="color:rgba(245,240,232,0.8);"><strong style="color:var(--yellow);">Strength:</strong> Connects with mentors, supports admissions and financial aid.<br><br><strong style="color:var(--yellow);">Weakness:</strong> Focused only on high school and college students.<br><br><strong style="color:var(--coral);">Opportunity:</strong> Partner with mentors for working professionals seeking career growth.</p>
+    </div>
+    <div class="problem-card" style="background:#fff;color:var(--black);">
+      <p class="problem-num">M</p>
+      <p class="problem-title">MentorKart</p>
+      <p class="problem-desc" style="color:var(--muted);"><strong style="color:var(--black);">Strength:</strong> Good mentor base for the tech industry.<br><br><strong style="color:var(--black);">Weakness:</strong> Poor navigation; no mentors for non-tech industries.<br><br><strong style="color:var(--coral);">Opportunity:</strong> Include non-tech mentors and broader course offerings.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PAPER WIREFRAMES -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Design Process</p>
+  <h2 class="cs-section-heading">Starting with <em style="font-style:italic;color:var(--coral);">paper.</em></h2>
+  <p class="cs-body">Taking time to draft iterations of each screen on paper ensured that the elements making it to digital wireframes were well-suited to address user pain points. For the home screen, I prioritised recommended mentors and courses front and centre.</p>
+
+  <div class="img-frame" style="margin-top:32px">
+    <img src="https://static.wixstatic.com/media/f74026_c9f4e310d9d547e3896cfdcfe84e3d20~mv2.png/v1/fill/w_980,h_448,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_c9f4e310d9d547e3896cfdcfe84e3d20~mv2.png" alt="Paper Wireframes">
+  </div>
+  <p class="img-caption">Paper wireframes — exploring layout iterations for key screens</p>
+</section>
+
+<!-- DIGITAL WIREFRAMES -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Digital Wireframes</p>
+  <h2 class="cs-section-heading">From paper to <em style="font-style:italic;color:var(--coral);">pixels.</em></h2>
+  <p class="cs-body">As the initial design phase progressed, screen designs were continuously grounded in feedback and findings from user research — ensuring every decision was driven by real user needs rather than assumptions.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:32px;">
+    <div class="img-frame">
+      <img src="https://static.wixstatic.com/media/f74026_2ed052a6e7e54819b44721117bfc98bf~mv2.png/v1/fill/w_980,h_886,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_2ed052a6e7e54819b44721117bfc98bf~mv2.png" alt="Digital Wireframes">
+    </div>
+    <div class="img-frame">
+      <img src="https://static.wixstatic.com/media/f74026_68ba37c1404a4d0082ead0b97ba427b0~mv2.png/v1/fill/w_980,h_1127,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_68ba37c1404a4d0082ead0b97ba427b0~mv2.png" alt="Digital Wireframes 2">
+    </div>
+  </div>
+  <p class="img-caption">Digital wireframes — home, mentor discovery, mentor profile, booking, and sessions screens</p>
+</section>
+
+<!-- LOW FI PROTOTYPE -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Low Fidelity Prototype</p>
+  <h2 class="cs-section-heading">Testing the <em style="font-style:italic;color:var(--coral);">flow.</em></h2>
+  <p class="cs-body">Using the completed digital wireframes, a low-fidelity prototype was created to test the primary user flow — connecting with a mentor and booking a session — enabling early usability testing before investing in high-fidelity design.</p>
+
+  <div class="img-frame" style="margin-top:32px">
+    <img src="https://static.wixstatic.com/media/f74026_98fd936c97894990951722af61cceb71~mv2.png/v1/fill/w_980,h_535,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_98fd936c97894990951722af61cceb71~mv2.png" alt="Low Fidelity Prototype">
+  </div>
+  <p class="img-caption">Low-fidelity prototype — primary user flow for mentor connection</p>
+</section>
+
+<!-- USABILITY STUDY -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Usability Study</p>
+  <h2 class="cs-section-heading"><em style="font-style:normal;background:linear-gradient(transparent 25%, var(--yellow) 25%);padding:0 6px;">Two</em> rounds of testing,<br>one <em style="font-style:italic;color:var(--coral);">refined</em> product.</h2>
+  <p class="cs-body">Two rounds of usability studies were conducted. The first guided the transition from wireframes to mockups; the second used a high-fidelity prototype to surface what still needed refinement.</p>
+
+  <div class="problem-grid" style="grid-template-columns:1fr 1fr 1fr;margin-top:40px">
+    <div class="problem-card" style="background:var(--black);color:var(--cream);">
+      <p class="problem-num" style="opacity:0.12;">!</p>
+      <p class="problem-title">Multiple Events</p>
+      <p class="problem-desc" style="color:rgba(245,240,232,0.8);">Users wanted to add and manage multiple mentor sessions simultaneously.</p>
+    </div>
+    <div class="problem-card" style="background:var(--yellow);color:var(--black);">
+      <p class="problem-num" style="opacity:0.12;">!</p>
+      <p class="problem-title">Customisation</p>
+      <p class="problem-desc" style="color:var(--black);">Users wanted personalisation options for themes, preferences and session formats.</p>
+    </div>
+    <div class="problem-card" style="background:var(--coral);color:var(--black);">
+      <p class="problem-num" style="opacity:0.12;">!</p>
+      <p class="problem-title">Navigation Issues</p>
+      <p class="problem-desc" style="color:var(--black);">The new event option was unclear, vendor selection was confusing, and returning to home was complicated.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MOCKUP BEFORE/AFTER -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Refine the Design</p>
+  <h2 class="cs-section-heading">Before & <em style="font-style:italic;color:var(--coral);">after</em> usability.</h2>
+  <p class="cs-body">Early designs placed price information on the mentor details page in a way that wasn't prominent enough. After the usability study, pricing was moved to the bottom with a clearer layout, and a favourites feature was introduced to let users save mentors for later.</p>
+
+  <div class="before-after" style="margin-top:32px;align-items:start">
+    <div>
+      <p style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">Before</p>
+      <div class="img-frame">
+        <img src="https://static.wixstatic.com/media/f74026_b7e83c63b43c4ed8a8c455f3aa7ecf43~mv2.png/v1/fill/w_453,h_1012,al_c,q_90,enc_avif,quality_auto/f74026_b7e83c63b43c4ed8a8c455f3aa7ecf43~mv2.png" alt="Before">
+      </div>
+    </div>
+    <div>
+      <p style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">After</p>
+      <div class="img-frame">
+        <img src="https://static.wixstatic.com/media/f74026_814c287164af4edf85d6bbed71d360fa~mv2.png/v1/fill/w_471,h_1022,al_c,q_90,enc_avif,quality_auto/f74026_814c287164af4edf85d6bbed71d360fa~mv2.png" alt="After">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL MOCKUPS -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Final Mockups</p>
+  <h2 class="cs-section-heading">The final <em style="font-style:italic;color:var(--coral);">design.</em></h2>
+  <p class="cs-body">The final mockups reflect all iterations from research and usability testing — a clean, intuitive interface that makes discovering mentors and courses feel effortless.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:32px;">
+    <div class="img-frame">
+      <img src="https://static.wixstatic.com/media/f74026_b230e1ec06d84c788ddacc321dfb4de1~mv2.png/v1/fill/w_416,h_936,al_c,q_90,enc_avif,quality_auto/f74026_b230e1ec06d84c788ddacc321dfb4de1~mv2.png" alt="Final Mockup 1">
+    </div>
+    <div class="img-frame">
+      <img src="https://static.wixstatic.com/media/f74026_36b579c9b58441f89a0ddd9efc0557c8~mv2.png/v1/fill/w_466,h_1027,al_c,q_90,enc_avif,quality_auto/f74026_36b579c9b58441f89a0ddd9efc0557c8~mv2.png" alt="Final Mockup 2">
+    </div>
+    <div class="img-frame">
+      <img src="https://static.wixstatic.com/media/f74026_dd90ad0c8abc4e7dbd1d3f637e947f51~mv2.png/v1/fill/w_466,h_1133,al_c,q_90,enc_avif,quality_auto/f74026_dd90ad0c8abc4e7dbd1d3f637e947f51~mv2.png" alt="Final Mockup 3">
+    </div>
+  </div>
+  <p class="img-caption">Final high-fidelity mockups — home, mentor profile, and session booking</p>
+
+  <div style="margin-top:40px;padding:28px;background:var(--black);display:flex;align-items:center;gap:20px;">
+    <div>
+      <p style="font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">High Fidelity Prototype</p>
+      <p style="font-size:14px;color:rgba(245,240,232,0.8);line-height:1.6;margin-bottom:16px;">The final prototype presents clean user flows for discovering mentors, browsing courses, and booking live sessions.</p>
+      <a href="https://www.figma.com/proto/gjb4rP81sZWWS44z0knL98/MentorApp_LF?node-id=112-552&p=f&t=gooNlsXrijUY8FIW-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=112%3A447" target="_blank" style="display:inline-block;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;background:var(--yellow);color:var(--black);padding:10px 20px;text-decoration:none;">View Prototype →</a>
+    </div>
+  </div>
+</section>
+
+<!-- RESPONSIVE DESIGN -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Responsive Design</p>
+  <h2 class="cs-section-heading">Built for <em style="font-style:italic;color:var(--coral);">every</em> screen.</h2>
+  <p class="cs-body">Designs were optimised for mobile, tablet, and desktop — each tailored to the specific needs and context of that screen size and usage pattern.</p>
+
+  <div class="img-frame" style="margin-top:32px">
+    <img src="https://static.wixstatic.com/media/f74026_47813de2bbee4336b5493b4c89f905c3~mv2.png/v1/fill/w_980,h_587,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_47813de2bbee4336b5493b4c89f905c3~mv2.png" alt="Site Map">
+  </div>
+  <p class="img-caption">Site map — information architecture overview</p>
+  <div class="img-frame" style="margin-top:16px">
+    <img src="https://static.wixstatic.com/media/f74026_5847f2e50763447386086828ce61d1b6~mv2.png/v1/fill/w_980,h_416,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/f74026_5847f2e50763447386086828ce61d1b6~mv2.png" alt="Responsive Designs">
+  </div>
+  <p class="img-caption">Responsive layouts — mobile, tablet, and desktop designs</p>
+</section>
+
+<!-- TAKEAWAYS -->
+<section class="cs-section reveal">
+  <p class="cs-section-label">Takeaways</p>
+  <h2 class="cs-section-heading">Impact & <em style="font-style:italic;color:var(--coral);">learnings.</em></h2>
+
+  <div class="problem-grid" style="margin-top:40px">
+    <div class="problem-card" style="background:var(--black);color:var(--cream);">
+      <p class="problem-num" style="opacity:0.12;">★</p>
+      <p class="problem-title">Impact</p>
+      <p class="problem-desc" style="color:rgba(245,240,232,0.8);">The app makes users feel like MentorMentee truly thinks about how to meet their needs. Peer feedback confirmed its potential: <em style="font-style:italic;">"The app looks simple to use and should definitely help people from various fields get the right mentorship."</em></p>
+    </div>
+    <div class="problem-card" style="background:var(--yellow);color:var(--black);">
+      <p class="problem-num" style="opacity:0.12;">✎</p>
+      <p class="problem-title">What I Learned</p>
+      <p class="problem-desc" style="color:var(--black);">While designing MentorMentee, I learned that the first ideas are only the beginning. Usability studies and peer feedback shaped every iteration — proving that great design is an ongoing conversation with real users.</p>
+    </div>
+  </div>
+
+  <div style="margin-top:40px;border:1px solid var(--border);padding:36px;">
+    <p style="font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:24px;">Next Steps</p>
+    <div style="display:flex;flex-direction:column;gap:20px;">
+      <div style="display:grid;grid-template-columns:48px 1fr;gap:20px;align-items:baseline;border-bottom:1px solid var(--border);padding-bottom:20px;">
+        <span style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--coral);">01</span>
+        <p style="font-size:14px;line-height:1.7;color:var(--black);">Conduct another round of usability studies to validate whether the pain points users experienced have been effectively addressed.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:48px 1fr;gap:20px;align-items:baseline;">
+        <span style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--coral);">02</span>
+        <p style="font-size:14px;line-height:1.7;color:var(--black);">Conduct more user research to determine any new areas of need as the platform scales to new industries and user demographics.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cs-cta">
+  <div class="cs-cta-bg">Talk?</div>
+  <p class="cs-cta-label">↳ Let's connect</p>
+  <h2 class="cs-cta-heading">Have a project<br>in <em>mind?</em></h2>
+  <a href="mailto:designer.kj1411@gmail.com" class="cs-cta-link">designer.kj1411@gmail.com</a>
+</section>
+
+<!-- FOOTER -->
+<footer id="footer">
+  <p class="footer-copy">© 2025 Krupali Jain — All rights reserved</p>
+  <div class="footer-links">
+    <a href="#">LinkedIn</a>
+    <a href="#">Resume</a>
+    <a href="index.html">Back to Portfolio</a>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('a, button').forEach(function(el) {
+    el.addEventListener('mouseenter', function() {
+      var r = document.getElementById('c-ring');
+      var d = document.getElementById('c-dot');
+      if (r) r.classList.add('on');
+      if (d) d.style.background = 'var(--coral)';
+    });
+    el.addEventListener('mouseleave', function() {
+      var r = document.getElementById('c-ring');
+      var d = document.getElementById('c-dot');
+      if (r) r.classList.remove('on');
+      if (d) d.style.background = 'var(--yellow)';
+    });
+  });
+
+  var revealEls = document.querySelectorAll('.reveal');
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  revealEls.forEach(function(el) { observer.observe(el); });
+</script>
+</body>
+</html>
