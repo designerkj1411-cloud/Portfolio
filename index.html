@@ -1035,6 +1035,14 @@
     .hcard-idx { font-size: 28px; }
   }
 
+
+  /* Hide custom cursor on touch devices */
+  @media (hover: none) and (pointer: coarse) {
+    *, *::before, *::after { cursor: auto !important; }
+    #c-dot, #c-ring { display: none !important; }
+    .hcard { cursor: pointer !important; }
+  }
+
 </style>
 </head>
 <body onmousemove="__cm(event)">
