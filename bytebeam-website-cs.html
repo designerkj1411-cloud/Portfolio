@@ -372,6 +372,78 @@
   /* ── REVEAL ── */
   .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
   .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ============================================
+     RESPONSIVE — TABLET & MOBILE
+     ============================================ */
+
+  @media (max-width: 1024px) {
+    nav { padding: 16px 40px; }
+    .cs-hero { padding: 120px 40px 60px; }
+    .cs-overview { padding: 24px 40px; }
+    .cs-section { padding: 60px 40px; }
+    .cs-cta { padding: 80px 40px; }
+    footer { padding: 20px 40px; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-links { gap: 16px; }
+    .nav-links a { font-size: 10px; }
+
+    .cs-hero {
+      grid-template-columns: 1fr !important;
+      padding: 100px 24px 48px;
+      gap: 32px;
+    }
+    .cs-hero-eyebrow { font-size: 10px; }
+    .cs-hero h1 { font-size: clamp(32px, 8vw, 60px); }
+
+    .cs-overview {
+      grid-template-columns: 1fr 1fr !important;
+      padding: 20px 24px;
+      gap: 0;
+    }
+
+    .cs-section { padding: 48px 24px; }
+    .cs-section-heading { font-size: clamp(24px, 6vw, 40px); }
+
+    .problem-grid,
+    .features-grid,
+    .before-after {
+      grid-template-columns: 1fr !important;
+    }
+
+    .rq-item { grid-template-columns: 32px 1fr !important; }
+
+    .change-list { grid-template-columns: 1fr !important; }
+
+    .img-frame img { max-height: 60vw; }
+
+    /* Inline side-by-side image grids → stack */
+    [style*="grid-template-columns:1fr 1fr"],
+    [style*="grid-template-columns: 1fr 1fr"] {
+      grid-template-columns: 1fr !important;
+    }
+
+    .cs-cta { padding: 60px 24px; }
+    .cs-cta-bg { font-size: clamp(60px, 20vw, 120px); }
+    .cs-cta-heading { font-size: clamp(28px, 7vw, 48px); }
+    .cs-cta-link { font-size: clamp(14px, 4vw, 20px); }
+
+    footer { padding: 16px 24px; flex-direction: column; gap: 12px; }
+    .footer-links { justify-content: center; }
+  }
+
+  @media (max-width: 480px) {
+    .nav-links { display: none; }
+    .cs-overview { grid-template-columns: 1fr 1fr !important; }
+    .cs-section { padding: 36px 20px; }
+    .cs-section-heading { font-size: clamp(22px, 7vw, 36px); }
+    .problem-grid { grid-template-columns: 1fr !important; }
+    .problem-card { padding: 24px; }
+  }
+
 </style>
 </head>
 <body onmousemove="__cm(event)">
