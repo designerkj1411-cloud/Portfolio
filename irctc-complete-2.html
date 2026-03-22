@@ -1,0 +1,1998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RailConnect — India's Railway, Redesigned</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --lotus:       #C4506A;
+    --lotus-deep:  #A0304A;
+    --lotus-pale:  #FBF3F5;
+    --lotus-mid:   #E8809A;
+    --sage:        #2A6B5A;
+    --sage-deep:   #1E5245;
+    --sage-pale:   #EAF4F1;
+    --gold:        #C49A5A;
+    --gold-pale:   #FDF5E6;
+    --plum:        #1A0F14;
+    --plum-mid:    #2E1820;
+    --ivory:       #FCF8F6;
+    --ink:         #1E0F14;
+    --mid:         #7A5A62;
+    --border:      #EDD8DE;
+    --border-sage: #C5DED9;
+    --r:           12px;
+    --r-sm:        8px;
+    --shadow:      0 4px 20px rgba(196,80,106,0.12);
+    --shadow-lg:   0 8px 40px rgba(196,80,106,0.18);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans', sans-serif;
+    background: var(--ivory);
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ═══════════════════════════════════
+     NAV — shared across all pages
+  ═══════════════════════════════════ */
+  nav {
+    background: var(--plum);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    border-bottom: 2px solid var(--lotus);
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+  .nav-logo .icon { width: 32px; height: 32px; background: var(--lotus); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .nav-logo span { font-family: 'Baloo 2', cursive; font-weight: 800; font-size: 20px; color: #fff; }
+  .nav-logo span em { color: var(--lotus-mid); font-style: normal; }
+  .nav-links { display: flex; gap: 4px; align-items: center; }
+  .nav-links a {
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .nav-links a:hover, .nav-links a.active { background: rgba(196,80,106,0.2); color: #fff; }
+  .nav-links .btn-login { background: var(--lotus); color: #fff; font-weight: 700; }
+  .nav-links .btn-login:hover { background: var(--lotus-deep); }
+
+  /* ═══════════════════════════════════
+     PAGE SYSTEM
+  ═══════════════════════════════════ */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ═══════════════════════════════════
+     PAGE NAV TABS (below nav)
+  ═══════════════════════════════════ */
+  .page-tabs {
+    background: var(--plum-mid);
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    border-bottom: 1px solid rgba(196,80,106,0.2);
+    padding: 0 24px;
+  }
+  .page-tab {
+    padding: 10px 18px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.5);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .page-tab:hover { color: rgba(255,255,255,0.85); }
+  .page-tab.active { color: var(--lotus-mid); border-bottom-color: var(--lotus); }
+
+  /* ═══════════════════════════════════
+     SHARED COMPONENTS
+  ═══════════════════════════════════ */
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+  .section { padding: 48px 0; }
+  .section-title { font-family: 'Baloo 2', cursive; font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+  .section-sub { font-size: 13px; color: var(--sage); margin-bottom: 24px; }
+
+  .card {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: var(--r);
+    transition: all 0.2s;
+  }
+  .card:hover { border-color: var(--lotus); box-shadow: var(--shadow); transform: translateY(-2px); }
+
+  .badge {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.3px;
+  }
+  .badge-lotus { background: var(--lotus-pale); color: var(--lotus-deep); }
+  .badge-sage  { background: var(--sage-pale);  color: var(--sage-deep); }
+  .badge-gold  { background: var(--gold-pale);  color: #7A5A10; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: var(--r-sm);
+    font-family: 'Baloo 2', cursive;
+    font-size: 15px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--lotus), var(--lotus-deep));
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(196,80,106,0.35);
+    width: 100%;
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(196,80,106,0.45); }
+  .btn-sage {
+    background: linear-gradient(135deg, var(--sage), var(--sage-deep));
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(42,107,90,0.3);
+  }
+  .btn-sage:hover { transform: translateY(-1px); }
+  .btn-outline {
+    background: transparent;
+    border: 1.5px solid var(--border);
+    color: var(--ink);
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 13px;
+  }
+  .btn-outline:hover { border-color: var(--lotus); color: var(--lotus-deep); }
+
+  /* Form fields */
+  .field-group { margin-bottom: 14px; }
+  .field-label { font-size: 10px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--mid); display: block; margin-bottom: 4px; }
+  .field-input {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--r-sm);
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    background: #fff;
+    outline: none;
+    transition: all 0.2s;
+  }
+  .field-input:focus { border-color: var(--lotus); box-shadow: 0 0 0 3px rgba(196,80,106,0.1); }
+  .field-input::placeholder { color: #C5B8BC; }
+
+  /* Status pills */
+  .status { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 12px; }
+  .status-confirmed { background: #EAF4F1; color: #1E5245; }
+  .status-waitlist  { background: #FFF8E6; color: #7A5010; }
+  .status-rac       { background: #EDF3FB; color: #1A4875; }
+  .status-cancelled { background: #F5EAEB; color: #7A1A28; }
+
+  /* Divider */
+  .divider-motif {
+    background: var(--plum);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+  .divider-line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(196,80,106,0.4), transparent); }
+  .divider-text { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: rgba(196,80,106,0.7); white-space: nowrap; }
+
+  /* ═══════════════════════════════════
+     PAGE 1 — TRAIN SEARCH (HOME)
+  ═══════════════════════════════════ */
+  .hero {
+    background: var(--plum);
+    padding: 52px 24px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 70% at 85% 40%, rgba(196,80,106,0.22) 0%, transparent 65%),
+      radial-gradient(ellipse 45% 60% at 15% 75%, rgba(42,107,90,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 35% 40% at 50% 100%, rgba(122,61,90,0.15) 0%, transparent 60%);
+  }
+  .hero-ring {
+    position: absolute; border-radius: 50%;
+    border: 1px solid rgba(196,80,106,0.12);
+    pointer-events: none;
+    animation: spin 50s linear infinite;
+  }
+  .hero-ring:nth-child(2) { width:640px; height:640px; right:-220px; top:-220px; }
+  .hero-ring:nth-child(3) { width:440px; height:440px; right:-120px; top:-120px; border-color:rgba(42,107,90,0.15); animation-duration:70s; animation-direction:reverse; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .hero-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 490px;
+    gap: 48px; align-items: center; position: relative;
+  }
+  .hero-copy { padding-bottom: 56px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(42,107,90,0.18);
+    border: 1px solid rgba(42,107,90,0.45);
+    color: #5ABFA8;
+    font-size: 11.5px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase;
+    padding: 5px 14px; border-radius: 20px; margin-bottom: 20px;
+  }
+  .hero-badge .dot {
+    width: 8px; height: 8px; background: #FF80A0; border-radius: 50%;
+    box-shadow: 0 0 6px 2px rgba(255,128,160,0.75); flex-shrink: 0;
+    animation: dotglow 1.4s ease-in-out infinite;
+  }
+  @keyframes dotglow {
+    0%,100% { opacity:1; transform:scale(1); box-shadow: 0 0 6px 2px rgba(255,128,160,0.75); }
+    50%      { opacity:0.6; transform:scale(0.75); box-shadow: 0 0 3px 1px rgba(255,128,160,0.35); }
+  }
+  .hero-h1 { font-family: 'Baloo 2', cursive; font-size: 46px; font-weight: 800; line-height: 1.1; color: #fff; margin-bottom: 16px; }
+  .hero-h1 .accent { color: #F07090; }
+  .hero-sub { font-family: 'Noto Serif', serif; font-style: italic; font-size: 15px; color: rgba(255,255,255,0.6); line-height: 1.7; max-width: 420px; margin-bottom: 28px; }
+  .hero-stats { display: flex; gap: 32px; }
+  .stat-num { font-family: 'Baloo 2', cursive; font-size: 28px; font-weight: 800; color: var(--gold); line-height: 1; }
+  .stat-label { font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+
+  /* Search Card */
+  .search-card { background: #fff; border-radius: var(--r); box-shadow: 0 24px 64px rgba(0,0,0,0.3); overflow: hidden; animation: slideUp 0.5s cubic-bezier(0.22,1,0.36,1) both; }
+  @keyframes slideUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+  .card-tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--ivory); }
+  .ctab { flex:1; padding:13px 8px; font-size:12px; font-weight:600; color:var(--mid); text-align:center; cursor:pointer; border-bottom:2px solid transparent; transition:all 0.2s; display:flex; flex-direction:column; align-items:center; gap:3px; font-size: 13px; }
+  .ctab .ti { font-size: 18px; }
+  .ctab.active { color: var(--lotus); border-bottom-color: var(--lotus); background: #fff; }
+  .ctab:hover:not(.active) { color: var(--ink); background: var(--border); }
+  .card-body { padding: 22px; }
+  .jtype-row { display:flex; gap:8px; margin-bottom:18px; }
+  .jtype { display:flex; align-items:center; gap:6px; padding:6px 14px; border-radius:20px; font-size:12.5px; font-weight:600; cursor:pointer; border:1.5px solid var(--border); color:var(--mid); transition:all 0.2s; background:transparent; }
+  .jtype.active, .jtype:hover { background:var(--sage-pale); border-color:var(--sage); color:var(--sage-deep); }
+  .jtype .rdot { width:12px;height:12px;border:2px solid currentColor;border-radius:50%;position:relative;flex-shrink:0; }
+  .jtype.active .rdot::after { content:'';position:absolute;inset:2px;background:var(--sage);border-radius:50%; }
+  .from-to { display:grid;grid-template-columns:1fr 40px 1fr;border:1.5px solid var(--border);border-radius:var(--r-sm);overflow:hidden;margin-bottom:12px;transition:border-color 0.2s; }
+  .from-to:focus-within { border-color: var(--lotus); box-shadow: 0 0 0 3px rgba(196,80,106,0.1); }
+  .ft-box { padding:12px 14px; }
+  .ft-box label { display:block;font-size:10px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:var(--mid);margin-bottom:2px; }
+  .ft-box input { border:none;outline:none;font-family:'Baloo 2',cursive;font-size:20px;font-weight:700;color:var(--ink);background:transparent;width:100%;cursor:pointer; }
+  .ft-box input::placeholder { color:#D0B8BE;font-weight:500;font-size:16px; }
+  .ft-box .hint { font-size:11px;color:var(--mid);margin-top:2px; }
+  .swap { width:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--lotus);background:var(--lotus-pale);border-left:1px solid var(--border);border-right:1px solid var(--border);font-size:18px;transition:all 0.2s;user-select:none;font-weight:700; }
+  .swap:hover { background:var(--lotus);color:#fff; }
+  .dates-row { display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px; }
+  .date-box { border:1.5px solid var(--border);border-radius:var(--r-sm);padding:12px 14px;cursor:pointer;transition:all 0.2s; }
+  .date-box:hover,.date-box:focus-within { border-color:var(--lotus);box-shadow:0 0 0 3px rgba(196,80,106,0.1); }
+  .date-box label { font-size:10px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:var(--mid);display:block;margin-bottom:2px; }
+  .date-box input { border:none;outline:none;font-size:15px;font-weight:600;color:var(--ink);background:transparent;width:100%;cursor:pointer; }
+  .date-box .day { font-size:11px;color:var(--mid); }
+  .opts-row { display:flex;gap:8px;align-items:center;margin-bottom:18px;flex-wrap:wrap; }
+  .pill { display:flex;align-items:center;gap:5px;padding:7px 13px;border:1.5px solid var(--border);border-radius:20px;font-size:12.5px;font-weight:600;color:var(--ink);cursor:pointer;background:#fff;transition:all 0.2s; }
+  .pill:hover { border-color:var(--sage);color:var(--sage-deep); }
+  .toggle-wrap { display:flex;align-items:center;gap:7px;margin-left:auto; }
+  .tog { width:36px;height:20px;background:var(--border);border-radius:10px;cursor:pointer;position:relative;transition:background 0.2s;flex-shrink:0; }
+  .tog.on { background:var(--sage); }
+  .tog::after { content:'';position:absolute;width:14px;height:14px;background:#fff;border-radius:50%;top:3px;left:3px;transition:left 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2); }
+  .tog.on::after { left:19px; }
+  .tog-label { font-size:12px;font-weight:500;color:var(--mid); }
+
+  /* Quick actions */
+  .quick-grid { display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:48px; }
+  .qcard { background:#fff;border:1.5px solid var(--border);border-radius:var(--r);padding:18px 10px;text-align:center;cursor:pointer;transition:all 0.25s;text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:8px; }
+  .qcard:hover { border-color:var(--lotus);transform:translateY(-4px);box-shadow:var(--shadow); }
+  .qicon { width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px; }
+  .qlabel { font-size:12px;font-weight:600;color:var(--ink);line-height:1.3; }
+
+  /* Route cards */
+  .routes-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:48px; }
+  .route-card { background:#fff;border:1.5px solid var(--border);border-radius:var(--r);padding:18px;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden; }
+  .route-card::before { content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--lotus),var(--sage));transform:scaleX(0);transform-origin:left;transition:transform 0.3s; }
+  .route-card:hover { border-color:transparent;box-shadow:0 8px 28px rgba(0,0,0,0.1);transform:translateY(-2px); }
+  .route-card:hover::before { transform:scaleX(1); }
+  .rc-cities { display:flex;align-items:center;gap:8px;margin-bottom:10px; }
+  .rc-city { font-family:'Baloo 2',cursive;font-size:18px;font-weight:700;color:var(--ink); }
+  .rc-arrow { color:var(--lotus);font-size:14px; }
+  .rc-meta { display:flex;gap:8px;align-items:center; }
+  .rc-price { margin-left:auto;font-size:13px;font-weight:700;color:var(--ink); }
+  .rc-price span { font-size:10px;color:var(--mid);font-weight:400; }
+
+  /* Festive banner */
+  .festive { background:linear-gradient(135deg,#1A0F14 0%,#0F0810 100%);border-radius:var(--r);padding:32px;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;margin-bottom:48px;position:relative;overflow:hidden; }
+  .festive::before { content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='30' cy='30' r='1.5' fill='rgba(196,160,80,0.15)'/%3E%3C/svg%3E") repeat; }
+  .festive-tag { font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:8px; }
+  .festive-h2 { font-family:'Baloo 2',cursive;font-size:24px;font-weight:800;color:#fff;margin-bottom:8px; }
+  .festive-p { font-size:13px;color:rgba(255,255,255,0.6);line-height:1.6;max-width:480px; }
+
+  /* Lang strip */
+  .lang-strip { background:var(--sage-pale);border:1px solid rgba(42,107,90,0.2);border-radius:var(--r);padding:14px 22px;display:flex;align-items:center;gap:14px;margin-bottom:48px;flex-wrap:wrap; }
+  .lang-label { font-size:12px;font-weight:600;color:var(--sage-deep);white-space:nowrap; }
+  .lang-pills { display:flex;gap:6px;flex-wrap:wrap; }
+  .lpill { padding:4px 11px;background:#fff;border:1px solid var(--border-sage);border-radius:16px;font-size:12px;font-weight:500;color:var(--sage-deep);cursor:pointer;transition:all 0.2s; }
+  .lpill:hover,.lpill.active { background:var(--sage);color:#fff;border-color:var(--sage); }
+
+  /* ═══════════════════════════════════
+     PAGE 2 — SEARCH RESULTS
+  ═══════════════════════════════════ */
+  .results-layout { display:grid;grid-template-columns:260px 1fr;gap:24px;padding:32px 0; }
+  .filter-panel { background:#fff;border:1.5px solid var(--border);border-radius:var(--r);padding:20px;height:fit-content;position:sticky;top:80px; }
+  .filter-title { font-family:'Baloo 2',cursive;font-size:16px;font-weight:700;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border); }
+  .filter-section { margin-bottom:20px; }
+  .filter-section h4 { font-size:11px;font-weight:700;letter-spacing:0.7px;text-transform:uppercase;color:var(--mid);margin-bottom:10px; }
+  .check-item { display:flex;align-items:center;gap:8px;margin-bottom:8px;cursor:pointer;font-size:13px;color:var(--ink); }
+  .check-item input { accent-color:var(--lotus);width:14px;height:14px; }
+  .time-slider { width:100%;accent-color:var(--lotus); }
+  .results-list { display:flex;flex-direction:column;gap:14px; }
+  .train-card { background:#fff;border:1.5px solid var(--border);border-radius:var(--r);padding:20px;transition:all 0.2s; }
+  .train-card:hover { border-color:var(--lotus);box-shadow:var(--shadow); }
+  .tc-head { display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px; }
+  .tc-name { font-family:'Baloo 2',cursive;font-size:17px;font-weight:700;color:var(--ink); }
+  .tc-number { font-size:12px;color:var(--mid);margin-top:2px; }
+  .tc-days { display:flex;gap:4px;margin-top:6px; }
+  .day-dot { width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700; }
+  .day-dot.run { background:var(--sage-pale);color:var(--sage-deep); }
+  .day-dot.off { background:var(--lotus-pale);color:#C5A0A8; }
+  .tc-timing { display:flex;align-items:center;gap:16px; }
+  .tc-time { font-family:'Baloo 2',cursive;font-size:22px;font-weight:800;color:var(--ink); }
+  .tc-stn { font-size:11px;color:var(--mid);margin-top:2px; }
+  .tc-dur { text-align:center; }
+  .tc-dur-line { display:flex;align-items:center;gap:4px;margin-bottom:4px; }
+  .tc-dur-bar { flex:1;height:1.5px;background:var(--border);position:relative; }
+  .tc-dur-bar::after { content:'▶';position:absolute;right:-6px;top:-8px;font-size:10px;color:var(--border); }
+  .tc-dur-text { font-size:12px;font-weight:600;color:var(--mid); }
+  .tc-stops { font-size:11px;color:var(--mid);text-align:center; }
+  .tc-classes { display:flex;gap:8px;margin-top:14px;flex-wrap:wrap; }
+  .tc-class {
+    border:1.5px solid var(--border);border-radius:var(--r-sm);padding:8px 12px;cursor:pointer;transition:all 0.2s;text-align:center;min-width:80px;
+  }
+  .tc-class:hover,.tc-class.sel { border-color:var(--lotus);background:var(--lotus-pale); }
+  .tc-class .cname { font-size:11px;font-weight:700;color:var(--mid);text-transform:uppercase; }
+  .tc-class .cprice { font-family:'Baloo 2',cursive;font-size:16px;font-weight:700;color:var(--ink);margin-top:2px; }
+  .tc-class .cavail { font-size:10px;color:var(--sage-deep);font-weight:600;margin-top:1px; }
+  .tc-class .cwait { font-size:10px;color:#9E6A10;font-weight:600;margin-top:1px; }
+  .results-breadcrumb { display:flex;align-items:center;gap:8px;padding:16px 0;font-size:13px;color:var(--mid);border-bottom:1px solid var(--border);margin-bottom:20px; }
+  .rb-route { font-weight:700;color:var(--ink); }
+  .rb-date { color:var(--lotus);font-weight:600; }
+  .sort-bar { display:flex;align-items:center;gap:8px;margin-bottom:16px; }
+  .sort-label { font-size:12px;font-weight:600;color:var(--mid); }
+  .sort-pill { padding:5px 12px;border:1.5px solid var(--border);border-radius:20px;font-size:12px;font-weight:600;color:var(--mid);cursor:pointer;transition:all 0.2s; }
+  .sort-pill.active,.sort-pill:hover { border-color:var(--lotus);color:var(--lotus-deep);background:var(--lotus-pale); }
+
+  /* ═══════════════════════════════════
+     PAGE 3 — PNR STATUS
+  ═══════════════════════════════════ */
+  .pnr-layout { max-width:720px;margin:0 auto;padding:48px 0; }
+  .pnr-card { background:#fff;border:1.5px solid var(--border);border-radius:var(--r);padding:32px;margin-bottom:24px; }
+  .pnr-hero-title { font-family:'Baloo 2',cursive;font-size:28px;font-weight:800;margin-bottom:6px; }
+  .pnr-sub { font-size:14px;color:var(--mid);margin-bottom:28px;line-height:1.6; }
+  .pnr-input-row { display:flex;gap:12px;align-items:flex-end; }
+  .pnr-input { flex:1;padding:14px 18px;border:1.5px solid var(--border);border-radius:var(--r-sm);font-family:'Baloo 2',cursive;font-size:22px;font-weight:700;color:var(--ink);outline:none;letter-spacing:2px;transition:all 0.2s; }
+  .pnr-input:focus { border-color:var(--lotus);box-shadow:0 0 0 3px rgba(196,80,106,0.1); }
+  .pnr-input::placeholder { color:#D0B8BE;font-size:16px;font-family:'Noto Sans',sans-serif;letter-spacing:0; }
+  .pnr-result { background:#fff;border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden; }
+  .pnr-result-header { background:linear-gradient(135deg,var(--plum),#2E1828);padding:24px;color:#fff; }
+  .prh-train { font-family:'Baloo 2',cursive;font-size:22px;font-weight:800; }
+  .prh-route { font-size:13px;color:rgba(255,255,255,0.65);margin-top:4px; }
+  .prh-date { font-size:13px;color:var(--lotus-mid);margin-top:2px;font-weight:600; }
+  .pnr-timeline { display:flex;align-items:center;gap:0;padding:20px 24px;background:var(--ivory);border-bottom:1px solid var(--border); }
+  .pt-stn { text-align:center; }
+  .pt-time { font-family:'Baloo 2',cursive;font-size:20px;font-weight:800;color:var(--ink); }
+  .pt-name { font-size:11px;color:var(--mid);margin-top:2px; }
+  .pt-line { flex:1;height:2px;background:var(--border);position:relative;margin:0 8px; }
+  .pt-line-fill { height:100%;background:linear-gradient(90deg,var(--lotus),var(--sage));width:40%; }
+  .pt-dur { position:absolute;top:-18px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:11px;font-weight:600;color:var(--mid); }
+  .passenger-table { width:100%;padding:0 24px 24px; }
+  .pt-header { display:grid;grid-template-columns:2fr 1.5fr 1.5fr 1.5fr;gap:8px;padding:10px 0;border-bottom:1px solid var(--border);font-size:10px;font-weight:700;letter-spacing:0.7px;text-transform:uppercase;color:var(--mid); }
+  .pt-row { display:grid;grid-template-columns:2fr 1.5fr 1.5fr 1.5fr;gap:8px;padding:12px 0;border-bottom:1px solid var(--border);font-size:13px; }
+  .pt-row:last-child { border-bottom:none; }
+  .pt-name-cell { font-weight:600; }
+  .pnr-actions { display:flex;gap:10px;padding:0 24px 24px;flex-wrap:wrap; }
+
+  /* ═══════════════════════════════════
+     PAGE 4 — BOOKING FORM
+  ═══════════════════════════════════ */
+  .booking-layout { display:grid;grid-template-columns:1fr 340px;gap:24px;padding:32px 0; }
+  .booking-main { }
+  .booking-sidebar { }
+  .booking-section { background:#fff;border:1.5px solid var(--border);border-radius:var(--r);padding:24px;margin-bottom:16px; }
+  .bs-title { font-family:'Baloo 2',cursive;font-size:17px;font-weight:700;margin-bottom:18px;display:flex;align-items:center;gap:10px; }
+  .bs-num { width:26px;height:26px;border-radius:50%;background:var(--lotus);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+  .pax-row { background:var(--ivory);border:1px solid var(--border);border-radius:var(--r-sm);padding:16px;margin-bottom:12px; }
+  .pax-head { display:flex;align-items:center;justify-content:space-between;margin-bottom:12px; }
+  .pax-label { font-size:13px;font-weight:600; }
+  .pax-fields { display:grid;grid-template-columns:1fr 80px 100px 1fr;gap:10px; }
+  .berth-select { display:flex;gap:8px;flex-wrap:wrap; }
+  .berth-opt { padding:6px 12px;border:1.5px solid var(--border);border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s; }
+  .berth-opt.sel,.berth-opt:hover { border-color:var(--lotus);background:var(--lotus-pale);color:var(--lotus-deep); }
+  .train-summary { background:linear-gradient(135deg,var(--plum),#2E1828);border-radius:var(--r);padding:20px;margin-bottom:16px;color:#fff; }
+  .ts-train { font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;margin-bottom:12px; }
+  .ts-row { display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.1);font-size:13px; }
+  .ts-row:last-child { border-bottom:none; }
+  .ts-label { color:rgba(255,255,255,0.6); }
+  .ts-val { font-weight:600;color:#fff; }
+  .fare-box { background:#fff;border:1.5px solid var(--border);border-radius:var(--r);padding:20px; }
+  .fare-title { font-family:'Baloo 2',cursive;font-size:16px;font-weight:700;margin-bottom:14px; }
+  .fare-row { display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:1px solid var(--border); }
+  .fare-row:last-child { border-bottom:none; }
+  .fare-total { display:flex;justify-content:space-between;font-family:'Baloo 2',cursive;font-size:20px;font-weight:800;padding:14px 0 0;color:var(--lotus-deep); }
+  .concession-tag { background:var(--sage-pale);border:1px solid var(--border-sage);border-radius:var(--r-sm);padding:10px 14px;font-size:12px;color:var(--sage-deep);margin-bottom:14px;display:flex;align-items:flex-start;gap:8px; }
+
+  /* ═══════════════════════════════════
+     PAGE 5 — MY BOOKINGS
+  ═══════════════════════════════════ */
+  .mybookings-layout { padding:32px 0; }
+  .tabs-row { display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:24px; }
+  .mbtab { padding:10px 20px;font-size:14px;font-weight:600;color:var(--mid);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all 0.2s; }
+  .mbtab.active { color:var(--lotus);border-bottom-color:var(--lotus); }
+  .booking-list { display:flex;flex-direction:column;gap:14px; }
+  .booking-item { background:#fff;border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden; }
+  .bi-header { display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:var(--ivory);border-bottom:1px solid var(--border); }
+  .bi-pnr { font-size:11px;color:var(--mid);font-weight:600; }
+  .bi-pnr span { font-family:'Baloo 2',cursive;font-size:14px;color:var(--ink);font-weight:700; }
+  .bi-body { padding:20px; }
+  .bi-route { display:flex;align-items:center;gap:12px;margin-bottom:12px; }
+  .bi-city { font-family:'Baloo 2',cursive;font-size:22px;font-weight:800; }
+  .bi-arrow { color:var(--lotus);font-size:20px; }
+  .bi-train { font-size:13px;color:var(--mid);margin-bottom:4px; }
+  .bi-pax-chips { display:flex;gap:8px;flex-wrap:wrap; }
+  .pax-chip { padding:4px 10px;background:var(--lotus-pale);border-radius:20px;font-size:12px;font-weight:600;color:var(--lotus-deep); }
+  .bi-actions { display:flex;gap:8px;padding:16px 20px;border-top:1px solid var(--border);background:var(--ivory); }
+
+  /* ═══════════════════════════════════
+     PAGE 6 — LIVE TRAIN STATUS
+  ═══════════════════════════════════ */
+  .live-layout { max-width:720px;margin:0 auto;padding:48px 0; }
+  .live-card { background:#fff;border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:16px; }
+  .live-header { background:linear-gradient(135deg,var(--plum),#2E1828);padding:20px 24px;color:#fff;display:flex;justify-content:space-between;align-items:flex-start; }
+  .live-train-name { font-family:'Baloo 2',cursive;font-size:20px;font-weight:800; }
+  .live-status-badge { display:flex;align-items:center;gap:6px;background:rgba(42,107,90,0.3);border:1px solid rgba(42,107,90,0.5);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600;color:#7DDDD7; }
+  .live-dot { width:7px;height:7px;background:#2EFFD6;border-radius:50%;box-shadow:0 0 6px rgba(46,255,214,0.7);animation:dotglow 1.4s ease-in-out infinite; }
+  .station-list { padding:16px 24px; }
+  .station-item { display:grid;grid-template-columns:80px 24px 1fr auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border); }
+  .station-item:last-child { border-bottom:none; }
+  .si-time { font-family:'Baloo 2',cursive;font-size:14px;font-weight:700;color:var(--ink); }
+  .si-dot-col { display:flex;flex-direction:column;align-items:center; }
+  .si-dot { width:12px;height:12px;border-radius:50%;border:2px solid var(--border);background:#fff;z-index:1; }
+  .si-dot.done { background:var(--sage);border-color:var(--sage); }
+  .si-dot.current { background:var(--lotus);border-color:var(--lotus);box-shadow:0 0 0 3px var(--lotus-pale); }
+  .si-line { width:2px;flex:1;background:var(--border);min-height:16px; }
+  .si-line.done { background:var(--sage); }
+  .si-name { font-size:14px;font-weight:600;color:var(--ink); }
+  .si-code { font-size:11px;color:var(--mid); }
+  .si-delay { font-size:12px;font-weight:600; }
+  .delay-none { color:var(--sage-deep); }
+  .delay-late { color:#9E5010; }
+
+  /* ═══════════════════════════════════
+     FOOTER
+  ═══════════════════════════════════ */
+  footer { background:var(--plum);color:rgba(255,255,255,0.5);padding:32px 24px 20px;font-size:12px;line-height:1.6;border-top:2px solid var(--lotus); }
+  .footer-inner { max-width:1100px;margin:0 auto; }
+  .footer-top { display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px;margin-bottom:24px; }
+  .footer-brand p { font-size:12px;line-height:1.7;color:rgba(255,255,255,0.4);max-width:250px;margin-top:10px; }
+  .footer-col h4 { font-size:11px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:rgba(255,255,255,0.65);margin-bottom:12px; }
+  .footer-col a { display:block;color:rgba(255,255,255,0.4);text-decoration:none;margin-bottom:6px;transition:color 0.2s; }
+  .footer-col a:hover { color:var(--sage); }
+  .footer-bottom { border-top:1px solid rgba(255,255,255,0.08);padding-top:14px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap; }
+  .tricolor { display:flex;height:4px;border-radius:2px;overflow:hidden;width:48px; }
+  .tc-s { flex:1;background:#FF9933; } .tc-w { flex:1;background:#fff; } .tc-g { flex:1;background:#138808; }
+
+  @keyframes fadeSlide { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+  .anim { animation:fadeSlide 0.45s ease both; }
+
+  @media(max-width:900px){
+    .hero-inner,.results-layout,.booking-layout { grid-template-columns:1fr; }
+    .quick-grid { grid-template-columns:repeat(3,1fr); }
+    .routes-grid { grid-template-columns:1fr 1fr; }
+    .footer-top { grid-template-columns:1fr 1fr; }
+  }
+  @media(max-width:600px){
+    .hero-h1{font-size:30px;} .quick-grid{grid-template-columns:repeat(3,1fr);} .routes-grid{grid-template-columns:1fr;} .footer-top{grid-template-columns:1fr;} .nav-links a:not(.btn-login){display:none;} .dates-row{grid-template-columns:1fr;} .pax-fields{grid-template-columns:1fr 1fr;}
+  }
+
+  /* ══ LOGIN MODAL ══ */
+
+  /* ── DEMO BACKDROP ── */
+  .page-bg {
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 80% 30%, rgba(196,80,106,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse 45% 55% at 20% 80%, rgba(42,107,90,0.12) 0%, transparent 55%),
+      #1A0F14;
+    z-index: 0;
+  }
+
+  /* ── MODAL OVERLAY ── */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(26,15,20,0.72);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: fadeIn 0.2s ease both;
+  }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+  /* ── MODAL ── */
+  .modal {
+    width: 100%;
+    max-width: 920px;
+    background: var(--ivory);
+    border-radius: 20px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(196,80,106,0.15);
+    animation: popUp 0.35s cubic-bezier(0.22,1,0.36,1) both;
+    position: relative;
+    max-height: 90vh;
+  }
+  @keyframes popUp {
+    from { opacity:0; transform:scale(0.94) translateY(12px); }
+    to   { opacity:1; transform:scale(1)   translateY(0); }
+  }
+
+  /* ── LEFT PANEL ── */
+  .left-panel {
+    background: linear-gradient(160deg, var(--plum) 0%, #2A1020 60%, #1E2A20 100%);
+    padding: 40px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+  .lp-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(196,80,106,0.12);
+    pointer-events: none;
+    animation: spin 50s linear infinite;
+  }
+  .lp-ring:nth-child(1) { width:400px;height:400px;right:-180px;top:-120px; }
+  .lp-ring:nth-child(2) { width:280px;height:280px;right:-120px;top:-60px;border-color:rgba(42,107,90,0.15);animation-duration:70s;animation-direction:reverse; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .lp-top { position: relative; }
+  .lp-logo { display:flex;align-items:center;gap:10px;margin-bottom:36px; }
+  .lp-logo .icon { width:36px;height:36px;background:var(--lotus);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px; }
+  .lp-logo span { font-family:'Baloo 2',cursive;font-weight:800;font-size:20px;color:#fff; }
+  .lp-logo em { color:var(--lotus-mid);font-style:normal; }
+
+  .lp-heading { font-family:'Baloo 2',cursive;font-size:26px;font-weight:800;color:#fff;line-height:1.2;margin-bottom:14px; }
+  .lp-heading .hl { color:var(--lotus-mid); }
+  .lp-sub { font-size:13px;color:rgba(255,255,255,0.55);line-height:1.7;margin-bottom:32px; }
+
+  .lp-features { display:flex;flex-direction:column;gap:14px;position:relative; }
+  .lp-feature { display:flex;align-items:flex-start;gap:12px; }
+  .lp-feat-icon { width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;margin-top:1px; }
+  .lp-feat-text .ft { font-size:13px;font-weight:600;color:#fff;margin-bottom:2px; }
+  .lp-feat-text .fs { font-size:11.5px;color:rgba(255,255,255,0.45);line-height:1.5; }
+
+  .lp-bottom { position:relative; }
+  .lp-stats { display:flex;gap:20px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.08); }
+  .lp-stat .sn { font-family:'Baloo 2',cursive;font-size:20px;font-weight:800;color:var(--gold); }
+  .lp-stat .sl { font-size:10px;text-transform:uppercase;letter-spacing:0.6px;color:rgba(255,255,255,0.4);margin-top:1px; }
+
+  /* ── RIGHT PANEL ── */
+  .right-panel {
+    padding: 36px 40px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    background: var(--ivory);
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 16px;
+    right: 18px;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: rgba(26,15,20,0.08);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--mid);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    z-index: 10;
+  }
+  .close-btn:hover { background:var(--lotus-pale);color:var(--lotus-deep); }
+
+  /* ── FORM TABS ── */
+  .form-tabs {
+    display: flex;
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 4px;
+    margin-bottom: 28px;
+  }
+  .ftab {
+    flex: 1;
+    padding: 9px 12px;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    color: var(--mid);
+    transition: all 0.2s;
+    border: none;
+    background: transparent;
+  }
+  .ftab.active { background: linear-gradient(135deg, var(--lotus), var(--lotus-deep)); color: #fff; box-shadow: 0 2px 10px rgba(196,80,106,0.3); }
+
+  /* ── FORM ── */
+  .form-section { display: none; }
+  .form-section.active { display: block; animation: fadeSlide 0.3s ease both; }
+  @keyframes fadeSlide { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+  .form-title { font-family:'Baloo 2',cursive;font-size:22px;font-weight:800;color:var(--ink);margin-bottom:4px; }
+  .form-sub { font-size:13px;color:var(--mid);margin-bottom:24px;line-height:1.6; }
+
+  .field-group { margin-bottom:14px; }
+  .field-label { display:block;font-size:10px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:var(--mid);margin-bottom:5px; }
+  .field-wrap { position: relative; }
+  .field-input {
+    width:100%;
+    padding:11px 14px;
+    border:1.5px solid var(--border);
+    border-radius:var(--r-sm);
+    font-family:'Noto Sans',sans-serif;
+    font-size:14px;
+    color:var(--ink);
+    background:#fff;
+    outline:none;
+    transition:all 0.2s;
+  }
+  .field-input:focus { border-color:var(--lotus);box-shadow:0 0 0 3px rgba(196,80,106,0.1); }
+  .field-input::placeholder { color:#C8B4BA; }
+  .field-icon { position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:16px;color:var(--mid);cursor:pointer;user-select:none; }
+  .field-hint { font-size:11px;color:var(--mid);margin-top:4px; }
+  .field-error { font-size:11px;color:var(--lotus-deep);margin-top:4px;display:none; }
+
+  .two-col { display:grid;grid-template-columns:1fr 1fr;gap:12px; }
+  .three-col { display:grid;grid-template-columns:80px 1fr;gap:10px; }
+
+  /* OTP field */
+  .otp-row { display:flex;gap:10px; }
+  .otp-digit {
+    width:48px;height:54px;border:1.5px solid var(--border);border-radius:var(--r-sm);
+    font-family:'Baloo 2',cursive;font-size:22px;font-weight:700;color:var(--ink);
+    text-align:center;outline:none;background:#fff;transition:all 0.2s;
+  }
+  .otp-digit:focus { border-color:var(--lotus);box-shadow:0 0 0 3px rgba(196,80,106,0.1); }
+  .otp-resend { font-size:12px;color:var(--mid);margin-top:8px; }
+  .otp-resend a { color:var(--lotus);cursor:pointer;font-weight:600;text-decoration:none; }
+
+  /* Divider */
+  .or-divider { display:flex;align-items:center;gap:12px;margin:20px 0; }
+  .or-line { flex:1;height:1px;background:var(--border); }
+  .or-text { font-size:12px;font-weight:600;color:var(--mid);white-space:nowrap; }
+
+  /* Social login */
+  .social-row { display:flex;gap:10px;margin-bottom:20px; }
+  .social-btn {
+    flex:1;padding:10px 8px;border:1.5px solid var(--border);border-radius:var(--r-sm);
+    background:#fff;cursor:pointer;font-size:13px;font-weight:600;color:var(--ink);
+    display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s;
+  }
+  .social-btn:hover { border-color:var(--lotus);background:var(--lotus-pale); }
+  .social-icon { font-size:18px; }
+
+  /* CTA button */
+  .btn-main {
+    width:100%;padding:14px;
+    background:linear-gradient(135deg,var(--lotus),var(--lotus-deep));
+    color:#fff;font-family:'Baloo 2',cursive;font-size:16px;font-weight:700;
+    border:none;border-radius:var(--r-sm);cursor:pointer;
+    box-shadow:0 4px 16px rgba(196,80,106,0.35);
+    transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;
+    letter-spacing:0.2px;
+  }
+  .btn-main:hover { transform:translateY(-1px);box-shadow:0 8px 24px rgba(196,80,106,0.45); }
+  .btn-main:active { transform:translateY(0); }
+
+  .btn-otp {
+    width:100%;padding:14px;
+    background:linear-gradient(135deg,var(--sage),var(--sage-deep));
+    color:#fff;font-family:'Baloo 2',cursive;font-size:16px;font-weight:700;
+    border:none;border-radius:var(--r-sm);cursor:pointer;
+    box-shadow:0 4px 14px rgba(42,107,90,0.3);
+    transition:all 0.2s;
+  }
+  .btn-otp:hover { transform:translateY(-1px); }
+
+  /* Terms */
+  .terms-row { display:flex;align-items:flex-start;gap:8px;margin-bottom:16px;font-size:12px;color:var(--mid);line-height:1.6; }
+  .terms-row input { accent-color:var(--lotus);width:14px;height:14px;margin-top:2px;flex-shrink:0; }
+  .terms-row a { color:var(--lotus);text-decoration:none;font-weight:600; }
+
+  /* Progress steps (register) */
+  .steps-bar { display:flex;align-items:center;gap:0;margin-bottom:28px; }
+  .step { display:flex;align-items:center;gap:0;flex:1; }
+  .step-circle {
+    width:28px;height:28px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;font-weight:700;flex-shrink:0;
+    border:2px solid var(--border);color:var(--mid);background:#fff;
+    transition:all 0.3s;
+  }
+  .step-circle.done { background:var(--sage);border-color:var(--sage);color:#fff; }
+  .step-circle.active { background:var(--lotus);border-color:var(--lotus);color:#fff;box-shadow:0 0 0 3px var(--lotus-pale); }
+  .step-label { font-size:10px;font-weight:600;color:var(--mid);margin-top:3px;white-space:nowrap; }
+  .step-line { flex:1;height:2px;background:var(--border);margin:0 4px;position:relative;top:-5px; }
+  .step-line.done { background:var(--sage); }
+  .step-inner { display:flex;flex-direction:column;align-items:center; }
+
+  /* Concession callout */
+  .concession-bar {
+    background:var(--sage-pale);border:1px solid var(--border-sage, #C5DED9);border-radius:var(--r-sm);
+    padding:10px 14px;margin-bottom:16px;font-size:12px;color:var(--sage-deep);
+    display:flex;align-items:flex-start;gap:8px;line-height:1.6;
+  }
+
+  /* Forgot password link */
+  .forgot-link { text-align:right;margin-top:-8px;margin-bottom:14px; }
+  .forgot-link a { font-size:12px;color:var(--lotus);font-weight:600;text-decoration:none;cursor:pointer; }
+  .forgot-link a:hover { text-decoration:underline; }
+
+  /* Switch text */
+  .switch-text { text-align:center;font-size:13px;color:var(--mid);margin-top:16px; }
+  .switch-text a { color:var(--lotus);font-weight:600;cursor:pointer;text-decoration:none; }
+  .switch-text a:hover { text-decoration:underline; }
+
+  /* Success state */
+  .success-state { text-align:center;padding:20px 0; }
+  .success-icon { font-size:56px;margin-bottom:16px;animation:bounce 0.6s cubic-bezier(0.34,1.56,0.64,1) both; }
+  @keyframes bounce { from{opacity:0;transform:scale(0.5)} to{opacity:1;transform:scale(1)} }
+  .success-title { font-family:'Baloo 2',cursive;font-size:24px;font-weight:800;color:var(--ink);margin-bottom:8px; }
+  .success-sub { font-size:14px;color:var(--mid);line-height:1.7;margin-bottom:24px; }
+
+  /* Mobile */
+  @media(max-width:660px) {
+    .modal { grid-template-columns:1fr;max-height:95vh; }
+    .left-panel { display:none; }
+    .right-panel { padding:28px 24px; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ═══════════ NAV ═══════════ -->
+<nav>
+  <div class="nav-logo" onclick="showPage('home')">
+    <div class="icon">🚆</div>
+    <span>Rail<em>Connect</em></span>
+  </div>
+  <div class="nav-links">
+    <a onclick="showPage('home')" id="nav-home" class="active">Trains</a>
+    <a onclick="showPage('pnr')" id="nav-pnr">PNR Status</a>
+    <a onclick="showPage('live')" id="nav-live">Live Train</a>
+    <a onclick="showPage('mybookings')" id="nav-mybookings">My Bookings</a>
+    <a class="btn-login" onclick="openLoginModal()" style="cursor:pointer">Login / Register</a>
+  </div>
+</nav>
+
+<!-- ═══════════ PAGE TABS ═══════════ -->
+<div class="page-tabs">
+  <div class="page-tab active" onclick="switchTab(this,'home')">🏠 Home</div>
+  <div class="page-tab" onclick="switchTab(this,'results')">🔍 Search Results</div>
+  <div class="page-tab" onclick="switchTab(this,'booking')">🎫 Booking Form</div>
+  <div class="page-tab" onclick="switchTab(this,'pnr')">📋 PNR Status</div>
+  <div class="page-tab" onclick="switchTab(this,'mybookings')">📂 My Bookings</div>
+  <div class="page-tab" onclick="switchTab(this,'live')">📡 Live Train</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PAGE 1 — HOME / TRAIN SEARCH
+══════════════════════════════════════════════════════ -->
+<div class="page active" id="page-home">
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-ring"></div><div class="hero-ring"></div>
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <div class="hero-badge"><span class="dot"></span> India's Railway Network</div>
+        <h1 class="hero-h1">Journey Across<br><span class="accent">Incredible India</span></h1>
+        <p class="hero-sub">From the Himalayas to Kanyakumari, from Dwarka to Puri — book your train and let the tracks carry your story.</p>
+        <div class="hero-stats">
+          <div><div class="stat-num">14M+</div><div class="stat-label">Daily Passengers</div></div>
+          <div><div class="stat-num">7,000+</div><div class="stat-label">Stations</div></div>
+          <div><div class="stat-num">20,000+</div><div class="stat-label">Trains Daily</div></div>
+        </div>
+      </div>
+      <!-- Search Card -->
+      <div class="search-card">
+        <div class="card-tabs">
+          <div class="ctab active"><span class="ti">🚆</span>Trains</div>
+          <div class="ctab"><span class="ti">✈️</span>Flights</div>
+          <div class="ctab"><span class="ti">🏨</span>Hotels</div>
+          <div class="ctab"><span class="ti">🗺️</span>Tours</div>
+        </div>
+        <div class="card-body">
+          <div class="jtype-row">
+            <div class="jtype active"><span class="rdot"></span>One Way</div>
+            <div class="jtype"><span class="rdot"></span>Round Trip</div>
+            <div class="jtype"><span class="rdot"></span>Multi-city</div>
+          </div>
+          <div class="from-to">
+            <div class="ft-box"><label>From</label><input type="text" value="New Delhi" placeholder="Departure city"/><div class="hint">NDLS – New Delhi</div></div>
+            <div class="swap">⇄</div>
+            <div class="ft-box"><label>To</label><input type="text" placeholder="Mumbai CST"/><div class="hint">Search destination</div></div>
+          </div>
+          <div class="dates-row">
+            <div class="date-box"><label>Departure Date</label><input type="date" value="2026-05-15"/><div class="day">Friday</div></div>
+            <div class="date-box"><label>Return Date <span style="color:var(--border)">(Optional)</span></label><input type="date"/><div class="day">Add return date</div></div>
+          </div>
+          <div class="opts-row">
+            <div class="pill">👤 1 Passenger</div>
+            <div class="pill">🎟️ All Classes</div>
+            <div class="pill">♿ General Quota</div>
+            <div class="toggle-wrap"><div class="tog on"></div><span class="tog-label">Flexible</span></div>
+          </div>
+          <button class="btn btn-primary" onclick="showPage('results')">🔍 Search Trains</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider-motif"><div class="divider-line"></div><div class="divider-text">✦ कहीं भी, कभी भी ✦</div><div class="divider-line"></div></div>
+
+  <main class="container section">
+    <h2 class="section-title">Quick Actions</h2>
+    <p class="section-sub">Everything you need, right at your fingertips</p>
+    <div class="quick-grid">
+      <a class="qcard" onclick="showPage('pnr')"><div class="qicon" style="background:var(--lotus-pale)">📋</div><span class="qlabel">PNR Status</span></a>
+      <a class="qcard" onclick="showPage('live')"><div class="qicon" style="background:var(--sage-pale)">🗺️</div><span class="qlabel">Live Train Status</span></a>
+      <a class="qcard"><div class="qicon" style="background:var(--gold-pale)">🛐</div><span class="qlabel">Pilgrimage Trains</span></a>
+      <a class="qcard"><div class="qicon" style="background:var(--lotus-pale)">👴</div><span class="qlabel">Senior Citizens</span></a>
+      <a class="qcard"><div class="qicon" style="background:var(--sage-pale)">♿</div><span class="qlabel">Differently Abled</span></a>
+      <a class="qcard"><div class="qicon" style="background:var(--gold-pale)">🍱</div><span class="qlabel">Order Meal</span></a>
+    </div>
+
+    <h2 class="section-title">Popular Routes</h2>
+    <p class="section-sub">Most searched train corridors across India</p>
+    <div class="routes-grid">
+      <div class="route-card" onclick="showPage('results')">
+        <div class="rc-cities"><span class="rc-city">Delhi</span><span class="rc-arrow">→</span><span class="rc-city">Mumbai</span></div>
+        <div class="rc-meta"><span class="badge badge-sage">68 Trains</span><span class="badge badge-lotus">Rajdhani</span><span class="rc-price">from ₹710 <span>/ person</span></span></div>
+      </div>
+      <div class="route-card" onclick="showPage('results')">
+        <div class="rc-cities"><span class="rc-city">Bangalore</span><span class="rc-arrow">→</span><span class="rc-city">Chennai</span></div>
+        <div class="rc-meta"><span class="badge badge-sage">24 Trains</span><span class="badge badge-lotus">Shatabdi</span><span class="rc-price">from ₹380 <span>/ person</span></span></div>
+      </div>
+      <div class="route-card" onclick="showPage('results')">
+        <div class="rc-cities"><span class="rc-city">Varanasi</span><span class="rc-arrow">→</span><span class="rc-city">Ayodhya</span></div>
+        <div class="rc-meta"><span class="badge badge-sage">14 Trains</span><span class="badge badge-gold">Pilgrimage</span><span class="rc-price">from ₹120 <span>/ person</span></span></div>
+      </div>
+      <div class="route-card" onclick="showPage('results')">
+        <div class="rc-cities"><span class="rc-city">Kolkata</span><span class="rc-arrow">→</span><span class="rc-city">Puri</span></div>
+        <div class="rc-meta"><span class="badge badge-sage">18 Trains</span><span class="badge badge-gold">Jagannath Dham</span><span class="rc-price">from ₹210 <span>/ person</span></span></div>
+      </div>
+      <div class="route-card" onclick="showPage('results')">
+        <div class="rc-cities"><span class="rc-city">Mumbai</span><span class="rc-arrow">→</span><span class="rc-city">Goa</span></div>
+        <div class="rc-meta"><span class="badge badge-sage">12 Trains</span><span class="badge badge-lotus">Vande Bharat</span><span class="rc-price">from ₹450 <span>/ person</span></span></div>
+      </div>
+      <div class="route-card" onclick="showPage('results')">
+        <div class="rc-cities"><span class="rc-city">Amritsar</span><span class="rc-arrow">→</span><span class="rc-city">Delhi</span></div>
+        <div class="rc-meta"><span class="badge badge-sage">30 Trains</span><span class="badge badge-gold">Golden Temple</span><span class="rc-price">from ₹290 <span>/ person</span></span></div>
+      </div>
+    </div>
+
+    <div class="festive">
+      <div style="position:relative">
+        <div class="festive-tag">✦ Special Offer</div>
+        <h2 class="festive-h2">Pilgrimage & Festival Trains 2026</h2>
+        <p class="festive-p">Special trains for Char Dham Yatra, Shirdi, Tirupati, Golden Temple, and Velankanni. Concessions available for senior citizens and pilgrims.</p>
+      </div>
+      <div style="position:relative">
+        <button class="btn btn-sage" style="white-space:nowrap">Explore Pilgrimage →</button>
+      </div>
+    </div>
+
+    <div class="lang-strip">
+      <span class="lang-label">🌐 Choose Language:</span>
+      <div class="lang-pills">
+        <span class="lpill active">English</span>
+        <span class="lpill">हिन्दी</span>
+        <span class="lpill">বাংলা</span>
+        <span class="lpill">தமிழ்</span>
+        <span class="lpill">తెలుగు</span>
+        <span class="lpill">मराठी</span>
+        <span class="lpill">ਪੰਜਾਬੀ</span>
+        <span class="lpill">ಕನ್ನಡ</span>
+        <span class="lpill">ગુજરાતી</span>
+        <span class="lpill">മലയാളം</span>
+      </div>
+    </div>
+  </main>
+  <!-- Footer inside home page -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="nav-logo" style="cursor:default"><div class="icon" style="width:28px;height:28px;font-size:15px">🚆</div><span style="font-family:'Baloo 2',cursive;font-weight:800;font-size:18px;color:#fff">Rail<em style="color:var(--lotus-mid);font-style:normal">Connect</em></span></div>
+          <p>Ministry of Railways, Government of India. Connecting 1.4 billion lives every day.</p>
+          <div class="tricolor" style="margin-top:12px"><div class="tc-s"></div><div class="tc-w"></div><div class="tc-g"></div></div>
+        </div>
+        <div class="footer-col"><h4>Services</h4><a>Book Tickets</a><a>Cancel Ticket</a><a>PNR Status</a><a>Live Status</a><a>Seat Availability</a></div>
+        <div class="footer-col"><h4>Travellers</h4><a>Senior Citizens</a><a>Divyangjan</a><a>Students</a><a>Foreign Tourists</a><a>Pilgrimage Tours</a></div>
+        <div class="footer-col"><h4>Support</h4><a>Helpline 139</a><a>Complaint Portal</a><a>RTI</a><a>Grievance</a><a>Contact Us</a></div>
+      </div>
+      <div class="footer-bottom"><span>© 2026 IRCTC Ltd. All rights reserved.</span><span style="color:rgba(255,255,255,0.3)">Designed with 🌸 for Bharat</span></div>
+    </div>
+  </footer>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PAGE 2 — SEARCH RESULTS
+══════════════════════════════════════════════════════ -->
+<div class="page" id="page-results">
+  <div class="container">
+    <div class="results-breadcrumb">
+      <span class="rb-route">New Delhi → Mumbai CSMT</span>
+      <span>·</span>
+      <span class="rb-date">Fri, 15 May 2026</span>
+      <span>·</span>
+      <span>1 Passenger · Sleeper</span>
+      <button class="btn btn-outline" style="margin-left:auto;padding:5px 14px" onclick="showPage('home')">✏️ Modify</button>
+    </div>
+    <div class="results-layout">
+      <!-- Filters -->
+      <div class="filter-panel anim">
+        <div class="filter-title">🎛️ Filters</div>
+        <div class="filter-section">
+          <h4>Train Type</h4>
+          <label class="check-item"><input type="checkbox" checked> Rajdhani Express</label>
+          <label class="check-item"><input type="checkbox" checked> Vande Bharat</label>
+          <label class="check-item"><input type="checkbox"> Shatabdi Express</label>
+          <label class="check-item"><input type="checkbox"> Duronto Express</label>
+          <label class="check-item"><input type="checkbox"> Superfast</label>
+          <label class="check-item"><input type="checkbox"> Express / Mail</label>
+        </div>
+        <div class="filter-section">
+          <h4>Travel Class</h4>
+          <label class="check-item"><input type="checkbox" checked> Sleeper (SL)</label>
+          <label class="check-item"><input type="checkbox"> 3 AC (3A)</label>
+          <label class="check-item"><input type="checkbox"> 2 AC (2A)</label>
+          <label class="check-item"><input type="checkbox"> 1 AC (1A)</label>
+          <label class="check-item"><input type="checkbox"> Chair Car (CC)</label>
+        </div>
+        <div class="filter-section">
+          <h4>Departure Time</h4>
+          <label class="check-item"><input type="checkbox" checked> 🌅 Morning (6–12)</label>
+          <label class="check-item"><input type="checkbox"> ☀️ Afternoon (12–18)</label>
+          <label class="check-item"><input type="checkbox"> 🌙 Night (18–24)</label>
+          <label class="check-item"><input type="checkbox"> 🌑 Late Night (0–6)</label>
+        </div>
+        <div class="filter-section">
+          <h4>Quota</h4>
+          <label class="check-item"><input type="checkbox" checked> General</label>
+          <label class="check-item"><input type="checkbox"> Tatkal</label>
+          <label class="check-item"><input type="checkbox"> Ladies</label>
+          <label class="check-item"><input type="checkbox"> Senior Citizen</label>
+        </div>
+        <div class="filter-section">
+          <h4>Availability</h4>
+          <label class="check-item"><input type="checkbox" checked> Available Only</label>
+          <label class="check-item"><input type="checkbox"> Include Waitlist</label>
+        </div>
+      </div>
+      <!-- Results -->
+      <div>
+        <div class="sort-bar">
+          <span class="sort-label">Sort by:</span>
+          <span class="sort-pill active">Departure</span>
+          <span class="sort-pill">Duration</span>
+          <span class="sort-pill">Arrival</span>
+          <span class="sort-pill">Price</span>
+          <span class="sort-pill">Availability</span>
+        </div>
+        <div class="results-list">
+          <!-- Train 1 -->
+          <div class="train-card anim">
+            <div class="tc-head">
+              <div>
+                <div class="tc-name">12951 Mumbai Rajdhani</div>
+                <div class="tc-number">Runs: Mon Tue Wed Thu Fri Sat Sun</div>
+                <div class="tc-days">
+                  <div class="day-dot run">M</div><div class="day-dot run">T</div><div class="day-dot run">W</div><div class="day-dot run">T</div><div class="day-dot run">F</div><div class="day-dot run">S</div><div class="day-dot run">S</div>
+                </div>
+              </div>
+              <div style="text-align:right"><span class="badge badge-lotus">Rajdhani</span><div style="font-size:12px;color:var(--mid);margin-top:6px">NDLS → MMCT</div></div>
+            </div>
+            <div class="tc-timing">
+              <div><div class="tc-time">16:55</div><div class="tc-stn">New Delhi</div></div>
+              <div class="tc-dur" style="flex:1;padding:0 12px">
+                <div class="tc-dur-line"><div class="tc-dur-bar"></div></div>
+                <div class="tc-dur-text">17h 40m</div>
+                <div class="tc-stops">1 stop</div>
+              </div>
+              <div style="text-align:right"><div class="tc-time">10:35</div><div class="tc-stn">Mumbai Central</div></div>
+            </div>
+            <div class="tc-classes">
+              <div class="tc-class sel" onclick="showPage('booking')"><div class="cname">SL</div><div class="cprice">₹710</div><div class="cavail">✓ 48 avail</div></div>
+              <div class="tc-class" onclick="showPage('booking')"><div class="cname">3A</div><div class="cprice">₹1,890</div><div class="cavail">✓ 12 avail</div></div>
+              <div class="tc-class" onclick="showPage('booking')"><div class="cname">2A</div><div class="cprice">₹2,740</div><div class="cwait">WL 3</div></div>
+              <div class="tc-class" onclick="showPage('booking')"><div class="cname">1A</div><div class="cprice">₹4,620</div><div class="cavail">✓ 4 avail</div></div>
+            </div>
+          </div>
+          <!-- Train 2 -->
+          <div class="train-card anim">
+            <div class="tc-head">
+              <div>
+                <div class="tc-name">22209 Mumbai Duronto</div>
+                <div class="tc-number">Runs on select days</div>
+                <div class="tc-days">
+                  <div class="day-dot off">M</div><div class="day-dot run">T</div><div class="day-dot off">W</div><div class="day-dot off">T</div><div class="day-dot run">F</div><div class="day-dot off">S</div><div class="day-dot run">S</div>
+                </div>
+              </div>
+              <div style="text-align:right"><span class="badge badge-sage">Duronto</span><div style="font-size:12px;color:var(--mid);margin-top:6px">NDLS → MMCT</div></div>
+            </div>
+            <div class="tc-timing">
+              <div><div class="tc-time">23:00</div><div class="tc-stn">New Delhi</div></div>
+              <div class="tc-dur" style="flex:1;padding:0 12px">
+                <div class="tc-dur-line"><div class="tc-dur-bar"></div></div>
+                <div class="tc-dur-text">16h 45m</div>
+                <div class="tc-stops">Non-stop</div>
+              </div>
+              <div style="text-align:right"><div class="tc-time">15:45</div><div class="tc-stn">Mumbai CSMT</div></div>
+            </div>
+            <div class="tc-classes">
+              <div class="tc-class" onclick="showPage('booking')"><div class="cname">3A</div><div class="cprice">₹2,050</div><div class="cavail">✓ 24 avail</div></div>
+              <div class="tc-class" onclick="showPage('booking')"><div class="cname">2A</div><div class="cprice">₹2,960</div><div class="cavail">✓ 8 avail</div></div>
+              <div class="tc-class" onclick="showPage('booking')"><div class="cname">1A</div><div class="cprice">₹4,980</div><div class="cwait">WL 1</div></div>
+            </div>
+          </div>
+          <!-- Train 3 -->
+          <div class="train-card anim">
+            <div class="tc-head">
+              <div>
+                <div class="tc-name">12137 Punjab Mail</div>
+                <div class="tc-number">Daily · Superfast Express</div>
+                <div class="tc-days">
+                  <div class="day-dot run">M</div><div class="day-dot run">T</div><div class="day-dot run">W</div><div class="day-dot run">T</div><div class="day-dot run">F</div><div class="day-dot run">S</div><div class="day-dot run">S</div>
+                </div>
+              </div>
+              <div style="text-align:right"><span class="badge badge-gold">Mail Express</span><div style="font-size:12px;color:var(--mid);margin-top:6px">NDLS → CSTM</div></div>
+            </div>
+            <div class="tc-timing">
+              <div><div class="tc-time">07:15</div><div class="tc-stn">New Delhi</div></div>
+              <div class="tc-dur" style="flex:1;padding:0 12px">
+                <div class="tc-dur-line"><div class="tc-dur-bar"></div></div>
+                <div class="tc-dur-text">26h 20m</div>
+                <div class="tc-stops">24 stops</div>
+              </div>
+              <div style="text-align:right"><div class="tc-time">09:35</div><div class="tc-stn">Mumbai CSMT</div></div>
+            </div>
+            <div class="tc-classes">
+              <div class="tc-class sel" onclick="showPage('booking')"><div class="cname">SL</div><div class="cprice">₹490</div><div class="cavail">✓ 120 avail</div></div>
+              <div class="tc-class" onclick="showPage('booking')"><div class="cname">3A</div><div class="cprice">₹1,310</div><div class="cavail">✓ 42 avail</div></div>
+              <div class="tc-class" onclick="showPage('booking')"><div class="cname">2A</div><div class="cprice">₹1,920</div><div class="cavail">✓ 16 avail</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PAGE 3 — BOOKING FORM
+══════════════════════════════════════════════════════ -->
+<div class="page" id="page-booking">
+  <div class="container">
+    <div class="booking-layout">
+      <div class="booking-main">
+        <!-- Section 1: Passenger Details -->
+        <div class="booking-section anim">
+          <div class="bs-title"><span class="bs-num">1</span> Passenger Details</div>
+          <div class="pax-row">
+            <div class="pax-head"><span class="pax-label">Passenger 1</span><button class="btn btn-outline" style="padding:4px 10px;font-size:12px">Remove</button></div>
+            <div class="pax-fields">
+              <div class="field-group"><label class="field-label">Full Name</label><input class="field-input" placeholder="As on ID proof" value="Rahul Sharma"/></div>
+              <div class="field-group"><label class="field-label">Age</label><input class="field-input" placeholder="Age" value="32" type="number"/></div>
+              <div class="field-group"><label class="field-label">Gender</label><select class="field-input"><option>Male</option><option>Female</option><option>Other</option></select></div>
+              <div class="field-group"><label class="field-label">Berth Preference</label>
+                <div class="berth-select">
+                  <div class="berth-opt sel">Lower</div>
+                  <div class="berth-opt">Middle</div>
+                  <div class="berth-opt">Upper</div>
+                  <div class="berth-opt">SL</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="pax-row">
+            <div class="pax-head"><span class="pax-label">Passenger 2</span><button class="btn btn-outline" style="padding:4px 10px;font-size:12px">Remove</button></div>
+            <div class="pax-fields">
+              <div class="field-group"><label class="field-label">Full Name</label><input class="field-input" placeholder="As on ID proof" value="Priya Sharma"/></div>
+              <div class="field-group"><label class="field-label">Age</label><input class="field-input" placeholder="Age" value="28" type="number"/></div>
+              <div class="field-group"><label class="field-label">Gender</label><select class="field-input"><option selected>Female</option><option>Male</option><option>Other</option></select></div>
+              <div class="field-group"><label class="field-label">Berth Preference</label>
+                <div class="berth-select">
+                  <div class="berth-opt sel">Lower</div>
+                  <div class="berth-opt">Middle</div>
+                  <div class="berth-opt">Upper</div>
+                  <div class="berth-opt">SL</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-outline" style="width:100%;margin-top:4px">+ Add Passenger (up to 6)</button>
+        </div>
+        <!-- Section 2: Contact -->
+        <div class="booking-section anim">
+          <div class="bs-title"><span class="bs-num">2</span> Contact Details</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <div class="field-group"><label class="field-label">Mobile Number</label><input class="field-input" placeholder="10-digit mobile" value="98765 43210"/></div>
+            <div class="field-group"><label class="field-label">Email Address</label><input class="field-input" placeholder="email@example.com" value="rahul@email.com"/></div>
+          </div>
+        </div>
+        <!-- Section 3: ID Proof -->
+        <div class="booking-section anim">
+          <div class="bs-title"><span class="bs-num">3</span> ID Proof</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <div class="field-group"><label class="field-label">ID Type</label><select class="field-input"><option>Aadhaar Card</option><option>PAN Card</option><option>Passport</option><option>Voter ID</option></select></div>
+            <div class="field-group"><label class="field-label">ID Number</label><input class="field-input" placeholder="Enter ID number" value="XXXX XXXX 1234"/></div>
+          </div>
+        </div>
+        <!-- Section 4: Payment -->
+        <div class="booking-section anim">
+          <div class="bs-title"><span class="bs-num">4</span> Payment Method</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px">
+            <div class="berth-opt sel" style="text-align:center;padding:12px">💳 UPI</div>
+            <div class="berth-opt" style="text-align:center;padding:12px">🏦 Net Banking</div>
+            <div class="berth-opt" style="text-align:center;padding:12px">💳 Cards</div>
+          </div>
+          <div class="field-group"><label class="field-label">UPI ID</label><input class="field-input" placeholder="yourname@upi" value="rahul@ybl"/></div>
+          <button class="btn btn-primary" style="margin-top:8px" onclick="alert('Booking confirmed! PNR: 6254831920')">🔒 Confirm & Pay ₹1,420</button>
+        </div>
+      </div>
+      <!-- Sidebar -->
+      <div class="booking-sidebar">
+        <div class="train-summary anim">
+          <div class="ts-train">12951 Mumbai Rajdhani</div>
+          <div class="ts-row"><span class="ts-label">From</span><span class="ts-val">New Delhi (NDLS)</span></div>
+          <div class="ts-row"><span class="ts-label">To</span><span class="ts-val">Mumbai Central (BCT)</span></div>
+          <div class="ts-row"><span class="ts-label">Date</span><span class="ts-val">Fri, 15 May 2026</span></div>
+          <div class="ts-row"><span class="ts-label">Departure</span><span class="ts-val">16:55</span></div>
+          <div class="ts-row"><span class="ts-label">Arrival</span><span class="ts-val">10:35 (+1)</span></div>
+          <div class="ts-row"><span class="ts-label">Class</span><span class="ts-val">Sleeper (SL)</span></div>
+          <div class="ts-row"><span class="ts-label">Quota</span><span class="ts-val">General</span></div>
+        </div>
+        <div class="concession-tag">
+          <span>🌸</span>
+          <span>Senior citizen concession applied for Passenger 2. 40% discount on base fare.</span>
+        </div>
+        <div class="fare-box anim">
+          <div class="fare-title">Fare Breakup</div>
+          <div class="fare-row"><span>Base Fare (2 pax)</span><span>₹1,420</span></div>
+          <div class="fare-row"><span>Reservation Charge</span><span>₹90</span></div>
+          <div class="fare-row"><span>Superfast Surcharge</span><span>₹60</span></div>
+          <div class="fare-row"><span>GST (5%)</span><span>₹79</span></div>
+          <div class="fare-row"><span>IRCTC Convenience Fee</span><span>₹35</span></div>
+          <div class="fare-row" style="color:var(--sage-deep);font-weight:600"><span>Senior Citizen Discount</span><span>−₹264</span></div>
+          <div class="fare-total"><span>Total</span><span>₹1,420</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PAGE 4 — PNR STATUS
+══════════════════════════════════════════════════════ -->
+<div class="page" id="page-pnr">
+  <div class="container">
+    <div class="pnr-layout">
+      <div class="pnr-card anim">
+        <h2 class="pnr-hero-title">🎫 PNR Status</h2>
+        <p class="pnr-sub">Enter your 10-digit PNR number printed on the top-left corner of your e-ticket. Get real-time booking status, berth details, and coach position.</p>
+        <div class="pnr-input-row">
+          <input class="pnr-input" type="text" placeholder="Enter 10-digit PNR" value="6254831920" maxlength="10"/>
+          <button class="btn btn-primary" style="width:auto;padding:14px 28px" onclick="document.getElementById('pnr-result').style.display='block'">Check Status</button>
+        </div>
+      </div>
+
+      <!-- Result -->
+      <div class="pnr-result anim" id="pnr-result" style="display:block">
+        <div class="pnr-result-header">
+          <div class="prh-train">12951 · Mumbai Rajdhani Express</div>
+          <div class="prh-route">New Delhi (NDLS) → Mumbai Central (BCT)</div>
+          <div class="prh-date">Friday, 15 May 2026 · Sleeper Class · General Quota</div>
+        </div>
+        <div class="pnr-timeline">
+          <div class="pt-stn"><div class="pt-time">16:55</div><div class="pt-name">New Delhi</div></div>
+          <div class="pt-line" style="flex:1">
+            <div class="pt-line-fill"></div>
+            <div class="pt-dur">17h 40m · 1 stop</div>
+          </div>
+          <div class="pt-stn" style="text-align:right"><div class="pt-time">10:35</div><div class="pt-name">Mumbai Central</div></div>
+        </div>
+        <div class="passenger-table">
+          <div class="pt-header"><div>Passenger</div><div>Booking Status</div><div>Current Status</div><div>Coach / Berth</div></div>
+          <div class="pt-row">
+            <div class="pt-name-cell">Rahul Sharma, 32 / M</div>
+            <div><span class="status status-confirmed">● Confirmed</span></div>
+            <div><span class="status status-confirmed">● CNF</span></div>
+            <div style="font-weight:600">S4 / 42 LB</div>
+          </div>
+          <div class="pt-row">
+            <div class="pt-name-cell">Priya Sharma, 28 / F</div>
+            <div><span class="status status-confirmed">● Confirmed</span></div>
+            <div><span class="status status-confirmed">● CNF</span></div>
+            <div style="font-weight:600">S4 / 41 LB</div>
+          </div>
+        </div>
+        <div class="pnr-actions">
+          <button class="btn btn-primary" style="width:auto;padding:10px 20px" onclick="showPage('live')">📡 Track Train</button>
+          <button class="btn btn-outline" style="padding:10px 20px">📥 Download Ticket</button>
+          <button class="btn btn-outline" style="padding:10px 20px;color:var(--lotus-deep);border-color:var(--lotus)">❌ Cancel Ticket</button>
+        </div>
+      </div>
+
+      <!-- Info cards -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px">
+        <div class="card" style="padding:18px"><div style="font-size:22px;margin-bottom:8px">🏷️</div><div style="font-weight:700;margin-bottom:4px">Status Codes</div><div style="font-size:12px;color:var(--mid);line-height:1.7">CNF = Confirmed · RAC = Reservation Against Cancellation · WL = Waitlist · PQWL = Pooled Quota WL · GNWL = General WL</div></div>
+        <div class="card" style="padding:18px"><div style="font-size:22px;margin-bottom:8px">⏰</div><div style="font-weight:700;margin-bottom:4px">Chart Preparation</div><div style="font-size:12px;color:var(--mid);line-height:1.7">Final chart is prepared 4 hours before departure. Waitlisted passengers get updated status at chart time.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PAGE 5 — MY BOOKINGS
+══════════════════════════════════════════════════════ -->
+<div class="page" id="page-mybookings">
+  <div class="container">
+    <div class="mybookings-layout">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+        <h2 class="section-title">My Bookings</h2>
+        <button class="btn btn-primary" style="width:auto;padding:10px 20px" onclick="showPage('home')">+ Book New Ticket</button>
+      </div>
+      <div class="tabs-row">
+        <div class="mbtab active">Upcoming (2)</div>
+        <div class="mbtab">Past Journeys</div>
+        <div class="mbtab">Cancelled</div>
+        <div class="mbtab">Waitlisted</div>
+      </div>
+      <div class="booking-list">
+        <!-- Booking 1 -->
+        <div class="booking-item anim">
+          <div class="bi-header">
+            <div class="bi-pnr">PNR: <span>6254831920</span></div>
+            <span class="status status-confirmed">● Confirmed</span>
+          </div>
+          <div class="bi-body">
+            <div class="bi-route">
+              <div><div class="bi-city">New Delhi</div><div style="font-size:11px;color:var(--mid)">NDLS · Dep 16:55</div></div>
+              <div class="bi-arrow">→</div>
+              <div><div class="bi-city">Mumbai Central</div><div style="font-size:11px;color:var(--mid)">BCT · Arr 10:35</div></div>
+            </div>
+            <div class="bi-train">12951 Mumbai Rajdhani · Fri, 15 May 2026 · Sleeper (S4)</div>
+            <div class="bi-pax-chips" style="margin-top:10px">
+              <span class="pax-chip">Rahul S. · S4/42</span>
+              <span class="pax-chip">Priya S. · S4/41</span>
+            </div>
+          </div>
+          <div class="bi-actions">
+            <button class="btn btn-outline" style="padding:7px 16px;font-size:12px" onclick="showPage('pnr')">View PNR</button>
+            <button class="btn btn-outline" style="padding:7px 16px;font-size:12px" onclick="showPage('live')">Track Train</button>
+            <button class="btn btn-outline" style="padding:7px 16px;font-size:12px">Download</button>
+            <button class="btn btn-outline" style="padding:7px 16px;font-size:12px;color:var(--lotus-deep);border-color:var(--lotus);margin-left:auto">Cancel</button>
+          </div>
+        </div>
+        <!-- Booking 2 -->
+        <div class="booking-item anim">
+          <div class="bi-header">
+            <div class="bi-pnr">PNR: <span>8731920456</span></div>
+            <span class="status status-waitlist">⏳ WL 4 → RAC 2</span>
+          </div>
+          <div class="bi-body">
+            <div class="bi-route">
+              <div><div class="bi-city">Bangalore</div><div style="font-size:11px;color:var(--mid)">SBC · Dep 06:00</div></div>
+              <div class="bi-arrow">→</div>
+              <div><div class="bi-city">Varanasi</div><div style="font-size:11px;color:var(--mid)">BSB · Arr 20:30</div></div>
+            </div>
+            <div class="bi-train">12625 Kerala Express · Sun, 22 May 2026 · 3A</div>
+            <div style="margin-top:10px;padding:10px 14px;background:var(--gold-pale);border-radius:var(--r-sm);font-size:12px;color:#7A5010">
+              ⚡ High chance of confirmation — WL has been moving. Chart prepared on 22 May at 02:00 AM.
+            </div>
+          </div>
+          <div class="bi-actions">
+            <button class="btn btn-outline" style="padding:7px 16px;font-size:12px" onclick="showPage('pnr')">View PNR</button>
+            <button class="btn btn-outline" style="padding:7px 16px;font-size:12px">Download</button>
+            <button class="btn btn-outline" style="padding:7px 16px;font-size:12px;color:var(--lotus-deep);border-color:var(--lotus);margin-left:auto">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PAGE 6 — LIVE TRAIN STATUS
+══════════════════════════════════════════════════════ -->
+<div class="page" id="page-live">
+  <div class="container">
+    <div class="live-layout">
+      <div class="pnr-card anim">
+        <h2 class="pnr-hero-title">📡 Live Train Status</h2>
+        <p class="pnr-sub">Track any train in real-time. Enter a train number or name to see its current location, delay, and upcoming stops.</p>
+        <div class="pnr-input-row">
+          <input class="pnr-input" type="text" placeholder="Train number or name" value="12951" style="font-size:18px;letter-spacing:1px"/>
+          <button class="btn btn-primary" style="width:auto;padding:14px 28px">Track Now</button>
+        </div>
+      </div>
+
+      <div class="live-card anim">
+        <div class="live-header">
+          <div>
+            <div class="live-train-name">12951 · Mumbai Rajdhani Express</div>
+            <div style="font-size:13px;color:rgba(255,255,255,0.6);margin-top:4px">New Delhi → Mumbai Central · 1,384 km</div>
+            <div style="font-size:12px;color:var(--gold);margin-top:6px;font-weight:600">Last updated: 2 min ago</div>
+          </div>
+          <div>
+            <div class="live-status-badge"><span class="live-dot"></span> Running</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.55);margin-top:8px;text-align:right">Delay: <span style="color:#FFB347;font-weight:700">+12 min</span></div>
+          </div>
+        </div>
+
+        <!-- Current position banner -->
+        <div style="background:var(--lotus-pale);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;gap:10px">
+          <span style="font-size:20px">🚆</span>
+          <div>
+            <div style="font-weight:700;font-size:14px">Currently between Vadodara and Surat</div>
+            <div style="font-size:12px;color:var(--mid)">Estimated arrival at Mumbai Central: 10:47 AM (+12 min late)</div>
+          </div>
+        </div>
+
+        <div class="station-list">
+          <div class="station-item">
+            <div class="si-time">16:55<div style="font-size:10px;color:var(--sage-deep);font-weight:600">On time</div></div>
+            <div class="si-dot-col"><div class="si-dot done"></div><div class="si-line done"></div></div>
+            <div><div class="si-name">New Delhi</div><div class="si-code">NDLS · Platform 12</div></div>
+            <div class="si-delay delay-none">✓ Departed</div>
+          </div>
+          <div class="station-item">
+            <div class="si-time">20:15<div style="font-size:10px;color:var(--sage-deep);font-weight:600">On time</div></div>
+            <div class="si-dot-col"><div class="si-dot done"></div><div class="si-line done"></div></div>
+            <div><div class="si-name">Kota Junction</div><div class="si-code">KOTA · 5 min halt</div></div>
+            <div class="si-delay delay-none">✓ Departed</div>
+          </div>
+          <div class="station-item">
+            <div class="si-time">00:42<div style="font-size:10px;color:#9E5010;font-weight:600">+12 min</div></div>
+            <div class="si-dot-col"><div class="si-dot done"></div><div class="si-line done"></div></div>
+            <div><div class="si-name">Vadodara Junction</div><div class="si-code">BRC · 5 min halt</div></div>
+            <div class="si-delay delay-late">+12 min</div>
+          </div>
+          <div class="station-item" style="background:var(--lotus-pale);border-radius:var(--r-sm);margin:0 -4px;padding:10px 4px">
+            <div class="si-time" style="color:var(--lotus-deep)">02:18<div style="font-size:10px;color:#9E5010;font-weight:600">+12 min</div></div>
+            <div class="si-dot-col"><div class="si-dot current"></div><div class="si-line"></div></div>
+            <div><div class="si-name" style="color:var(--lotus-deep);font-weight:700">Surat <span style="font-size:11px;font-weight:400;color:var(--lotus)">← Train approaching</span></div><div class="si-code">ST · 2 min halt</div></div>
+            <div class="si-delay delay-late">+12 min</div>
+          </div>
+          <div class="station-item">
+            <div class="si-time">04:38<div style="font-size:10px;color:var(--mid);font-weight:600">Scheduled</div></div>
+            <div class="si-dot-col"><div class="si-dot"></div><div class="si-line"></div></div>
+            <div><div class="si-name">Borivali</div><div class="si-code">BVI · 2 min halt</div></div>
+            <div class="si-delay" style="color:var(--mid)">—</div>
+          </div>
+          <div class="station-item">
+            <div class="si-time">10:35<div style="font-size:10px;color:var(--mid);font-weight:600">Scheduled</div></div>
+            <div class="si-dot-col"><div class="si-dot"></div></div>
+            <div><div class="si-name">Mumbai Central</div><div class="si-code">BCT · Terminal</div></div>
+            <div class="si-delay" style="color:var(--mid)">~10:47</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coach composition -->
+      <div class="live-card anim">
+        <div style="padding:18px 24px;border-bottom:1px solid var(--border);font-family:'Baloo 2',cursive;font-size:16px;font-weight:700">🚃 Coach Composition</div>
+        <div style="padding:16px 24px;display:flex;gap:6px;overflow-x:auto">
+          <div style="padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--r-sm);text-align:center;min-width:56px;font-size:11px;font-weight:700;color:var(--mid)">ENG<br><span style="color:var(--ink)">🚂</span></div>
+          <div style="padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--r-sm);text-align:center;min-width:56px;font-size:11px;font-weight:700;background:var(--gold-pale);color:#7A5010">H1<br>1AC</div>
+          <div style="padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--r-sm);text-align:center;min-width:56px;font-size:11px;font-weight:700;background:var(--lotus-pale);color:var(--lotus-deep)">A1<br>2AC</div>
+          <div style="padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--r-sm);text-align:center;min-width:56px;font-size:11px;font-weight:700;background:var(--lotus-pale);color:var(--lotus-deep)">A2<br>2AC</div>
+          <div style="padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--r-sm);text-align:center;min-width:56px;font-size:11px;font-weight:700;background:var(--sage-pale);color:var(--sage-deep)">B1<br>3AC</div>
+          <div style="padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--r-sm);text-align:center;min-width:56px;font-size:11px;font-weight:700;background:var(--sage-pale);color:var(--sage-deep)">B2<br>3AC</div>
+          <div style="padding:8px 12px;border:1.5px solid var(--lotus);border-radius:var(--r-sm);text-align:center;min-width:56px;font-size:11px;font-weight:700;background:var(--lotus-pale);color:var(--lotus-deep)">S4<br>SL ★</div>
+          <div style="padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--r-sm);text-align:center;min-width:56px;font-size:11px;font-weight:700;background:var(--ivory);color:var(--mid)">S5<br>SL</div>
+          <div style="padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--r-sm);text-align:center;min-width:56px;font-size:11px;font-weight:700;background:var(--ivory);color:var(--mid)">S6<br>SL</div>
+          <div style="padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--r-sm);text-align:center;min-width:56px;font-size:11px;font-weight:700;color:var(--mid)">GEN<br>—</div>
+        </div>
+        <div style="padding:0 24px 16px;font-size:12px;color:var(--mid)">★ Your coach is S4</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    document.querySelectorAll('.page-tab').forEach((t, i) => {
+      const ids = ['home','results','booking','pnr','mybookings','live'];
+      t.classList.toggle('active', ids[i] === id);
+    });
+    ['home','pnr','live','mybookings'].forEach(n => {
+      const el = document.getElementById('nav-' + n);
+      if(el) el.classList.toggle('active', n === id);
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function switchTab(tab, id) {
+    document.querySelectorAll('.page-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    showPage(id);
+  }
+
+  // Card tabs
+  document.querySelectorAll('.ctab').forEach(t => {
+    t.addEventListener('click', () => {
+      t.closest('.card-tabs').querySelectorAll('.ctab').forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+    });
+  });
+
+  // Journey type
+  document.querySelectorAll('.jtype').forEach(j => {
+    j.addEventListener('click', () => {
+      j.closest('.jtype-row').querySelectorAll('.jtype').forEach(x => x.classList.remove('active'));
+      j.classList.add('active');
+    });
+  });
+
+  // Toggles
+  document.querySelectorAll('.tog').forEach(t => t.addEventListener('click', () => t.classList.toggle('on')));
+
+  // Swap
+  document.querySelector('.swap').addEventListener('click', () => {
+    const inputs = document.querySelectorAll('.ft-box input');
+    [inputs[0].value, inputs[1].value] = [inputs[1].value, inputs[0].value];
+  });
+
+  // Sort pills
+  document.querySelectorAll('.sort-pill').forEach(p => {
+    p.addEventListener('click', () => {
+      p.closest('.sort-bar').querySelectorAll('.sort-pill').forEach(x => x.classList.remove('active'));
+      p.classList.add('active');
+    });
+  });
+
+  // Language pills
+  document.querySelectorAll('.lpill').forEach(p => {
+    p.addEventListener('click', () => {
+      document.querySelectorAll('.lpill').forEach(x => x.classList.remove('active'));
+      p.classList.add('active');
+    });
+  });
+
+  // My bookings tabs
+  document.querySelectorAll('.mbtab').forEach(t => {
+    t.addEventListener('click', () => {
+      t.closest('.tabs-row').querySelectorAll('.mbtab').forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+    });
+  });
+
+  // Berth options
+  document.querySelectorAll('.berth-opt').forEach(b => {
+    b.addEventListener('click', () => {
+      b.closest('.berth-select,.booking-section > div').querySelectorAll('.berth-opt').forEach(x => x.classList.remove('sel'));
+      b.classList.add('sel');
+    });
+  });
+
+  // Train class selection
+  document.querySelectorAll('.tc-class').forEach(c => {
+    c.addEventListener('click', () => {
+      c.closest('.tc-classes').querySelectorAll('.tc-class').forEach(x => x.classList.remove('sel'));
+      c.classList.add('sel');
+    });
+  });
+
+  // Date day name
+  document.querySelectorAll('.date-box input[type=date]').forEach(i => {
+    i.addEventListener('change', function() {
+      const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+      const d = new Date(this.value);
+      const dayEl = this.closest('.date-box').querySelector('.day');
+      if(dayEl) dayEl.textContent = isNaN(d) ? '' : days[d.getDay()];
+    });
+  });
+</script>
+<div class="overlay" id="modal-overlay" style="display:none">
+  <div class="modal" id="modal">
+
+    <!-- Close -->
+    <button class="close-btn" onclick="closeLoginModal()">✕</button>
+
+    <!-- ── LEFT PANEL ── -->
+    <div class="left-panel">
+      <div class="lp-ring"></div>
+      <div class="lp-ring"></div>
+
+      <div class="lp-top">
+        <div class="lp-logo">
+          <div class="icon">🚆</div>
+          <span>Rail<em>Connect</em></span>
+        </div>
+        <h2 class="lp-heading">Your journey<br>begins <span class="hl">here.</span></h2>
+        <p class="lp-sub">Sign in to book tickets, track trains, manage your bookings and travel across India seamlessly.</p>
+        <div class="lp-features">
+          <div class="lp-feature">
+            <div class="lp-feat-icon" style="background:rgba(196,80,106,0.18)">🎫</div>
+            <div class="lp-feat-text">
+              <div class="ft">Book & Manage Tickets</div>
+              <div class="fs">Up to 6 passengers per booking, Tatkal access</div>
+            </div>
+          </div>
+          <div class="lp-feature">
+            <div class="lp-feat-icon" style="background:rgba(42,107,90,0.18)">📡</div>
+            <div class="lp-feat-text">
+              <div class="ft">Live Train Tracking</div>
+              <div class="fs">Real-time status, delay alerts, platform info</div>
+            </div>
+          </div>
+          <div class="lp-feature">
+            <div class="lp-feat-icon" style="background:rgba(196,154,90,0.18)">🙏</div>
+            <div class="lp-feat-text">
+              <div class="ft">Pilgrimage & Senior Benefits</div>
+              <div class="fs">Concessions, special quotas, accessible booking</div>
+            </div>
+          </div>
+          <div class="lp-feature">
+            <div class="lp-feat-icon" style="background:rgba(196,80,106,0.18)">🔔</div>
+            <div class="lp-feat-text">
+              <div class="ft">PNR & WL Alerts</div>
+              <div class="fs">Instant SMS & email updates on booking status</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lp-bottom">
+        <div class="lp-stats">
+          <div class="lp-stat"><div class="sn">14M+</div><div class="sl">Daily Passengers</div></div>
+          <div class="lp-stat"><div class="sn">7K+</div><div class="sl">Stations</div></div>
+          <div class="lp-stat"><div class="sn">100%</div><div class="sl">Govt. Secured</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── RIGHT PANEL ── -->
+    <div class="right-panel">
+
+      <!-- Tabs: Login / Register -->
+      <div class="form-tabs">
+        <button class="ftab active" id="tab-login" onclick="switchForm('login')">Login</button>
+        <button class="ftab" id="tab-register" onclick="switchForm('register')">New Registration</button>
+      </div>
+
+      <!-- ════════════ LOGIN FORM ════════════ -->
+      <div class="form-section active" id="form-login">
+        <div class="form-title">Welcome back 🌸</div>
+        <div class="form-sub">Login to your RailConnect account to continue booking.</div>
+
+        <!-- Social Login -->
+        <div class="social-row">
+          <div class="social-btn"><span class="social-icon">🇬</span>Google</div>
+          <div class="social-btn"><span class="social-icon">📱</span>DigiLocker</div>
+        </div>
+
+        <div class="or-divider"><div class="or-line"></div><div class="or-text">or login with User ID</div><div class="or-line"></div></div>
+
+        <div class="field-group">
+          <label class="field-label">User ID / Mobile / Email</label>
+          <div class="field-wrap">
+            <input class="field-input" type="text" placeholder="Enter your User ID or mobile number" value="rahul_sharma92"/>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Password</label>
+          <div class="field-wrap">
+            <input class="field-input" type="password" placeholder="Enter password" id="pwd-input" value="••••••••"/>
+            <span class="field-icon" onclick="togglePwd()">👁️</span>
+          </div>
+        </div>
+
+        <div class="forgot-link"><a onclick="showOTPLogin()">Forgot Password? Login with OTP →</a></div>
+
+        <div class="concession-bar">
+          <span>🌐</span>
+          <span>For Senior Citizen or Divyangjan concessions, link your Aadhaar after login from <strong>My Profile → Concessions</strong>.</span>
+        </div>
+
+        <!-- CAPTCHA row -->
+        <div class="field-group">
+          <label class="field-label">Security Check</label>
+          <div style="display:flex;gap:10px;align-items:center">
+            <div style="background:var(--plum);color:#fff;padding:10px 16px;border-radius:var(--r-sm);font-family:'Baloo 2',cursive;font-size:18px;font-weight:700;letter-spacing:4px;user-select:none;flex-shrink:0">A3K7P</div>
+            <div class="field-wrap" style="flex:1"><input class="field-input" placeholder="Enter captcha" style="letter-spacing:2px"/></div>
+            <div style="cursor:pointer;font-size:18px;color:var(--mid);padding:8px" title="Refresh">🔄</div>
+          </div>
+        </div>
+
+        <button class="btn-main" onclick="showSuccess('login')">🔓 Login to RailConnect</button>
+
+        <div class="or-divider" style="margin:18px 0 14px"><div class="or-line"></div><div class="or-text">new here?</div><div class="or-line"></div></div>
+        <div class="switch-text">Don't have an account? <a onclick="switchForm('register')">Register for free →</a></div>
+      </div>
+
+      <!-- ════════════ OTP LOGIN (hidden by default) ════════════ -->
+      <div class="form-section" id="form-otp-login">
+        <div class="form-title">Login with OTP 📲</div>
+        <div class="form-sub">We'll send a one-time password to your registered mobile number.</div>
+
+        <div class="field-group">
+          <label class="field-label">Mobile Number</label>
+          <div class="three-col">
+            <input class="field-input" value="+91" style="text-align:center;font-weight:700"/>
+            <input class="field-input" placeholder="10-digit mobile number" value="98765 43210"/>
+          </div>
+        </div>
+
+        <button class="btn-otp" style="margin-bottom:20px" onclick="showOTPVerify()">Send OTP →</button>
+
+        <div id="otp-verify-section" style="display:none;animation:fadeSlide 0.3s ease both">
+          <div class="field-group">
+            <label class="field-label">Enter OTP sent to +91 98765 43210</label>
+            <div class="otp-row">
+              <input class="otp-digit" maxlength="1" value="4"/>
+              <input class="otp-digit" maxlength="1" value="8"/>
+              <input class="otp-digit" maxlength="1" value="3"/>
+              <input class="otp-digit" maxlength="1" value="1"/>
+              <input class="otp-digit" maxlength="1" value=""/>
+              <input class="otp-digit" maxlength="1" value=""/>
+            </div>
+            <div class="otp-resend">Didn't receive? <a>Resend OTP</a> in 00:42</div>
+          </div>
+          <button class="btn-main" onclick="showSuccess('login')">✓ Verify & Login</button>
+        </div>
+
+        <div class="switch-text" style="margin-top:16px"><a onclick="switchForm('login')">← Back to Password Login</a></div>
+      </div>
+
+      <!-- ════════════ REGISTER FORM ════════════ -->
+      <div class="form-section" id="form-register">
+
+        <!-- Progress Steps -->
+        <div class="steps-bar" id="steps-bar">
+          <div class="step">
+            <div class="step-inner"><div class="step-circle active" id="step1">1</div><div class="step-label">Account</div></div>
+            <div class="step-line" id="line1"></div>
+          </div>
+          <div class="step">
+            <div class="step-inner"><div class="step-circle" id="step2">2</div><div class="step-label">Personal</div></div>
+            <div class="step-line" id="line2"></div>
+          </div>
+          <div class="step">
+            <div class="step-inner"><div class="step-circle" id="step3">3</div><div class="step-label">Verify</div></div>
+            <div class="step-line" id="line3"></div>
+          </div>
+          <div class="step" style="flex:0">
+            <div class="step-inner"><div class="step-circle" id="step4">4</div><div class="step-label">Done</div></div>
+          </div>
+        </div>
+
+        <!-- Step 1: Account -->
+        <div id="reg-step-1" class="reg-step">
+          <div class="form-title">Create Account</div>
+          <div class="form-sub">Set up your RailConnect login credentials.</div>
+          <div class="field-group">
+            <label class="field-label">Choose User ID</label>
+            <div class="field-wrap">
+              <input class="field-input" placeholder="Letters, numbers, underscore (6–35 chars)" value="rahul_sharma92"/>
+              <span class="field-icon">✓</span>
+            </div>
+            <div class="field-hint">User ID cannot be changed later. Choose wisely.</div>
+          </div>
+          <div class="two-col">
+            <div class="field-group">
+              <label class="field-label">Password</label>
+              <div class="field-wrap"><input class="field-input" type="password" value="••••••••"/><span class="field-icon" style="cursor:pointer">👁️</span></div>
+            </div>
+            <div class="field-group">
+              <label class="field-label">Confirm Password</label>
+              <div class="field-wrap"><input class="field-input" type="password" value="••••••••"/></div>
+            </div>
+          </div>
+          <div style="margin-bottom:14px">
+            <div style="font-size:10px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;color:var(--mid);margin-bottom:6px">Password Strength</div>
+            <div style="display:flex;gap:4px">
+              <div style="flex:1;height:4px;border-radius:2px;background:var(--lotus)"></div>
+              <div style="flex:1;height:4px;border-radius:2px;background:var(--lotus)"></div>
+              <div style="flex:1;height:4px;border-radius:2px;background:var(--lotus)"></div>
+              <div style="flex:1;height:4px;border-radius:2px;background:var(--border)"></div>
+            </div>
+            <div style="font-size:11px;color:var(--mid);margin-top:4px">Strong — add a symbol to make it Very Strong</div>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Security Question</label>
+            <select class="field-input"><option>What is your mother's maiden name?</option><option>Name of your first school?</option><option>Your childhood nickname?</option><option>Your favourite deity's name?</option></select>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Security Answer</label>
+            <input class="field-input" placeholder="Your answer (case-sensitive)"/>
+          </div>
+          <button class="btn-main" onclick="goRegStep(2)">Continue → Personal Details</button>
+        </div>
+
+        <!-- Step 2: Personal -->
+        <div id="reg-step-2" class="reg-step" style="display:none">
+          <div class="form-title">Personal Details</div>
+          <div class="form-sub">We need this to issue your tickets correctly.</div>
+          <div class="two-col">
+            <div class="field-group"><label class="field-label">First Name</label><input class="field-input" placeholder="As per Aadhaar" value="Rahul"/></div>
+            <div class="field-group"><label class="field-label">Last Name</label><input class="field-input" value="Sharma"/></div>
+          </div>
+          <div class="two-col">
+            <div class="field-group">
+              <label class="field-label">Date of Birth</label>
+              <input class="field-input" type="date" value="1992-06-14"/>
+              <div class="field-hint">Required to calculate age-based concessions</div>
+            </div>
+            <div class="field-group">
+              <label class="field-label">Gender</label>
+              <select class="field-input"><option>Male</option><option>Female</option><option>Other / Prefer not to say</option></select>
+            </div>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Nationality</label>
+            <select class="field-input"><option>Indian</option><option>Foreign National</option></select>
+          </div>
+          <div class="two-col">
+            <div class="field-group">
+              <label class="field-label">Mobile Number</label>
+              <div class="three-col">
+                <input class="field-input" value="+91" style="text-align:center;font-weight:700"/>
+                <input class="field-input" value="98765 43210"/>
+              </div>
+            </div>
+            <div class="field-group"><label class="field-label">Email Address</label><input class="field-input" value="rahul@email.com"/></div>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Residential Address</label>
+            <input class="field-input" placeholder="Flat / House, Street, Area" style="margin-bottom:8px" value="42, MG Road, Koramangala"/>
+            <div class="two-col">
+              <input class="field-input" placeholder="City" value="Bengaluru"/>
+              <input class="field-input" placeholder="PIN Code" value="560034"/>
+            </div>
+          </div>
+          <div class="concession-bar">
+            <span>🌸</span>
+            <span>If you're a Senior Citizen (60+), Divyangjan, or Railway Employee, you can link your ID after registration to unlock concessions.</span>
+          </div>
+          <div style="display:flex;gap:10px">
+            <button class="btn-main" style="background:var(--ivory);color:var(--ink);box-shadow:none;border:1.5px solid var(--border);flex:0 0 auto;width:auto;padding:14px 20px;font-family:'Noto Sans',sans-serif;font-size:13px" onclick="goRegStep(1)">← Back</button>
+            <button class="btn-main" onclick="goRegStep(3)" style="flex:1">Continue → Verify OTP</button>
+          </div>
+        </div>
+
+        <!-- Step 3: Verify -->
+        <div id="reg-step-3" class="reg-step" style="display:none">
+          <div class="form-title">Verify Your Identity 📲</div>
+          <div class="form-sub">We've sent a 6-digit OTP to <strong>+91 98765 43210</strong> and <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ee9c8f869b82ae8b838f8782c08d8183">[email&#160;protected]</a></strong>.</div>
+
+          <div class="field-group">
+            <label class="field-label">Mobile OTP</label>
+            <div class="otp-row">
+              <input class="otp-digit" maxlength="1" value="7"/>
+              <input class="otp-digit" maxlength="1" value="4"/>
+              <input class="otp-digit" maxlength="1" value="2"/>
+              <input class="otp-digit" maxlength="1" value="8"/>
+              <input class="otp-digit" maxlength="1" value="1"/>
+              <input class="otp-digit" maxlength="1" value="6"/>
+            </div>
+            <div class="otp-resend">Didn't receive? <a>Resend OTP</a> (00:38 remaining)</div>
+          </div>
+
+          <div class="field-group" style="margin-top:20px">
+            <label class="field-label">Email OTP</label>
+            <div class="otp-row">
+              <input class="otp-digit" maxlength="1" value="3"/>
+              <input class="otp-digit" maxlength="1" value="9"/>
+              <input class="otp-digit" maxlength="1" value="1"/>
+              <input class="otp-digit" maxlength="1" value="4"/>
+              <input class="otp-digit" maxlength="1" value="5"/>
+              <input class="otp-digit" maxlength="1" value="2"/>
+            </div>
+            <div class="otp-resend">Didn't receive? <a>Resend Email OTP</a></div>
+          </div>
+
+          <div class="terms-row" style="margin-top:20px">
+            <input type="checkbox" checked/>
+            <span>I agree to the <a>Terms of Service</a> and <a>Privacy Policy</a> of RailConnect / IRCTC. I consent to receiving booking alerts via SMS and email.</span>
+          </div>
+
+          <div style="display:flex;gap:10px">
+            <button class="btn-main" style="background:var(--ivory);color:var(--ink);box-shadow:none;border:1.5px solid var(--border);flex:0 0 auto;width:auto;padding:14px 20px;font-family:'Noto Sans',sans-serif;font-size:13px" onclick="goRegStep(2)">← Back</button>
+            <button class="btn-main" onclick="showSuccess('register')" style="flex:1">✓ Complete Registration</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ════════════ SUCCESS STATE ════════════ -->
+      <div class="form-section" id="form-success">
+        <div class="success-state">
+          <div class="success-icon" id="success-icon">🌸</div>
+          <div class="success-title" id="success-title">Welcome, Rahul!</div>
+          <div class="success-sub" id="success-sub">You're now logged in. Ready to book your next journey across India.</div>
+          <button class="btn-main" onclick="closeLoginModal()" style="max-width:280px;margin:0 auto">🚆 Start Booking</button>
+          <div style="margin-top:16px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+            <a style="font-size:12px;color:var(--lotus);cursor:pointer;font-weight:600">Check PNR Status</a>
+            <span style="color:var(--border)">·</span>
+            <a style="font-size:12px;color:var(--lotus);cursor:pointer;font-weight:600">View My Bookings</a>
+            <span style="color:var(--border)">·</span>
+            <a style="font-size:12px;color:var(--lotus);cursor:pointer;font-weight:600">Track a Train</a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /right-panel -->
+  </div><!-- /modal -->
+</div><!-- /overlay -->
+
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  /* ── MODAL OPEN/CLOSE ── */
+  function openLoginModal() {
+    const overlay = document.getElementById('modal-overlay');
+    overlay.style.display = 'flex';
+    overlay.style.opacity = '0';
+    requestAnimationFrame(() => {
+      overlay.style.transition = 'opacity 0.2s ease';
+      overlay.style.opacity = '1';
+    });
+    document.body.style.overflow = 'hidden';
+    // Reset to login tab
+    switchForm('login');
+    document.getElementById('modal').style.animation = 'popUp 0.35s cubic-bezier(0.22,1,0.36,1) both';
+  }
+
+  function closeLoginModal() {
+    const overlay = document.getElementById('modal-overlay');
+    overlay.style.transition = 'opacity 0.2s ease';
+    overlay.style.opacity = '0';
+    setTimeout(() => {
+      overlay.style.display = 'none';
+      overlay.style.transition = '';
+    }, 200);
+    document.body.style.overflow = '';
+  }
+
+  /* ── MODAL BACKDROP CLICK ── */
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('modal-overlay').addEventListener('click', function(e) {
+      if (e.target === this) closeLoginModal();
+    });
+    /* ESC key */
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeLoginModal();
+    });
+  });
+
+  function switchForm(which) {
+    document.querySelectorAll('.form-section').forEach(f => f.classList.remove('active'));
+    document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
+    document.getElementById('form-' + which).classList.add('active');
+    document.getElementById('tab-' + which).classList.add('active');
+    // Handle register tab — it may not exist as a direct form-section match
+    if (which === 'register') {
+      document.getElementById('tab-register').classList.add('active');
+    }
+  }
+
+  function showOTPLogin() {
+    document.querySelectorAll('.form-section').forEach(f => f.classList.remove('active'));
+    document.getElementById('form-otp-login').classList.add('active');
+  }
+
+  function showOTPVerify() {
+    document.getElementById('otp-verify-section').style.display = 'block';
+  }
+
+  function goRegStep(step) {
+    document.querySelectorAll('.reg-step').forEach(s => s.style.display = 'none');
+    document.getElementById('reg-step-' + step).style.display = 'block';
+
+    // Update step indicators
+    for (let i = 1; i <= 4; i++) {
+      const el = document.getElementById('step' + i);
+      el.classList.remove('active', 'done');
+      if (i < step) {
+        el.classList.add('done');
+        el.textContent = '✓';
+      } else if (i === step) {
+        el.classList.add('active');
+        el.textContent = i;
+      } else {
+        el.textContent = i;
+      }
+    }
+    for (let i = 1; i <= 3; i++) {
+      const line = document.getElementById('line' + i);
+      if (line) line.classList.toggle('done', i < step);
+    }
+    document.querySelector('.right-panel').scrollTop = 0;
+  }
+
+  function showSuccess(type) {
+    document.querySelectorAll('.form-section').forEach(f => f.classList.remove('active'));
+    document.getElementById('form-success').classList.add('active');
+    if (type === 'register') {
+      document.getElementById('success-icon').textContent = '🎉';
+      document.getElementById('success-title').textContent = 'Registration Successful!';
+      document.getElementById('success-sub').textContent = 'Your account rahul_sharma92 is ready. Welcome to RailConnect — India is waiting to be explored.';
+      // Update steps to all done
+      for (let i = 1; i <= 4; i++) {
+        const el = document.getElementById('step' + i);
+        el.classList.remove('active');
+        el.classList.add('done');
+        el.textContent = '✓';
+      }
+    }
+  }
+
+  function togglePwd() {
+    const inp = document.getElementById('pwd-input');
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+  }
+
+  // OTP auto-advance
+  document.querySelectorAll('.otp-digit').forEach((digit, idx, all) => {
+    digit.addEventListener('input', () => {
+      if (digit.value && idx < all.length - 1) all[idx + 1].focus();
+    });
+    digit.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace' && !digit.value && idx > 0) all[idx - 1].focus();
+    });
+  });
+
+  // Close on backdrop click
+  document.getElementById('modal-overlay').addEventListener('c
