@@ -370,80 +370,8 @@
   }
 
   /* ── REVEAL ── */
-  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-
-  /* ============================================
-     RESPONSIVE — TABLET & MOBILE
-     ============================================ */
-
-  @media (max-width: 1024px) {
-    nav { padding: 16px 40px; }
-    .cs-hero { padding: 120px 40px 60px; }
-    .cs-overview { padding: 24px 40px; }
-    .cs-section { padding: 60px 40px; }
-    .cs-cta { padding: 80px 40px; }
-    footer { padding: 20px 40px; }
-  }
-
-  @media (max-width: 768px) {
-    nav { padding: 16px 24px; }
-    .nav-links { gap: 16px; }
-    .nav-links a { font-size: 10px; }
-
-    .cs-hero {
-      grid-template-columns: 1fr !important;
-      padding: 100px 24px 48px;
-      gap: 32px;
-    }
-    .cs-hero-eyebrow { font-size: 10px; }
-    .cs-hero h1 { font-size: clamp(32px, 8vw, 60px); }
-
-    .cs-overview {
-      grid-template-columns: 1fr 1fr !important;
-      padding: 20px 24px;
-      gap: 0;
-    }
-
-    .cs-section { padding: 48px 24px; }
-    .cs-section-heading { font-size: clamp(24px, 6vw, 40px); }
-
-    .problem-grid,
-    .features-grid,
-    .before-after {
-      grid-template-columns: 1fr !important;
-    }
-
-    .rq-item { grid-template-columns: 32px 1fr !important; }
-
-    .change-list { grid-template-columns: 1fr !important; }
-
-    .img-frame img { max-height: 60vw; }
-
-    /* Inline side-by-side image grids → stack */
-    [style*="grid-template-columns:1fr 1fr"],
-    [style*="grid-template-columns: 1fr 1fr"] {
-      grid-template-columns: 1fr !important;
-    }
-
-    .cs-cta { padding: 60px 24px; }
-    .cs-cta-bg { font-size: clamp(60px, 20vw, 120px); }
-    .cs-cta-heading { font-size: clamp(28px, 7vw, 48px); }
-    .cs-cta-link { font-size: clamp(14px, 4vw, 20px); }
-
-    footer { padding: 16px 24px; flex-direction: column; gap: 12px; }
-    .footer-links { justify-content: center; }
-  }
-
-  @media (max-width: 480px) {
-    .nav-links { display: none; }
-    .cs-overview { grid-template-columns: 1fr 1fr !important; }
-    .cs-section { padding: 36px 20px; }
-    .cs-section-heading { font-size: clamp(22px, 7vw, 36px); }
-    .problem-grid { grid-template-columns: 1fr !important; }
-    .problem-card { padding: 24px; }
-  }
-
+  .reveal { opacity: 1; transform: none; }
+  .reveal.visible { opacity: 1; transform: none; }
 </style>
 </head>
 <body onmousemove="__cm(event)">
@@ -461,13 +389,13 @@ function __cm(e) {
 
 <!-- NAV -->
 <nav>
-  <a href="index.html" class="logo">
+  <a href="krupalijain-fixed.html" class="logo">
     <div class="box"><span class="box-letter">KJ</span></div>
   </a>
-  <a href="index.html#work" class="nav-back">← Back to Work</a>
+  <a href="krupalijain-fixed.html#work" class="nav-back">← Back to Work</a>
   <ul class="nav-links">
-    <li><a href="index.html#about">About</a></li>
-    <li><a href="index.html#footer">Contact</a></li>
+    <li><a href="krupalijain-fixed.html#about">About</a></li>
+    <li><a href="krupalijain-fixed.html#footer">Contact</a></li>
   </ul>
 </nav>
 
@@ -739,7 +667,7 @@ function __cm(e) {
   <div class="cs-cta-bg">Talk?</div>
   <p class="cs-cta-label">↳ Let's connect</p>
   <h2 class="cs-cta-heading">Have a project<br>in <em>mind?</em></h2>
-  <a href="mailto:designer.kj1411@gmail.com" class="cs-cta-link">designer.kj1411@gmail.com</a>
+  <a href="/cdn-cgi/l/email-protection#432726302a242d26316d28297277727203242e222a2f6d202c2e" class="cs-cta-link"><span class="__cf_email__" data-cfemail="3054554359575e55421e5b5a0104010170575d51595c1e535f5d">[email&#160;protected]</span></a>
 </section>
 
 <!-- FOOTER -->
@@ -747,12 +675,12 @@ function __cm(e) {
   <p class="footer-copy">© 2025 Krupali Jain — All rights reserved</p>
   <div class="footer-links">
     <a href="#">LinkedIn</a>
-    <a href="#">Resume</a>
+    <a href="Krupali_Jain-Product_Designer.pdf" target="_blank">Resume</a>
     <a href="index.html">Back to Portfolio</a>
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   // Hover states for cursor
   document.querySelectorAll('a, button').forEach(function(el) {
     el.addEventListener('mouseenter', function() {
@@ -771,14 +699,4 @@ function __cm(e) {
 
   // Scroll reveal
   var revealEls = document.querySelectorAll('.reveal');
-  var observer = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-      }
-    });
-  }, { threshold: 0.1 });
-  revealEls.forEach(function(el) { observer.observe(el); });
-</script>
-</body>
-</html>
+  var observer = new IntersectionObserver(function(entr
