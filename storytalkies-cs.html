@@ -370,8 +370,8 @@
   }
 
   /* ── REVEAL ── */
-  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal { opacity: 1; transform: none; }
+  .reveal.visible { opacity: 1; transform: none; }
 </style>
 </head>
 <body onmousemove="__cm(event)">
@@ -386,13 +386,13 @@ function __cm(e) {
 <div class="c-dot" id="c-dot"></div>
 <div class="c-ring" id="c-ring"></div>
 <nav>
-  <a href="krupalijain-fixed.html" class="logo">
+  <a href="index.html" class="logo">
     <div class="box"><span class="box-letter">KJ</span></div>
   </a>
-  <a href="krupalijain-fixed.html#work" class="nav-back">← Back to Work</a>
+  <a href="index.html#work" class="nav-back">← Back to Work</a>
   <ul class="nav-links">
-    <li><a href="krupalijain-fixed.html#about">About</a></li>
-    <li><a href="krupalijain-fixed.html#footer">Contact</a></li>
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#footer">Contact</a></li>
   </ul>
 </nav>
 
@@ -699,15 +699,11 @@ function __cm(e) {
 <footer id="footer">
   <p class="footer-copy">© 2025 Krupali Jain — All rights reserved</p>
   <div class="footer-links">
-    <a href="#">LinkedIn</a><a href="#">Resume</a><a href="index.html">Back to Portfolio</a>
+    <a href="#">LinkedIn</a><a href="Krupali_Jain-Product_Designer.pdf" download="Krupali_Jain-Product_Designer.pdf" target="_blank">Resume</a><a href="index.html">Back to Portfolio</a>
   </div>
 </footer>
 <script>
   document.querySelectorAll('a,button').forEach(function(el){
     el.addEventListener('mouseenter',function(){var r=document.getElementById('c-ring'),d=document.getElementById('c-dot');if(r)r.classList.add('on');if(d)d.style.background='var(--coral)';});
     el.addEventListener('mouseleave',function(){var r=document.getElementById('c-ring'),d=document.getElementById('c-dot');if(r)r.classList.remove('on');if(d)d.style.background='var(--yellow)';});
-  });
-  var obs=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting)x.target.classList.add('visible');});},{threshold:0.1});
-  document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el);});
-</script>
-</body></html>
+  
