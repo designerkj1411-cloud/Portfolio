@@ -373,6 +373,208 @@
   .footer-links { display: flex; gap: 24px; }
   .footer-links a { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #555; text-decoration: none; }
   .footer-links a:hover { color: var(--yellow); }
+
+  /* ═══════════════════════════════════════════
+     RESPONSIVE — MOBILE / TABLET / LAPTOP
+     Breakpoints: 480 | 768 | 1024
+  ═══════════════════════════════════════════ */
+
+  /* ── Laptop (≤1024px) ── */
+  @media (max-width: 1024px) {
+    nav { padding: 18px 40px; }
+    .cs-hero, section[class*="cs-"] { padding-left: 40px; padding-right: 40px; }
+    section { padding-left: 40px !important; padding-right: 40px !important; }
+    .mascot-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  /* ── Tablet (≤768px) ── */
+  @media (max-width: 768px) {
+    /* Nav */
+    nav { padding: 14px 24px !important; }
+    .nav-links { gap: 20px; }
+    .nav-links a { font-size: 10px; }
+
+    /* All sections — reduce horizontal padding */
+    section, .cs-hero { padding-left: 24px !important; padding-right: 24px !important; }
+    .cs-section, .section-cta { padding-top: 60px !important; padding-bottom: 60px !important; }
+
+    /* Hero — stack columns */
+    .cs-hero {
+      grid-template-columns: 1fr !important;
+      padding-top: 100px !important;
+      padding-bottom: 48px !important;
+      gap: 40px !important;
+      min-height: auto !important;
+    }
+    .cs-hero h1, .hero-title { font-size: clamp(32px, 8vw, 52px) !important; letter-spacing: -1px !important; }
+
+    /* Stats strip */
+    .stats-strip, .cs-stats { grid-template-columns: repeat(2, 1fr) !important; }
+    .stat-number { font-size: 36px !important; }
+
+    /* Problem grid — 2 → 1 column */
+    .problem-grid { grid-template-columns: 1fr !important; }
+    .problem-card { padding: 24px !important; }
+    .problem-num { font-size: 40px !important; }
+
+    /* Change number */
+    .change-num { font-size: 44px !important; }
+    .change-title { font-size: 22px !important; }
+
+    /* Before/after grid → stack */
+    .before-after { grid-template-columns: 1fr !important; }
+
+    /* Features grid → 1 column */
+    .features-grid { grid-template-columns: 1fr !important; }
+
+    /* Emotion / mascot grid */
+    .mascot-grid { grid-template-columns: repeat(3, 1fr) !important; }
+    .emotion-grid { grid-template-columns: repeat(3, 1fr) !important; }
+
+    /* Rationale / RQ list */
+    .rq-item { grid-template-columns: 36px 1fr !important; gap: 16px !important; }
+
+    /* CTA */
+    .cta-heading, .cs-cta h2 { font-size: clamp(28px, 7vw, 48px) !important; letter-spacing: -1px !important; }
+    .cta-bg-text { font-size: 100px !important; }
+    .section-cta { padding: 60px 24px !important; }
+
+    /* Footer */
+    footer { flex-direction: column !important; gap: 16px !important; text-align: center !important; padding: 24px !important; }
+    .footer-links { flex-wrap: wrap !important; justify-content: center !important; gap: 16px !important; }
+
+    /* Inline grids used as style attrs */
+    [style*="grid-template-columns: 1fr 1fr"],
+    [style*="grid-template-columns:1fr 1fr"] {
+      grid-template-columns: 1fr !important;
+    }
+    [style*="grid-template-columns: 1fr 1fr 1fr"],
+    [style*="grid-template-columns:1fr 1fr 1fr"] {
+      grid-template-columns: 1fr 1fr !important;
+    }
+
+    /* Img frames — full width */
+    .img-frame img, .mascot-frame img { max-height: 340px !important; }
+
+    /* Section heading numbers */
+    .section-num { font-size: 48px !important; }
+  }
+
+  /* ── Mobile (≤480px) ── */
+  @media (max-width: 480px) {
+    /* Nav */
+    nav { padding: 12px 16px !important; }
+    .nav-links { gap: 14px; }
+    .logo .box { width: 30px !important; height: 30px !important; }
+
+    /* Sections */
+    section, .cs-hero { padding-left: 16px !important; padding-right: 16px !important; }
+    .cs-section, .section-cta { padding-top: 48px !important; padding-bottom: 48px !important; }
+
+    /* Hero */
+    .cs-hero { padding-top: 88px !important; }
+    .cs-hero h1 { font-size: clamp(28px, 9vw, 40px) !important; }
+    .cs-body, .hero-desc { font-size: 12px !important; }
+
+    /* Stat strip — 2 col on very small */
+    .stats-strip, .cs-stats { grid-template-columns: repeat(2, 1fr) !important; }
+    .stat-number { font-size: 28px !important; }
+    .stat-unit { font-size: 8px !important; }
+
+    /* Problem grid */
+    .problem-grid { grid-template-columns: 1fr !important; }
+    .problem-card { padding: 20px !important; }
+    .problem-num { font-size: 32px !important; }
+    .problem-desc { font-size: 11px !important; }
+
+    /* Change items */
+    .change-num { font-size: 36px !important; }
+    .change-title { font-size: 18px !important; }
+    .change-body { font-size: 12px !important; }
+    .change-list { gap: 48px !important; }
+
+    /* Mascot / emotion grid */
+    .mascot-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    .emotion-grid { grid-template-columns: repeat(2, 1fr) !important; }
+
+    /* Inline style grids */
+    [style*="grid-template-columns: 1fr 1fr"],
+    [style*="grid-template-columns:1fr 1fr"] {
+      grid-template-columns: 1fr !important;
+    }
+    [style*="grid-template-columns: 1fr 1fr 1fr"],
+    [style*="grid-template-columns:1fr 1fr 1fr"],
+    [style*="grid-template-columns: repeat(3"],
+    [style*="grid-template-columns:repeat(3"] {
+      grid-template-columns: 1fr !important;
+    }
+
+    /* CTA */
+    .cta-bg-text { font-size: 64px !important; }
+    .cta-heading, .cs-cta h2 { font-size: clamp(24px, 8vw, 36px) !important; }
+    .section-cta { padding: 48px 16px !important; }
+
+    /* Footer */
+    footer { padding: 18px 16px !important; }
+    .footer-links { gap: 12px !important; }
+
+    /* Features, BA, rq */
+    .features-grid { grid-template-columns: 1fr !important; }
+    .feat-card, .feature-item { padding: 20px !important; }
+    .rq-item { grid-template-columns: 32px 1fr !important; gap: 12px !important; padding: 14px 0 !important; }
+    .rq-num { font-size: 18px !important; }
+    .rq-text { font-size: 12px !important; }
+  }
+
+
+  /* ── HAMBURGER MENU (mobile only) ── */
+  .nav-hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 4px;
+    background: none;
+    border: none;
+    z-index: 200;
+  }
+  .nav-hamburger span {
+    display: block;
+    width: 24px;
+    height: 1.5px;
+    background: var(--black);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+  .nav-mobile-menu {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--cream);
+    z-index: 150;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+  }
+  .nav-mobile-menu.open { display: flex; }
+  .nav-mobile-menu a {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--black);
+    letter-spacing: -1px;
+  }
+  .nav-mobile-menu a:hover { color: var(--coral); }
+
+  @media (max-width: 640px) {
+    .nav-hamburger { display: flex; }
+    .nav-links { display: none !important; }
+  }
+
 </style>
 </head>
 <body onmousemove="__cm(event)">
@@ -393,6 +595,7 @@ function __cm(e) {
     <div class="box"><span class="box-letter">KJ</span></div>
   </a>
   <a href="index.html#work" class="nav-back">← Back to Work</a>
+  <button class="nav-hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
   <ul class="nav-links">
     <li><a href="index.html#about">About</a></li>
     <li><a href="index.html#contact">Contact</a></li>
@@ -696,29 +899,23 @@ function __cm(e) {
   <div class="cs-cta-bg">Next?</div>
   <p class="cs-cta-label">Like what you see?</p>
   <h2 class="cs-cta-heading">Have a project<br>in <em>mind?</em></h2>
-  <a href="mailto:designer.kj1411@gmail.com" class="cs-cta-link">designer.kj1411@gmail.com</a>
+  <a href="/cdn-cgi/l/email-protection#e68283958f81888394c88d8cd7d2d7d7a6818b878f8ac885898b" class="cs-cta-link"><span class="__cf_email__" data-cfemail="583c3d2b313f363d2a763332696c6969183f35393134763b3735">[email&#160;protected]</span></a>
 </div>
 
 <footer>
   <p class="footer-copy">© 2025 Krupali Jain — All rights reserved</p>
   <div class="footer-links">
-    <a href="mailto:designer.kj1411@gmail.com">Email</a>
+    <a href="/cdn-cgi/l/email-protection#4c28293f252b22293e6227267d787d7d0c2b212d2520622f2321">Email</a>
     <a href="#">LinkedIn</a>
     <a href="Krupali_Jain-Product_Designer.pdf" download="Krupali_Jain-Product_Designer.pdf" target="_blank">Resume</a>
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   document.querySelectorAll('a, button, .feat-card, .outcome-cell, .rq-item, .problem-card, .step-cell').forEach(el => {
     el.addEventListener('mouseenter', () => { document.getElementById('c-ring').classList.add('on'); });
     el.addEventListener('mouseleave', () => { document.getElementById('c-ring').classList.remove('on'); });
   });
 
   function switchFrame(tab, btn) {
-    document.querySelectorAll('.cs-tab').forEach(t => t.classList.remove('active'));
-    btn.classList.add('active');
-    const frame = document.getElementById('irctc-frame');
-    try { frame.contentWindow.postMessage({ action: 'switchTab', tab }, '*'); }
-    catch(e) { frame.src = 'irctc-complete-2.html#' + tab; }
-  }
-  window.addE
+    document.querySelectorAll('

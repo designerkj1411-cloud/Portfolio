@@ -972,6 +972,202 @@
   }
   .c-ring.on { background: rgba(255,107,71,0.15); border-color: #FF6B47; width: 44px; height: 44px; }
   /* ── END CURSOR ── */
+
+  /* ═══════════════════════════════════════════
+     RESPONSIVE — MOBILE / TABLET / LAPTOP
+     Breakpoints: 480 | 768 | 1024
+  ═══════════════════════════════════════════ */
+
+  /* ── Laptop (≤1024px) ── */
+  @media (max-width: 1024px) {
+    nav { padding: 20px 40px; }
+    .hero { padding: 100px 40px 40px; gap: 40px; }
+    .hero-blob { width: 340px; height: 340px; left: 32%; }
+    .hero-blob-2 { width: 240px; height: 240px; left: 38%; }
+    .section-work { padding: 80px 40px; }
+    .hscroll-hint { padding: 0 40px 12px; }
+    .hscroll-wrap { padding: 0 40px 24px; }
+    .section-about { padding: 80px 40px; gap: 48px; }
+    .section-cta { padding: 80px 40px; }
+    footer { padding: 28px 40px; }
+    .projects-row-1 { height: auto; min-height: 220px; }
+    .projects-diag-row { height: 220px; }
+    .cta-bg-text { font-size: 130px; }
+  }
+
+  /* ── Tablet (≤768px) ── */
+  @media (max-width: 768px) {
+    /* Nav */
+    nav { padding: 16px 24px; }
+    .nav-links { gap: 24px; }
+    .nav-links a { font-size: 10px; }
+
+    /* Hero — stack */
+    .hero {
+      grid-template-columns: 1fr;
+      height: auto;
+      min-height: 100svh;
+      padding: 100px 24px 48px;
+      gap: 40px;
+    }
+    .hero-blob, .hero-blob-2 { display: none; }
+    .hero h1 { font-size: clamp(36px, 9vw, 54px); letter-spacing: -1px; }
+    .hero-desc { max-width: 100%; }
+    .hero-right { padding-top: 0; }
+
+    /* Stats */
+    .stats-row { grid-template-columns: repeat(3,1fr); }
+    .stat-num { font-size: 22px; }
+
+    /* Work section */
+    .section-work { padding: 60px 24px; }
+    .hscroll-hint { padding: 0 24px 10px; }
+    .hscroll-wrap { padding: 0 24px 20px; }
+    .hcard { width: 220px; height: 300px; }
+
+    /* Section header */
+    .section-header { flex-direction: column; align-items: flex-start; gap: 12px; margin-bottom: 40px; }
+    .section-count { font-size: 56px; }
+
+    /* Project grid — convert diagonal rows to stacked single cards */
+    .projects-row-1 { grid-template-columns: 1fr; height: auto; }
+    .projects-row-1 .project-card { height: 200px; }
+    .projects-diag-row { height: auto; display: flex; flex-direction: column; }
+    .projects-diag-row .project-card.diag-left,
+    .projects-diag-row .project-card.diag-right {
+      position: static;
+      width: 100%;
+      height: 200px;
+      clip-path: none !important;
+      text-align: left !important;
+    }
+    .projects-diag-row .project-card.diag-right .project-tags { justify-content: flex-start; }
+    .projects-diag-row .project-card.diag-right .project-link {
+      justify-content: flex-start;
+    }
+    .hit-area { display: none; }
+    .project-number { font-size: 60px; top: 16px; right: 16px; }
+
+    /* About */
+    .section-about {
+      grid-template-columns: 1fr;
+      padding: 60px 24px;
+      gap: 48px;
+    }
+    .skills-grid { grid-template-columns: 1fr 1fr; }
+
+    /* CTA */
+    .section-cta { padding: 60px 24px; }
+    .cta-bg-text { font-size: 80px; }
+    .cta-heading { letter-spacing: -1.5px; }
+
+    /* Footer */
+    footer {
+      flex-direction: column;
+      gap: 16px;
+      text-align: center;
+      padding: 24px;
+    }
+    .footer-links { flex-wrap: wrap; justify-content: center; gap: 16px; }
+  }
+
+  /* ── Mobile (≤480px) ── */
+  @media (max-width: 480px) {
+    /* Nav */
+    nav { padding: 14px 16px; }
+    .nav-links { gap: 16px; }
+    .logo .box { width: 30px; height: 30px; }
+
+    /* Hero */
+    .hero { padding: 88px 16px 40px; gap: 32px; }
+    .hero h1 { font-size: clamp(32px, 10vw, 44px); }
+    .hero-cta { padding: 14px 24px; font-size: 11px; }
+
+    /* Stats row */
+    .stats-row { grid-template-columns: repeat(3, 1fr); }
+    .stat { padding: 12px 8px; }
+    .stat-num { font-size: 20px; }
+    .stat-label { font-size: 8px; }
+
+    /* Work */
+    .section-work { padding: 48px 16px; }
+    .hscroll-hint { padding: 0 16px 8px; }
+    .hscroll-wrap { padding: 0 16px 16px; }
+    .hcard { width: 200px; height: 280px; padding: 18px 16px; }
+    .hcard-name { font-size: 16px; }
+    .section-header { margin-bottom: 28px; }
+    .section-title { font-size: clamp(28px, 8vw, 40px); }
+
+    /* Project cards */
+    .projects-row-1 .project-card { height: 180px; padding: 20px; }
+    .projects-diag-row .project-card.diag-left,
+    .projects-diag-row .project-card.diag-right { height: 180px; padding: 20px; }
+    .project-name { font-size: clamp(18px, 5vw, 26px); }
+    .project-card.pos-3 .project-name { font-size: clamp(20px, 6vw, 30px); }
+    .project-desc { font-size: 10px; margin-bottom: 16px; }
+
+    /* About */
+    .section-about { padding: 48px 16px; gap: 40px; }
+    .skills-grid { grid-template-columns: 1fr; }
+
+    /* CTA */
+    .section-cta { padding: 48px 16px; }
+    .cta-bg-text { font-size: 56px; }
+
+    /* Footer */
+    footer { padding: 20px 16px; gap: 12px; }
+    .footer-links { gap: 12px; }
+  }
+
+
+  /* ── HAMBURGER MENU (mobile only) ── */
+  .nav-hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 4px;
+    background: none;
+    border: none;
+    z-index: 200;
+  }
+  .nav-hamburger span {
+    display: block;
+    width: 24px;
+    height: 1.5px;
+    background: var(--black);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+  .nav-mobile-menu {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--cream);
+    z-index: 150;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+  }
+  .nav-mobile-menu.open { display: flex; }
+  .nav-mobile-menu a {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--black);
+    letter-spacing: -1px;
+  }
+  .nav-mobile-menu a:hover { color: var(--coral); }
+
+  @media (max-width: 640px) {
+    .nav-hamburger { display: flex; }
+    .nav-links { display: none !important; }
+  }
+
 </style>
 </head>
 <body onmousemove="__cm(event)">
@@ -993,6 +1189,7 @@ function __cm(e) {
   <a href="index.html" class="logo">
     <div class="box"><span class="box-letter">KJ</span></div>
   </a>
+  <button class="nav-hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
   <ul class="nav-links">
     <li><a href="#work">Work</a></li>
     <li><a href="#about">About</a></li>
@@ -1276,8 +1473,8 @@ function __cm(e) {
   <h2 class="cta-heading reveal">
     Have a project<br>in <em>mind?</em>
   </h2>
-  <a href="mailto:designer.kj1411@gmail.com" class="cta-email reveal">
-    designer.kj1411@gmail.com
+  <a href="/cdn-cgi/l/email-protection#1f7b7a6c7678717a6d3174752e2b2e2e5f78727e7673317c7072" class="cta-email reveal">
+    <span class="__cf_email__" data-cfemail="cfabaabca6a8a1aabde1a4a5fefbfefe8fa8a2aea6a3e1aca0a2">[email&#160;protected]</span>
   </a>
 </section>
 
@@ -1285,11 +1482,5 @@ function __cm(e) {
 <footer id="footer">
   <p class="footer-copy">© 2025 Krupali Jain — All rights reserved</p>
   <div class="footer-links">
-    <a href="mailto:designer.kj1411@gmail.com">Email</a>
-    <a href="https://www.linkedin.com/in/krupali-jain-43248a66/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-    <a href="Krupali_Jain-Product_Designer.pdf" download="Krupali_Jain-Product_Designer.pdf" target="_blank" rel="noopener noreferrer">Resume</a>
-  </div>
-</footer>
-
-</body>
-</html>
+    <a href="/cdn-cgi/l/email-protection#2044455349474e45520e4b4a1114111160474d41494c0e434f4d">Email</a>
+    <a href="https://www.linkedin.com/in/krupali-jain-43248a66/" target="_blank" rel="noopener noreferrer">
