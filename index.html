@@ -353,390 +353,6 @@
   .ticker-item::before { content: '★'; color: var(--yellow); }
   @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-  /* WORK SECTION */
-  /* Projects section decorative highlights */
-  .projects-deco { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
-
-  /* Large coral ring — top right */
-  .deco-c1 {
-    position: absolute;
-    width: 280px; height: 280px;
-    border-radius: 50%;
-    border: 1.5px solid var(--coral);
-    opacity: 0.22;
-    top: -60px; right: -60px;
-  }
-  /* Small coral ring — bottom left */
-  .deco-c2 {
-    position: absolute;
-    width: 120px; height: 120px;
-    border-radius: 50%;
-    border: 1.5px dashed var(--coral);
-    opacity: 0.3;
-    bottom: 80px; left: -30px;
-  }
-
-  /* Coral dots */
-  .deco-dot {
-    position: absolute;
-    border-radius: 50%;
-    background: var(--coral);
-  }
-  .deco-d1 { width: 6px; height: 6px; top: 80px; left: 80px; opacity: 0.5; }
-  .deco-d2 { width: 10px; height: 10px; top: 200px; right: 100px; opacity: 0.3; }
-  .deco-d3 { width: 4px; height: 4px; bottom: 120px; right: 220px; opacity: 0.4; }
-  .deco-d4 { width: 8px; height: 8px; bottom: 60px; left: 160px; opacity: 0.25; }
-
-  /* Coral cross / plus */
-  .deco-cross {
-    position: absolute;
-    opacity: 0.35;
-  }
-  .deco-cross::before, .deco-cross::after {
-    content: '';
-    position: absolute;
-    background: var(--coral);
-  }
-  .deco-cross::before { width: 1px; height: 32px; top: 0; left: 50%; }
-  .deco-cross::after  { width: 32px; height: 1px; top: 50%; left: 0; transform: translateY(-50%); }
-  .deco-x1 { width: 32px; height: 32px; top: 120px; right: 180px; }
-  .deco-x2 { width: 32px; height: 32px; bottom: 140px; left: 60px; opacity: 0.2; }
-
-  /* Coral vertical line */
-  .deco-vline {
-    position: absolute;
-    width: 1px;
-    background: var(--coral);
-    opacity: 0.25;
-  }
-  .deco-v1 { height: 100px; top: 60px; left: 50%; }
-  .deco-v2 { height: 60px; bottom: 80px; right: 160px; opacity: 0.18; }
-
-  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-  /* ── HORIZONTAL SCROLL CARDS ── */
-  .hscroll-hint {
-    padding: 0 60px 16px;
-    font-size: 9px; letter-spacing: 0.2em;
-    text-transform: uppercase; color: #8A8070;
-  }
-  .hscroll-wrap {
-    overflow-x: auto; padding: 0 60px 32px;
-    scrollbar-width: none; cursor: grab;
-  }
-  .hscroll-wrap:active { cursor: grabbing; }
-  .hscroll-wrap::-webkit-scrollbar { display: none; }
-  .hscroll {
-    display: flex; gap: 12px;
-    width: max-content;
-  }
-  .hcard {
-    width: 255px; height: 340px;
-    padding: 22px 20px;
-    display: flex; flex-direction: column;
-    justify-content: space-between;
-    flex-shrink: 0;
-    border: 1.5px solid #1A1A1A;
-    transition: transform 0.3s ease;
-    cursor: pointer;
-    overflow: hidden;
-    box-sizing: border-box;
-  }
-  .hcard:hover { background: var(--yellow) !important; color: #1A1A1A !important; }
-  .hcard-black  { background: var(--coral); color: #1A1A1A; }
-  .hcard-white  { background: #F5F0E8; color: #1A1A1A; }
-
-  .hcard-top {
-    display: flex; flex-direction: column; gap: 4px;
-  }
-  .hcard-idx {
-    font-family: 'Playfair Display', serif;
-    font-size: 36px; font-weight: 900;
-    opacity: 0.1; line-height: 1; margin-bottom: 6px;
-  }
-  .hcard-cat {
-    font-size: 8px; letter-spacing: 0.18em;
-    text-transform: uppercase; opacity: 0.6;
-  }
-  .hcard-mid { display: flex; flex-direction: column; gap: 8px; flex-grow: 1; justify-content: center; padding: 10px 0 8px; }
-  .hcard-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 18px; font-weight: 700; line-height: 1.2;
-    margin: 0;
-  }
-  .hcard-desc {
-    font-size: 11px; opacity: 0.65; line-height: 1.65; margin: 0;
-  }
-  .hcard-bottom { display: flex; flex-direction: column; gap: 16px; }
-  .hcard-tags { display: flex; gap: 6px; flex-wrap: wrap; }
-  .hcard-tags .tag { font-size: 7px; opacity: 0.8; }
-  .hcard-mid { display: flex; flex-direction: column; gap: 10px; }
-  .hcard-link {
-    font-size: 8px; letter-spacing: 0.15em;
-    text-transform: uppercase;
-    border-bottom: 1px solid currentColor;
-    padding-bottom: 2px; display: inline-block;
-    text-decoration: none; color: currentColor;
-  }
-  /* ── END HORIZONTAL SCROLL ── */
-
-  .section-work {
-    padding: 100px 60px;
-    background: linear-gradient(135deg, #e8e0d0 0%, #f0ebe0 40%, #ddd5c8 100%);
-    position: relative;
-  }
-
-  .section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 60px;
-    border-bottom: 1.5px solid var(--black);
-    padding-bottom: 24px;
-  }
-
-  .section-label {
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
-  }
-
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(36px, 5vw, 64px);
-    font-weight: 900;
-    letter-spacing: -1.5px;
-    line-height: 1;
-  }
-
-  .section-count {
-    font-family: 'Playfair Display', serif;
-    font-size: 80px;
-    font-weight: 900;
-    color: var(--border);
-    line-height: 1;
-  }
-
-  /* PROJECT GRID */
-  .projects-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    background: transparent;
-  }
-
-  .projects-diag {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .projects-diag-row {
-    position: relative;
-    height: 260px;
-    overflow: hidden;
-    background: transparent;
-    cursor: none;
-  }
-
-  /* Row 2: / diagonal */
-  .projects-diag-row.row-a .project-card.diag-left {
-    position: absolute; top: 0; left: 0;
-    width: 100%; height: 100%;
-    clip-path: polygon(0 0, 57% 0, 43% 100%, 0 100%);
-    z-index: 1; pointer-events: none;
-  }
-  .projects-diag-row.row-a .project-card.diag-right {
-    position: absolute; top: 0; left: 0;
-    width: 100%; height: 100%;
-    clip-path: polygon(59% 0, 100% 0, 100% 100%, 45% 100%);
-    z-index: 1; pointer-events: none;
-  }
-
-  /* Row 3: \ diagonal */
-  .projects-diag-row.row-b .project-card.diag-left {
-    position: absolute; top: 0; left: 0;
-    width: 100%; height: 100%;
-    clip-path: polygon(0 0, 44% 0, 58% 100%, 0 100%);
-    z-index: 1; pointer-events: none;
-  }
-  .projects-diag-row.row-b .project-card.diag-right {
-    position: absolute; top: 0; left: 0;
-    width: 100%; height: 100%;
-    clip-path: polygon(46% 0, 100% 0, 100% 100%, 60% 100%);
-    z-index: 1; pointer-events: none;
-  }
-
-  /* Transparent hit areas for diagonal hover */
-  .hit-area {
-    position: absolute; top: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: 10; cursor: none;
-  }
-  .hit-left     { clip-path: polygon(0 0, 57% 0, 43% 100%, 0 100%); }
-  .hit-right-a  { clip-path: polygon(59% 0, 100% 0, 100% 100%, 45% 100%); }
-  .hit-left-b   { clip-path: polygon(0 0, 44% 0, 58% 100%, 0 100%); }
-  .hit-right-b  { clip-path: polygon(46% 0, 100% 0, 100% 100%, 60% 100%); }
-
-  /* JS-only hover for diagonal cards */
-  /* Text alignment for diagonal cards */
-  .projects-diag-row .project-card.diag-left { text-align: left; }
-  .projects-diag-row .project-card.diag-right { text-align: right; }
-  .projects-diag-row .project-card.diag-right .project-tags { justify-content: flex-end; }
-  .projects-diag-row .project-card.diag-right .project-link { align-self: flex-end; display: flex; width: 100%; justify-content: flex-end; border-bottom: 1px solid currentColor; padding-bottom: 4px; }
-
-  /* Remove border/shadow from diagonal cards */
-  .projects-row-1 .project-card { border: none; box-shadow: none; }
-  .projects-diag-row .project-card.diag-left,
-  .projects-diag-row .project-card.diag-right { border: none; box-shadow: none; }
-  .projects-diag-row .project-card.diag-left:hover,
-  .projects-diag-row .project-card.diag-right:hover { background: inherit; }
-
-  /* Project card base */
-  .project-card {
-    background: #FFFFFF;
-    color: var(--black);
-    border: none;
-    box-shadow: none;
-    padding: 32px 32px;
-    position: relative;
-    overflow: hidden;
-    transition: background 0.3s ease;
-    cursor: none;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-  }
-  .project-card:hover {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    box-shadow: none;
-  }
-  /* Coral hover only on diagonal cards 3-6 */
-  .projects-diag-row .project-card.diag-hovered {
-    background: var(--coral) !important;
-    color: #fff !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-  }
-  .projects-diag-row .project-card.diag-hovered .project-category,
-  .projects-diag-row .project-card.diag-hovered .project-name,
-  .projects-diag-row .project-card.diag-hovered .project-desc,
-  .projects-diag-row .project-card.diag-hovered .tag,
-  .projects-diag-row .project-card.diag-hovered .project-link { color: #fff !important; border-color: rgba(255,255,255,0.5) !important; }
-
-  .project-card .project-category { color: var(--muted); }
-  .project-card .project-desc { color: var(--muted); }
-
-  .white-card  { background: var(--cream); color: #1A1A1A; }
-  .white-card  .project-category { color: #8A8070; }
-  .white-card  .project-desc { color: #8A8070; }
-
-  .projects-row-1-wrapper {
-    padding: 0;
-  }
-
-  .projects-row-1 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0;
-    height: 260px;
-  }
-
-  .black-card  { background: #1A1A1A; color: #F5F0E8; }
-  .black-card  .project-category { color: rgba(245,240,232,0.6); }
-  .black-card  .project-desc { color: rgba(245,240,232,0.55); }
-  .black-card  .tag { border-color: #444; color: #F5F0E8; }
-
-  .yellow-card { background: #D4FF4A; color: #1A1A1A; }
-  .yellow-card .project-category { color: rgba(26,26,26,0.6); }
-  .yellow-card .project-desc { color: rgba(26,26,26,0.55); }
-  .yellow-card .tag { border-color: rgba(26,26,26,0.25); }
-
-  .project-category {
-    font-size: 9px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 10px;
-  }
-
-  .project-name {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(20px, 2.5vw, 34px);
-    font-weight: 700;
-    line-height: 1.1;
-    margin-bottom: 12px;
-    letter-spacing: -0.5px;
-  }
-  .project-card.pos-3 .project-name { font-size: clamp(28px, 4vw, 48px); }
-
-  .project-desc {
-    font-size: 11px;
-    line-height: 1.75;
-    color: var(--muted);
-    max-width: 320px;
-    margin-bottom: 24px;
-  }
-
-  .project-tags {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-bottom: 24px;
-  }
-  .tag {
-    border: 1px solid currentColor;
-    padding: 3px 10px;
-    font-size: 9px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    border-radius: 100px;
-    opacity: 0.6;
-  }
-
-  .project-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 10px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    text-decoration: none;
-    color: inherit;
-    border-bottom: 1px solid currentColor;
-    padding-bottom: 2px;
-    transition: gap 0.2s;
-  }
-  /* Extend underline to left edge on right-aligned cards */
-  .projects-diag-row .project-card.diag-right .project-link {
-    display: flex;
-    width: 100%;
-    justify-content: flex-end;
-    border-bottom: 1px solid currentColor;
-    padding-bottom: 4px;
-  }
-
-  .project-number {
-    position: absolute;
-    top: 24px;
-    right: 28px;
-    font-family: 'Playfair Display', serif;
-    font-size: 90px;
-    font-weight: 900;
-    color: var(--border);
-    line-height: 1;
-    opacity: 0.25;
-    transition: opacity 0.3s;
-  }
-  .project-card.pos-3 .project-number { color: #333; opacity: 0.2; }
-  .project-card:hover .project-number { opacity: 0.45; }
-
   /* ABOUT SECTION */
   .section-about {
     padding: 100px 60px;
@@ -979,19 +595,25 @@
   ═══════════════════════════════════════════ */
 
   /* ── Laptop (≤1024px) ── */
+  /* ═══════════════════════════════════════════════
+     RESPONSIVE — ALL SCREEN SIZES
+     Breakpoints: 1280 desktop | 1024 laptop | 768 tablet | 480 mobile
+  ═══════════════════════════════════════════════ */
+
+  /* ── Laptop (≤1024px) ── */
   @media (max-width: 1024px) {
     nav { padding: 20px 40px; }
+
     .hero { padding: 100px 40px 40px; gap: 40px; }
     .hero-blob { width: 340px; height: 340px; left: 32%; }
     .hero-blob-2 { width: 240px; height: 240px; left: 38%; }
+
     .section-work { padding: 80px 40px; }
-    .hscroll-hint { padding: 0 40px 12px; }
-    .hscroll-wrap { padding: 0 40px 24px; }
+    .acc-item { grid-template-columns: 56px 1fr auto; gap: 0 24px; }
+
     .section-about { padding: 80px 40px; gap: 48px; }
     .section-cta { padding: 80px 40px; }
     footer { padding: 28px 40px; }
-    .projects-row-1 { height: auto; min-height: 220px; }
-    .projects-diag-row { height: 220px; }
     .cta-bg-text { font-size: 130px; }
   }
 
@@ -999,10 +621,10 @@
   @media (max-width: 768px) {
     /* Nav */
     nav { padding: 16px 24px; }
-    .nav-links { gap: 24px; }
+    .nav-links { gap: 20px; }
     .nav-links a { font-size: 10px; }
 
-    /* Hero — stack */
+    /* Hero — single column */
     .hero {
       grid-template-columns: 1fr;
       height: auto;
@@ -1016,44 +638,20 @@
     .hero-right { padding-top: 0; }
 
     /* Stats */
-    .stats-row { grid-template-columns: repeat(3,1fr); }
+    .stats-row { grid-template-columns: repeat(3, 1fr); }
     .stat-num { font-size: 22px; }
 
-    /* Work section */
+    /* Work / Accordion */
     .section-work { padding: 60px 24px; }
-    .hscroll-hint { padding: 0 24px 10px; }
-    .hscroll-wrap { padding: 0 24px 20px; }
-    .hcard { width: 220px; height: 300px; }
-
-    /* Section header */
-    .section-header { flex-direction: column; align-items: flex-start; gap: 12px; margin-bottom: 40px; }
+    .section-header { flex-direction: column; align-items: flex-start; gap: 12px; margin-bottom: 36px; }
     .section-count { font-size: 56px; }
-
-    /* Project grid — convert diagonal rows to stacked single cards */
-    .projects-row-1 { grid-template-columns: 1fr; height: auto; }
-    .projects-row-1 .project-card { height: 200px; }
-    .projects-diag-row { height: auto; display: flex; flex-direction: column; }
-    .projects-diag-row .project-card.diag-left,
-    .projects-diag-row .project-card.diag-right {
-      position: static;
-      width: 100%;
-      height: 200px;
-      clip-path: none !important;
-      text-align: left !important;
-    }
-    .projects-diag-row .project-card.diag-right .project-tags { justify-content: flex-start; }
-    .projects-diag-row .project-card.diag-right .project-link {
-      justify-content: flex-start;
-    }
-    .hit-area { display: none; }
-    .project-number { font-size: 60px; top: 16px; right: 16px; }
+    .acc-item { grid-template-columns: 44px 1fr auto; gap: 0 16px; }
+    .acc-num { font-size: 32px; padding-top: 22px; padding-bottom: 22px; }
+    .acc-mid { padding: 22px 0; }
+    .acc-name { font-size: clamp(17px, 4vw, 24px); }
 
     /* About */
-    .section-about {
-      grid-template-columns: 1fr;
-      padding: 60px 24px;
-      gap: 48px;
-    }
+    .section-about { grid-template-columns: 1fr; padding: 60px 24px; gap: 48px; }
     .skills-grid { grid-template-columns: 1fr 1fr; }
 
     /* CTA */
@@ -1062,12 +660,7 @@
     .cta-heading { letter-spacing: -1.5px; }
 
     /* Footer */
-    footer {
-      flex-direction: column;
-      gap: 16px;
-      text-align: center;
-      padding: 24px;
-    }
+    footer { flex-direction: column; gap: 16px; text-align: center; padding: 24px; }
     .footer-links { flex-wrap: wrap; justify-content: center; gap: 16px; }
   }
 
@@ -1080,31 +673,26 @@
 
     /* Hero */
     .hero { padding: 88px 16px 40px; gap: 32px; }
-    .hero h1 { font-size: clamp(32px, 10vw, 44px); }
+    .hero h1 { font-size: clamp(30px, 10vw, 42px); }
     .hero-cta { padding: 14px 24px; font-size: 11px; }
 
-    /* Stats row */
+    /* Stats */
     .stats-row { grid-template-columns: repeat(3, 1fr); }
     .stat { padding: 12px 8px; }
-    .stat-num { font-size: 20px; }
+    .stat-num { font-size: 18px; }
     .stat-label { font-size: 8px; }
 
-    /* Work */
+    /* Work / Accordion */
     .section-work { padding: 48px 16px; }
-    .hscroll-hint { padding: 0 16px 8px; }
-    .hscroll-wrap { padding: 0 16px 16px; }
-    .hcard { width: 200px; height: 280px; padding: 18px 16px; }
-    .hcard-name { font-size: 16px; }
-    .section-header { margin-bottom: 28px; }
+    .section-header { margin-bottom: 24px; }
     .section-title { font-size: clamp(28px, 8vw, 40px); }
-
-    /* Project cards */
-    .projects-row-1 .project-card { height: 180px; padding: 20px; }
-    .projects-diag-row .project-card.diag-left,
-    .projects-diag-row .project-card.diag-right { height: 180px; padding: 20px; }
-    .project-name { font-size: clamp(18px, 5vw, 26px); }
-    .project-card.pos-3 .project-name { font-size: clamp(20px, 6vw, 30px); }
-    .project-desc { font-size: 10px; margin-bottom: 16px; }
+    .acc-item { grid-template-columns: 36px 1fr auto; gap: 0 12px; padding: 0 4px; }
+    .acc-item:hover { padding: 0 8px; }
+    .acc-num { font-size: 26px; padding-top: 18px; padding-bottom: 18px; }
+    .acc-mid { padding: 18px 0; }
+    .acc-name { font-size: clamp(14px, 4.5vw, 19px); }
+    .acc-cat { font-size: 8px; }
+    .acc-arrow { font-size: 16px; padding-top: 22px; }
 
     /* About */
     .section-about { padding: 48px 16px; gap: 40px; }
@@ -1112,15 +700,15 @@
 
     /* CTA */
     .section-cta { padding: 48px 16px; }
-    .cta-bg-text { font-size: 56px; }
+    .cta-bg-text { font-size: 52px; }
+    .cta-heading { font-size: clamp(36px, 10vw, 60px) !important; }
 
     /* Footer */
     footer { padding: 20px 16px; gap: 12px; }
     .footer-links { gap: 12px; }
   }
 
-
-  /* ── HAMBURGER MENU (mobile only) ── */
+  /* ── HAMBURGER MENU (≤640px) ── */
   .nav-hamburger {
     display: none;
     flex-direction: column;
@@ -1133,33 +721,28 @@
   }
   .nav-hamburger span {
     display: block;
-    width: 24px;
-    height: 1.5px;
+    width: 24px; height: 1.5px;
     background: var(--black);
     transition: transform 0.3s ease, opacity 0.3s ease;
   }
   .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
   .nav-hamburger.open span:nth-child(2) { opacity: 0; }
   .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
   .nav-mobile-menu {
     display: none;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
     background: var(--cream);
     z-index: 150;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    align-items: center; justify-content: center;
     gap: 40px;
   }
   .nav-mobile-menu.open { display: flex; }
   .nav-mobile-menu a {
     font-family: 'Playfair Display', serif;
-    font-size: 36px;
-    font-weight: 700;
-    text-decoration: none;
-    color: var(--black);
-    letter-spacing: -1px;
+    font-size: 36px; font-weight: 700;
+    text-decoration: none; color: var(--black); letter-spacing: -1px;
   }
   .nav-mobile-menu a:hover { color: var(--coral); }
 
@@ -1189,7 +772,7 @@ function __cm(e) {
   <a href="index.html" class="logo">
     <div class="box"><span class="box-letter">KJ</span></div>
   </a>
-  <button class="nav-hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
   <ul class="nav-links">
     <li><a href="#work">Work</a></li>
     <li><a href="#about">About</a></li>
@@ -1279,9 +862,6 @@ function __cm(e) {
 <!-- WORK SECTION -->
 <section class="section-work" id="work">
 
-  <!-- Decorative highlights -->
-
-
   <div class="section-header reveal">
     <div>
       <p class="section-label">Selected projects</p>
@@ -1290,130 +870,115 @@ function __cm(e) {
     <span class="section-count">07</span>
   </div>
 
-  <p class="hscroll-hint reveal">Drag to explore →</p>
-  <div class="hscroll-wrap reveal">
-    <div class="hscroll">
+  <div class="acc-list reveal">
 
-      <a href="bytebeam-case-study.html" style="display:block;text-decoration:none;color:inherit;cursor:pointer;flex-shrink:0;">
-      <div class="hcard hcard-black">
-        <div class="hcard-top">
-          <span class="hcard-idx">01</span>
-          <span class="hcard-cat">Bytebeam · IoT Platform · B2B</span>
+    <a href="bytebeam-case-study.html" class="acc-item">
+      <div class="acc-num">01</div>
+      <div class="acc-mid">
+        <p class="acc-cat">Bytebeam · IoT Platform · B2B</p>
+        <h3 class="acc-name">Bytebeam Cloud Platform</h3>
+        <p class="acc-desc">Redesigned the dashboard for an automotive IoT platform. Built modular components and workflow filters to improve usability for engineers.</p>
+        <div class="acc-tags-row">
+          <span class="acc-tag">Product Design</span>
+          <span class="acc-tag">Dashboard UX</span>
+          <span class="acc-tag">B2B</span>
         </div>
-        <div class="hcard-mid">
-          <h3 class="hcard-name">Bytebeam Cloud Platform</h3>
-          <p class="hcard-desc">Redesigned the dashboard for an automotive IoT platform. Built modular components and workflow filters to improve usability for engineers.</p>
-        </div>
-        <div class="hcard-bottom">
-          <div class="hcard-tags"><span class="tag">Product Design</span><span class="tag">Dashboard UX</span><span class="tag">B2B</span></div>
-          <a href="bytebeam-case-study.html" class="hcard-link">>View Case Study →</a>
-        </div>
+        <span class="acc-link">View case study →</span>
       </div>
-      </a>
+      <div class="acc-arrow">›</div>
+    </a>
 
-      <a href="bytebeam-website-cs.html" style="display:block;text-decoration:none;color:inherit;cursor:pointer;flex-shrink:0;">
-      <div class="hcard hcard-white">
-        <div class="hcard-top">
-          <span class="hcard-idx">02</span>
-          <span class="hcard-cat">Bytebeam · Marketing</span>
+    <a href="bytebeam-website-cs.html" class="acc-item">
+      <div class="acc-num">02</div>
+      <div class="acc-mid">
+        <p class="acc-cat">Bytebeam · Marketing Design</p>
+        <h3 class="acc-name">Bytebeam Website</h3>
+        <p class="acc-desc">Developer-friendly marketing site with embedded docs and clear product storytelling. Balanced brand voice with functional hierarchy.</p>
+        <div class="acc-tags-row">
+          <span class="acc-tag">Marketing Design</span>
+          <span class="acc-tag">UI/UX</span>
         </div>
-        <div class="hcard-mid">
-          <h3 class="hcard-name">Bytebeam Website</h3>
-          <p class="hcard-desc">Developer-friendly marketing site with embedded docs and clear product storytelling. Balanced brand voice with functional hierarchy.</p>
-        </div>
-        <div class="hcard-bottom">
-          <div class="hcard-tags"><span class="tag">Marketing Design</span><span class="tag">UI/UX</span></div>
-          <a href="bytebeam-website-cs.html" class="hcard-link">>View Case Study →</a>
-        </div>
+        <span class="acc-link">View case study →</span>
       </div>
-      </a>
+      <div class="acc-arrow">›</div>
+    </a>
 
-      <a href="mentormentee-cs.html" style="display:block;text-decoration:none;color:inherit;cursor:pointer;flex-shrink:0;">
-      <div class="hcard hcard-black">
-        <div class="hcard-top">
-          <span class="hcard-idx">03</span>
-          <span class="hcard-cat">Google Project · Career Tech</span>
+    <a href="mentormentee-cs-6.html" class="acc-item">
+      <div class="acc-num">03</div>
+      <div class="acc-mid">
+        <p class="acc-cat">Google Project · Career Tech</p>
+        <h3 class="acc-name">Mentor-Mentee App</h3>
+        <p class="acc-desc">Career tech platform connecting mentors and mentees. Built for Google, focused on UX research and iterative prototyping.</p>
+        <div class="acc-tags-row">
+          <span class="acc-tag">UX Research</span>
+          <span class="acc-tag">Prototyping</span>
         </div>
-        <div class="hcard-mid">
-          <h3 class="hcard-name">Mentor-Mentee App</h3>
-          <p class="hcard-desc">Career tech platform connecting mentors and mentees. Built for Google, focused on UX research and iterative prototyping.</p>
-        </div>
-        <div class="hcard-bottom">
-          <div class="hcard-tags"><span class="tag">UX Research</span><span class="tag">Prototyping</span></div>
-          <a href="mentormentee-cs.html" class="hcard-link">>View Case Study →</a>
-        </div>
+        <span class="acc-link">View case study →</span>
       </div>
-      </a>
+      <div class="acc-arrow">›</div>
+    </a>
 
-      <a href="storytalkies-cs.html" style="display:block;text-decoration:none;color:inherit;cursor:pointer;flex-shrink:0;">
-      <div class="hcard hcard-white">
-        <div class="hcard-top">
-          <span class="hcard-idx">04</span>
-          <span class="hcard-cat">Google Project · Entertainment</span>
+    <a href="storytalkies-cs.html" class="acc-item">
+      <div class="acc-num">04</div>
+      <div class="acc-mid">
+        <p class="acc-cat">Google Project · Entertainment</p>
+        <h3 class="acc-name">StoryTALKIES Webpage</h3>
+        <p class="acc-desc">B2C entertainment platform designed mobile-first. Storytelling-forward layout with rich visual hierarchy.</p>
+        <div class="acc-tags-row">
+          <span class="acc-tag">B2C</span>
+          <span class="acc-tag">Mobile-First</span>
         </div>
-        <div class="hcard-mid">
-          <h3 class="hcard-name">StoryTALKIES Webpage</h3>
-          <p class="hcard-desc">B2C entertainment platform designed mobile-first. Storytelling-forward layout with rich visual hierarchy.</p>
-        </div>
-        <div class="hcard-bottom">
-          <div class="hcard-tags"><span class="tag">B2C</span><span class="tag">Mobile-First</span></div>
-          <a href="storytalkies-cs.html" class="hcard-link">>View Case Study →</a>
-        </div>
+        <span class="acc-link">View case study →</span>
       </div>
-      </a>
+      <div class="acc-arrow">›</div>
+    </a>
 
-      <a href="myinsurance-cs.html" style="display:block;text-decoration:none;color:inherit;cursor:pointer;flex-shrink:0;">
-      <div class="hcard hcard-black">
-        <div class="hcard-top">
-          <span class="hcard-idx">05</span>
-          <span class="hcard-cat">Fintech · India · Accessibility</span>
+    <a href="myinsurance-cs-2.html" class="acc-item">
+      <div class="acc-num">05</div>
+      <div class="acc-mid">
+        <p class="acc-cat">Fintech · India · Accessibility</p>
+        <h3 class="acc-name">MyInsurance App</h3>
+        <p class="acc-desc">Accessible fintech solution for India's insurance market. Designed for low-literacy users with simplified flows.</p>
+        <div class="acc-tags-row">
+          <span class="acc-tag">Fintech</span>
+          <span class="acc-tag">Accessibility</span>
         </div>
-        <div class="hcard-mid">
-          <h3 class="hcard-name">MyInsurance App</h3>
-          <p class="hcard-desc">Accessible fintech solution for India's insurance market. Designed for low-literacy users with simplified flows.</p>
-        </div>
-        <div class="hcard-bottom">
-          <div class="hcard-tags"><span class="tag">Fintech</span><span class="tag">Accessibility</span></div>
-          <a href="myinsurance-cs.html" class="hcard-link">>View Case Study →</a>
-        </div>
+        <span class="acc-link">View case study →</span>
       </div>
-      </a>
+      <div class="acc-arrow">›</div>
+    </a>
 
-      <a href="weddingmakers-cs.html" style="display:block;text-decoration:none;color:inherit;cursor:pointer;flex-shrink:0;">
-      <div class="hcard hcard-white">
-        <div class="hcard-top">
-          <span class="hcard-idx">06</span>
-          <span class="hcard-cat">Event Tech · B2B · Mobile</span>
+    <a href="weddingmakers-cs.html" class="acc-item">
+      <div class="acc-num">06</div>
+      <div class="acc-mid">
+        <p class="acc-cat">Event Tech · B2B · Mobile</p>
+        <h3 class="acc-name">Wedding Makers App</h3>
+        <p class="acc-desc">Mobile-first event planning platform for wedding professionals. End-to-end workflow for B2B event coordination.</p>
+        <div class="acc-tags-row">
+          <span class="acc-tag">Event Planning</span>
+          <span class="acc-tag">Mobile-First</span>
         </div>
-        <div class="hcard-mid">
-          <h3 class="hcard-name">Wedding Makers App</h3>
-          <p class="hcard-desc">Mobile-first event planning platform for wedding professionals. End-to-end workflow for B2B event coordination.</p>
-        </div>
-        <div class="hcard-bottom">
-          <div class="hcard-tags"><span class="tag">Event Planning</span><span class="tag">Mobile-First</span></div>
-          <a href="weddingmakers-cs.html" class="hcard-link">>View Case Study →</a>
-        </div>
+        <span class="acc-link">View case study →</span>
       </div>
-      </a>
+      <div class="acc-arrow">›</div>
+    </a>
 
-      <a href="irctc-case-study.html" style="display:block;text-decoration:none;color:inherit;cursor:pointer;flex-shrink:0;">
-      <div class="hcard hcard-black">
-        <div class="hcard-top">
-          <span class="hcard-idx">07</span>
-          <span class="hcard-cat">Gov-Tech · India · Accessibility</span>
+    <a href="irctc-case-study.html" class="acc-item">
+      <div class="acc-num">07</div>
+      <div class="acc-mid">
+        <p class="acc-cat">Gov-Tech · India · Accessibility</p>
+        <h3 class="acc-name">IRCTC Redesign</h3>
+        <p class="acc-desc">Ground-up redesign of India's busiest railway booking platform. Calm, accessible, mobile-first — for 14M+ daily users.</p>
+        <div class="acc-tags-row">
+          <span class="acc-tag">Gov-Tech</span>
+          <span class="acc-tag">Accessibility</span>
+          <span class="acc-tag">UX Design</span>
         </div>
-        <div class="hcard-mid">
-          <h3 class="hcard-name">IRCTC Redesign</h3>
-          <p class="hcard-desc">Ground-up redesign of India's busiest railway booking platform. Calm, accessible, mobile-first — for 14M+ daily users.</p>
-        </div>
-        <div class="hcard-bottom">
-          <div class="hcard-tags"><span class="tag">Gov-Tech</span><span class="tag">Accessibility</span><span class="tag">UX Design</span></div>
-          <a href="irctc-case-study.html" class="hcard-link">>View Case Study →</a>
-        </div>
+        <span class="acc-link">View case study →</span>
       </div>
-      </a>
+      <div class="acc-arrow">›</div>
+    </a>
 
-    </div>
   </div>
 </section>
 
@@ -1473,8 +1038,8 @@ function __cm(e) {
   <h2 class="cta-heading reveal">
     Have a project<br>in <em>mind?</em>
   </h2>
-  <a href="mailto:designer.kj1411@gmail.com" class="cta-email reveal">
-    designer.kj1411@gmail.com
+  <a href="/cdn-cgi/l/email-protection#ceaaabbda7a9a0abbce0a5a4fffaffff8ea9a3afa7a2e0ada1a3" class="cta-email reveal">
+    <span class="__cf_email__" data-cfemail="5d39382e343a33382f7336376c696c6c1d3a303c3431733e3230">[email&#160;protected]</span>
   </a>
 </section>
 
@@ -1482,5 +1047,4 @@ function __cm(e) {
 <footer id="footer">
   <p class="footer-copy">© 2025 Krupali Jain — All rights reserved</p>
   <div class="footer-links">
-    <a href="mailto:designer.kj1411@gmail.com">Email</a>
-    <a href="https://www.linkedin.com/in/krupali-jain-43248a66/" target="_blank" rel="noopener noreferrer">
+    <a href="/cdn
